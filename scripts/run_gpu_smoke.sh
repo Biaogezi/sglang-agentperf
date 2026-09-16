@@ -3,9 +3,9 @@ set -euo pipefail
 
 PROJECT_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 
-"${PROJECT_ROOT}/scripts/preflight_gpu.sh"
+bash "${PROJECT_ROOT}/scripts/preflight_gpu.sh"
 
-exec "${PROJECT_ROOT}/scripts/container_shell.sh" \
+exec bash "${PROJECT_ROOT}/scripts/container_shell.sh" \
   python -m agentperf.cli run \
     --config configs/experiment_matrix.json \
     --model qwen3_8b_fp16 \
