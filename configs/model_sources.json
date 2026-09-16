@@ -1,0 +1,29 @@
+{
+  "schema_version": 1,
+  "models": {
+    "qwen3_8b_fp16": {
+      "huggingface_id": "Qwen/Qwen3-8B",
+      "revision": "main",
+      "required": true,
+      "notes": "Primary correctness and performance baseline"
+    },
+    "qwen3_8b_awq": {
+      "huggingface_id": "Qwen/Qwen3-8B-AWQ",
+      "revision": "main",
+      "required": true,
+      "notes": "Official AWQ checkpoint; benchmark with SGLang AWQ-Marlin"
+    },
+    "qwen3_8b_gptq": {
+      "huggingface_id": "JunHowie/Qwen3-8B-GPTQ-Int4",
+      "revision": "main",
+      "required": false,
+      "notes": "Third-party secondary comparison; validate independently before use"
+    },
+    "qwen35_9b_fp16": {
+      "huggingface_id": "Qwen/Qwen3.5-9B",
+      "revision": "main",
+      "required": false,
+      "notes": "Secondary compatibility target after Qwen3-8B is stable"
+    }
+  }
+}

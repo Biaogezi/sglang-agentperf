@@ -1,0 +1,4 @@
+image=lmsysorg/sglang:v0.5.19-cu129
+digest=sha256:59e11312666e1c5c155210ea335589b91daa0d70848521b390b93b1b1e8fb0ef
+platform=linux/amd64
+resolved_at=2026-09-16
