@@ -15,6 +15,16 @@ from .commands import benchmark_command, server_command
 from .config import build_plan
 
 
+def _git_head() -> str | None:
+    completed = subprocess.run(
+        ["git", "rev-parse", "HEAD"],
+        capture_output=True,
+        text=True,
+        check=False,
+    )
+    return completed.stdout.strip() if completed.returncode == 0 else None
+
+
 def _ready(url: str) -> bool:
     try:
         with urllib.request.urlopen(url, timeout=3) as response:
@@ -65,13 +75,21 @@ def run_plan(
     run_dir.mkdir(parents=True, exist_ok=False)
 
     plan = build_plan(config, model=model, profile=profile, suite=suite)
+    server_argv = server_command(config, model, profile)
     manifest = {
         "created_at": timestamp,
+        "harness_commit": _git_head(),
         "upstream_commit": config["upstream_commit"],
         "model": model,
         "profile": profile,
         "suite": suite,
         "cases": [case.__dict__ for case in plan],
+        "server_command": server_argv,
+        "benchmark_commands": [
+            benchmark_command(config, case, run_dir / f"{case.case_id}.jsonl")
+            for case in plan
+        ],
+        "config": config,
     }
     (run_dir / "manifest.json").write_text(
         json.dumps(manifest, indent=2, ensure_ascii=False) + "\n", encoding="utf-8"
@@ -86,7 +104,7 @@ def run_plan(
     }
     if os.name != "nt":
         process_kwargs["start_new_session"] = True
-    process = subprocess.Popen(server_command(config, model, profile), **process_kwargs)
+    process = subprocess.Popen(server_argv, **process_kwargs)
 
     try:
         defaults = config["defaults"]
