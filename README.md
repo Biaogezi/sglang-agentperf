@@ -107,6 +107,8 @@ mandatory gate before any W8A8 performance result is accepted.
 To publish a compact, auditable result without committing multi-megabyte request traces, use
 `agentperf snapshot-evidence`. It copies the manifest plus either the benchmark aggregate CSV or
 the quality JSON, and records the size and SHA-256 of every ignored raw artifact.
+`agentperf snapshot-trace-evidence` publishes the compact profiler tables while recording the
+size and SHA-256 of the ignored raw trace.
 
 ## Evidence policy
 
@@ -139,6 +141,11 @@ the negative-result decision.
 The first bounded CPU+GPU trace shows 98.25% GPU activity and attributes 77.7% of kernel time to
 AWQ-Marlin variants. See [Profile 001](docs/PROFILE_001_AWQ_MIXED_PREFILL.md) for the hotspot table
 and next hypothesis.
+
+Calibrated W8A8 traces attribute 64.7% of mixed-prefill and 77.9% of batch-one decode kernel time
+to CUTLASS INT8 GEMM. Separate dynamic activation quantization plus RMSNorm account for only 5.7%
+and 3.5%, respectively. See [Profile 002](docs/PROFILE_002_W8A8_KERNELS.md) for the phase-separated
+analysis and optimization selection decision.
 
 The resulting FP16-reduction experiment did not improve the trace-relevant 8K workload and changed
 long-sequence outputs, so it was rejected. See

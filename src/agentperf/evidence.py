@@ -58,3 +58,52 @@ def snapshot_evidence(run_dir: Path, output_dir: Path) -> dict[str, Any]:
         json.dumps(index, indent=2) + "\n", encoding="utf-8"
     )
     return index
+
+
+def snapshot_trace_evidence(
+    trace_path: Path, analysis_dir: Path, output_dir: Path
+) -> dict[str, Any]:
+    """Publish compact trace aggregates while retaining a hash of the raw trace."""
+    aggregate_names = [
+        "summary.json",
+        "kernels.csv",
+        "cuda_runtime.csv",
+        "cpu_ops.csv",
+        "user_annotations.csv",
+    ]
+    required = [analysis_dir / name for name in aggregate_names]
+    missing = [str(path) for path in [trace_path, *required] if not path.is_file()]
+    if missing:
+        raise FileNotFoundError(f"Missing trace evidence: {', '.join(missing)}")
+
+    output_dir.mkdir(parents=True, exist_ok=False)
+    for source in required:
+        shutil.copy2(source, output_dir / source.name)
+
+    files = [
+        {
+            "name": trace_path.name,
+            "size_bytes": trace_path.stat().st_size,
+            "sha256": _sha256(trace_path),
+            "published": False,
+        }
+    ]
+    files.extend(
+        {
+            "name": source.name,
+            "size_bytes": source.stat().st_size,
+            "sha256": _sha256(source),
+            "published": True,
+        }
+        for source in required
+    )
+    index = {
+        "schema_version": 1,
+        "created_at": datetime.now(timezone.utc).isoformat(),
+        "source_trace": trace_path.name,
+        "files": files,
+    }
+    (output_dir / "checksums.json").write_text(
+        json.dumps(index, indent=2) + "\n", encoding="utf-8"
+    )
+    return index

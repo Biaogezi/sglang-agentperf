@@ -6,7 +6,7 @@ from pathlib import Path
 
 from .commands import benchmark_command, server_command, shell_join
 from .config import build_plan, load_config
-from .evidence import snapshot_evidence
+from .evidence import snapshot_evidence, snapshot_trace_evidence
 from .models import verify_model_files
 from .quality import compare_quality, score_corpus
 from .report import check_run_equivalence, compare_summaries, summarize_run
@@ -82,6 +82,14 @@ def _parser() -> argparse.ArgumentParser:
     )
     snapshot.add_argument("--run-dir", required=True)
     snapshot.add_argument("--output-dir", required=True)
+
+    trace_snapshot = subparsers.add_parser(
+        "snapshot-trace-evidence",
+        help="copy trace aggregates and checksum the ignored raw trace",
+    )
+    trace_snapshot.add_argument("--trace", required=True)
+    trace_snapshot.add_argument("--analysis-dir", required=True)
+    trace_snapshot.add_argument("--output-dir", required=True)
 
     verify_model = subparsers.add_parser(
         "verify-model", help="verify model file sizes and SHA-256 against pinned metadata"
@@ -160,6 +168,11 @@ def main() -> None:
         print(run_dir)
     elif args.command == "snapshot-evidence":
         result = snapshot_evidence(Path(args.run_dir), Path(args.output_dir))
+        print(json.dumps(result, indent=2, ensure_ascii=False))
+    elif args.command == "snapshot-trace-evidence":
+        result = snapshot_trace_evidence(
+            Path(args.trace), Path(args.analysis_dir), Path(args.output_dir)
+        )
         print(json.dumps(result, indent=2, ensure_ascii=False))
     elif args.command == "verify-model":
         result = verify_model_files(

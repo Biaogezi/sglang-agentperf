@@ -64,3 +64,12 @@ algorithm.
 
 The adaptive source patch and reduced-precision Marlin experiment were both rejected; see the
 decision log and optimization reports. Negative results are intentionally retained.
+
+## W8A8 profiler evidence
+
+Compact profiler aggregates are published in `w8a8_profile_mixed_prefill/` and
+`w8a8_profile_decode_bs1/`; each directory also records the size and SHA-256 of its ignored raw
+trace. The mixed-prefill trace attributes 64.71% of summed kernel time to CUTLASS INT8 GEMM and
+the batch-one decode trace attributes 77.92%. Dynamic INT8 activation quantization plus RMSNorm
+account for only 5.74% and 3.53%, respectively. See
+[`docs/PROFILE_002_W8A8_KERNELS.md`](../../docs/PROFILE_002_W8A8_KERNELS.md) for the decision.

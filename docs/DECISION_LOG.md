@@ -55,3 +55,13 @@ criterion. Add the trace evidence and decision here before coding the patch.
   a delta of -0.00241 against the pre-registered maximum increase of 0.02.
 - Decision: the calibrated W8A8 artifact clears the numerical gate and may proceed to the same
   three-repetition serving matrix as FP16 and AWQ. This gate does not replace downstream task eval.
+
+## 2026-09-18 — Select W8A8 GEMM as the next primary target
+
+- A bounded mixed-prefill trace attributes 64.71% of kernel time to CUTLASS INT8 GEMM variants.
+- A second trace with 49/50 batch-one decode steps raises the GEMM share to 77.92%.
+- Separate dynamic activation quantization and RMSNorm together account for only 5.74% of mixed
+  prefill and 3.53% of batch-one decode kernel time.
+- Decision: run the prepared Norm+quant fusion only as a bounded microbenchmark/negative-result
+  check; use exact-shape W8A8 GEMM dispatch or tuning as the primary retained-optimization target.
+- Full evidence: [Profile 002](PROFILE_002_W8A8_KERNELS.md).

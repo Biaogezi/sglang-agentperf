@@ -3,7 +3,7 @@ from pathlib import Path
 
 import pytest
 
-from agentperf.evidence import snapshot_evidence
+from agentperf.evidence import snapshot_evidence, snapshot_trace_evidence
 
 
 def test_snapshot_evidence_copies_aggregates_and_hashes_raw_files(tmp_path: Path) -> None:
@@ -47,3 +47,26 @@ def test_snapshot_evidence_supports_quality_runs(tmp_path: Path) -> None:
     published = {row["name"]: row["published"] for row in result["files"]}
     assert published["quality.json"] is True
     assert published["server.log"] is False
+
+
+def test_snapshot_trace_evidence_copies_analysis_and_hashes_trace(tmp_path: Path) -> None:
+    trace = tmp_path / "capture.trace.json.gz"
+    trace.write_bytes(b"raw trace")
+    analysis_dir = tmp_path / "analysis"
+    analysis_dir.mkdir()
+    for name in (
+        "summary.json",
+        "kernels.csv",
+        "cuda_runtime.csv",
+        "cpu_ops.csv",
+        "user_annotations.csv",
+    ):
+        (analysis_dir / name).write_text(name, encoding="utf-8")
+
+    output_dir = tmp_path / "published"
+    result = snapshot_trace_evidence(trace, analysis_dir, output_dir)
+
+    assert result["source_trace"] == trace.name
+    assert result["files"][0]["published"] is False
+    assert len(result["files"][0]["sha256"]) == 64
+    assert (output_dir / "summary.json").read_text(encoding="utf-8") == "summary.json"

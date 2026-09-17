@@ -73,6 +73,28 @@
         "--enable-cache-report"
       ]
     },
+    "w8a8_fused": {
+      "env": {
+        "SGLANG_W8A8_FUSED_RMSNORM_QUANT": "true"
+      },
+      "args": [
+        "--attention-backend", "flashinfer",
+        "--enable-metrics",
+        "--enable-cache-report"
+      ]
+    },
+    "w8a8_fused_chunk1024": {
+      "env": {
+        "SGLANG_W8A8_FUSED_RMSNORM_QUANT": "true"
+      },
+      "args": [
+        "--attention-backend", "flashinfer",
+        "--chunked-prefill-size", "1024",
+        "--prefill-decode-interval", "4",
+        "--enable-metrics",
+        "--enable-cache-report"
+      ]
+    },
     "adaptive_chunk1024": {
       "args": [
         "--attention-backend", "flashinfer",
@@ -200,6 +222,24 @@
         "--profile-prefix", "mixed-prefill"
       ]
     },
+    "profile_decode": {
+      "dataset": "random-ids",
+      "num_prompts": 8,
+      "max_concurrency": 1,
+      "request_rate": "inf",
+      "repetitions": 1,
+      "args": [
+        "--random-input-len", "1024",
+        "--random-output-len", "512",
+        "--random-range-ratio", "1.0",
+        "--profile",
+        "--profile-activities", "CPU", "GPU",
+        "--profile-start-step", "50",
+        "--profile-steps", "50",
+        "--profile-output-dir", "/workspace/agentperf/profiles/torch",
+        "--profile-prefix", "decode"
+      ]
+    },
     "agent_prefix_4k": {
       "dataset": "generated-shared-prefix",
       "num_prompts": 160,
@@ -222,6 +262,7 @@
     "agent_prefix_only": ["agent_prefix_4k"],
     "mixed_prefill_only": ["mixed_prefill_2k_8k"],
     "profile": ["profile_mixed_prefill"],
+    "profile_decode": ["profile_decode"],
     "all": ["smoke", "decode_1k_512", "prefill_8k_64", "agent_prefix_4k"]
   }
 }

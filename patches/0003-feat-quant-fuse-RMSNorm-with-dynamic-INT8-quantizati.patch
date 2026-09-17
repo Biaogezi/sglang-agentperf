@@ -1,0 +1,405 @@
+From 97b802a1fe43318e8928c3f08c95a56a0872338c Mon Sep 17 00:00:00 2001
+From: biaogezi <scwang@bupt.edu.cn>
+Date: Fri, 18 Sep 2026 01:53:09 +0800
+Subject: [PATCH] feat(quant): fuse RMSNorm with dynamic INT8 quantization
+
+---
+ .../kernels/ops/quantization/int8_kernel.py   | 88 +++++++++++++++++++
+ python/sglang/srt/layers/communicator.py      | 21 ++++-
+ python/sglang/srt/layers/layernorm.py         | 59 +++++++++++++
+ .../schemes/compressed_tensors_w8a8_int8.py   | 14 ++-
+ python/sglang/srt/models/qwen3.py             | 11 ++-
+ test/registered/quant/test_int8_kernel.py     | 46 +++++++++-
+ 6 files changed, 232 insertions(+), 7 deletions(-)
+
+diff --git a/python/sglang/kernels/ops/quantization/int8_kernel.py b/python/sglang/kernels/ops/quantization/int8_kernel.py
+index 3c73744..1fc3b4b 100644
+--- a/python/sglang/kernels/ops/quantization/int8_kernel.py
++++ b/python/sglang/kernels/ops/quantization/int8_kernel.py
+@@ -90,6 +90,94 @@ def per_token_quant_int8(x, scale_dtype=torch.float32, cal_sum=False):
+         return x_q, scales
+ 
+ 
++@triton.jit
++def _rmsnorm_quant_int8(
++    x_ptr,
++    residual_ptr,
++    weight_ptr,
++    xq_ptr,
++    scale_ptr,
++    stride_x,
++    stride_xq,
++    N,
++    eps,
++    HAS_RESIDUAL: tl.constexpr,
++    BLOCK: tl.constexpr,
++):
++    """Fused residual add, RMSNorm, and dynamic per-token INT8 quantization."""
++    row_id = tl.program_id(0)
++    cols = tl.arange(0, BLOCK)
++    mask = cols < N
++
++    x_offsets = row_id * stride_x + cols
++    x = tl.load(x_ptr + x_offsets, mask=mask, other=0.0).to(tl.float32)
++    if HAS_RESIDUAL:
++        residual = tl.load(residual_ptr + x_offsets, mask=mask, other=0.0).to(
++            tl.float32
++        )
++        x += residual
++        # Match fused_add_rmsnorm: publish the pre-normalization residual in-place.
++        tl.store(residual_ptr + x_offsets, x, mask=mask)
++
++    variance = tl.sum(x * x, axis=0) / N
++    normed = x * tl.rsqrt(variance + eps)
++    weight = tl.load(weight_ptr + cols, mask=mask, other=0.0).to(tl.float32)
++    normed *= weight
++
++    # Match the unfused path's model-dtype RMSNorm output before quantization.
++    normed = normed.to(x_ptr.dtype.element_ty).to(tl.float32)
++    absmax = tl.maximum(tl.max(tl.abs(normed)), 1e-10)
++    scale = absmax / 127.0
++    quantized = tl.extra.cuda.libdevice.round(normed * (127.0 / absmax)).to(tl.int8)
++
++    tl.store(xq_ptr + row_id * stride_xq + cols, quantized, mask=mask)
++    tl.store(scale_ptr + row_id, scale)
++
++
++def rmsnorm_quant_int8(
++    x: torch.Tensor,
++    weight: torch.Tensor,
++    eps: float,
++    residual: Optional[torch.Tensor] = None,
++):
++    """Fuse RMSNorm and dynamic per-token INT8 quantization on CUDA.
++
++    When ``residual`` is provided it is updated in-place with ``x + residual``,
++    matching the residual contract of SGLang's ``fused_add_rmsnorm`` operator.
++    """
++    assert x.is_cuda and x.is_contiguous()
++    assert x.dtype in (torch.float16, torch.bfloat16)
++    assert x.shape[-1] == weight.numel()
++    if residual is not None:
++        assert residual.is_contiguous() and residual.shape == x.shape
++        assert residual.dtype == x.dtype
++
++    original_shape = x.shape
++    x_2d = x.view(-1, x.shape[-1])
++    residual_2d = residual.view_as(x_2d) if residual is not None else None
++    x_q = torch.empty_like(x_2d, dtype=torch.int8)
++    scales = torch.empty((x_2d.shape[0], 1), device=x.device, dtype=torch.float32)
++    block = triton.next_power_of_2(x_2d.shape[-1])
++    num_warps = min(max(block // 256, 1), 8)
++
++    _rmsnorm_quant_int8[(x_2d.shape[0],)](
++        x_2d,
++        residual_2d,
++        weight,
++        x_q,
++        scales,
++        stride_x=x_2d.stride(0),
++        stride_xq=x_q.stride(0),
++        N=x_2d.shape[-1],
++        eps=eps,
++        HAS_RESIDUAL=residual is not None,
++        BLOCK=block,
++        num_warps=num_warps,
++        num_stages=1,
++    )
++    return x_q.view(original_shape), scales.view(*original_shape[:-1], 1)
++
++
+ @triton.jit
+ def _per_token_group_quant_int8(
+     # Pointers to inputs and output
+diff --git a/python/sglang/srt/layers/communicator.py b/python/sglang/srt/layers/communicator.py
+index c5c3501..ece1149 100644
+--- a/python/sglang/srt/layers/communicator.py
++++ b/python/sglang/srt/layers/communicator.py
+@@ -617,6 +617,7 @@ class LayerCommunicator:
+         forward_batch: ForwardBatch,
+         quant_format: str = "",
+         post_residual_addition: Optional[torch.Tensor] = None,
++        quant_linear: Optional[torch.nn.Module] = None,
+     ):
+         # residual is None marks the first decoder layer, where the SP region
+         # opens: re-evaluated per forward so a crash mid-loop cannot leak into
+@@ -736,7 +737,9 @@ class LayerCommunicator:
+                         )
+ 
+                     else:
+-                        hidden_states = self.input_layernorm(hidden_states)
++                        hidden_states = self.input_layernorm(
++                            hidden_states, quant_linear=quant_linear
++                        )
+                 else:
+                     if _use_aiter and _is_gfx95_supported and ("mxfp4" in quant_format):
+                         hidden_states, *_, residual = fused_rms_mxfp4_quant(
+@@ -792,6 +795,7 @@ class LayerCommunicator:
+                             hidden_states,
+                             residual,
+                             post_residual_addition,
++                            quant_linear=quant_linear,
+                         )
+ 
+         hidden_states = self._communicate_simple_fn(
+@@ -831,6 +835,7 @@ class LayerCommunicator:
+         residual: torch.Tensor,
+         forward_batch: ForwardBatch,
+         cache=None,
++        quant_linear: Optional[torch.nn.Module] = None,
+     ):
+         if self._sp_variant is not None and get_forward().sp_active:
+             return self._sp_variant.prepare_mlp(
+@@ -839,13 +844,20 @@ class LayerCommunicator:
+         if cache is not None:
+             self._context.cache = cache
+ 
+-        return self._communicate_with_all_reduce_and_layer_norm_fn(
++        kwargs = dict(
+             hidden_states=hidden_states,
+             residual=residual,
+             forward_batch=forward_batch,
+             layernorm=self.post_attention_layernorm,
+             context=self._context,
+         )
++        if quant_linear is not None:
++            assert (
++                self._communicate_with_all_reduce_and_layer_norm_fn
++                is CommunicateWithAllReduceAndLayerNormFn._simple
++            ), "pre-quantized LayerNorm output currently requires TP=1"
++            kwargs["quant_linear"] = quant_linear
++        return self._communicate_with_all_reduce_and_layer_norm_fn(**kwargs)
+ 
+     def postprocess_layer(
+         self,
+@@ -1163,10 +1175,13 @@ class CommunicateWithAllReduceAndLayerNormFn:
+         forward_batch: ForwardBatch,
+         layernorm: torch.nn.Module,
+         context: CommunicateContext,
++        quant_linear: Optional[torch.nn.Module] = None,
+     ):
+         # TODO move these `if shape != 0` into LayerNorm itself
+         if hidden_states.shape[0] != 0:
+-            hidden_states, residual = layernorm(hidden_states, residual)
++            hidden_states, residual = layernorm(
++                hidden_states, residual, quant_linear=quant_linear
++            )
+         return hidden_states, residual
+ 
+     @staticmethod
+diff --git a/python/sglang/srt/layers/layernorm.py b/python/sglang/srt/layers/layernorm.py
+index 626381b..0e65290 100644
+--- a/python/sglang/srt/layers/layernorm.py
++++ b/python/sglang/srt/layers/layernorm.py
+@@ -57,6 +57,9 @@ _is_cpu = is_cpu()
+ _is_xpu = is_xpu()
+ _flashinfer_layernorm_available = False
+ _flashinfer_rmsnorm_quant_available = False
++_enable_w8a8_fused_rmsnorm_quant = get_bool_env_var(
++    "SGLANG_W8A8_FUSED_RMSNORM_QUANT"
++)
+ 
+ if _is_cuda or _is_xpu or _is_musa:
+     if _is_flashinfer_available:
+@@ -436,6 +439,30 @@ def _is_static_per_tensor_fp8_linear(quant_method, linear) -> bool:
+     return False
+ 
+ 
++def _is_dynamic_per_token_int8_linear(linear) -> bool:
++    """Return whether ``linear`` accepts pre-quantized dynamic W8A8 input."""
++    if linear is None:
++        return False
++    try:
++        from sglang.srt.layers.quantization.compressed_tensors.compressed_tensors import (
++            CompressedTensorsLinearMethod,
++        )
++        from sglang.srt.layers.quantization.compressed_tensors.schemes import (
++            CompressedTensorsW8A8Int8,
++        )
++    except ImportError:
++        return False
++
++    quant_method = getattr(linear, "quant_method", None)
++    scheme = getattr(linear, "scheme", None)
++    return (
++        isinstance(quant_method, CompressedTensorsLinearMethod)
++        and isinstance(scheme, CompressedTensorsW8A8Int8)
++        and not scheme.is_static_input_scheme
++        and scheme.input_symmetric
++    )
++
++
+ class RMSNorm(BaseFusedOp):
+     def __init__(
+         self,
+@@ -521,6 +548,15 @@ class RMSNorm(BaseFusedOp):
+             if needs_reshape:
+                 out = out.reshape(original_shape)
+             return out
++        if (
++            _enable_w8a8_fused_rmsnorm_quant
++            and quant_linear is not None
++            and not self.cast_x_before_out_mul
++            and _is_dynamic_per_token_int8_linear(quant_linear)
++        ):
++            return self.forward_with_dynamic_int8_quant_fusion(
++                x, residual, post_residual_addition
++            )
+         # Fuse the downstream FP8 static per-tensor activation quant into the
+         # norm when supported. Placed after the empty / variance-override /
+         # batch-invariant guards above (all incompatible with the fused kernel)
+@@ -608,6 +644,29 @@ class RMSNorm(BaseFusedOp):
+             return result.reshape(original_shape)
+         return result
+ 
++    def forward_with_dynamic_int8_quant_fusion(
++        self,
++        x: torch.Tensor,
++        residual: Optional[torch.Tensor] = None,
++        post_residual_addition: Optional[torch.Tensor] = None,
++    ):
++        """Fuse RMSNorm with dynamic per-token INT8 activation quantization."""
++        from sglang.kernels.ops.quantization.int8_kernel import rmsnorm_quant_int8
++
++        if post_residual_addition is not None:
++            assert residual is not None
++            residual = residual + post_residual_addition
++        x_q, x_scale = rmsnorm_quant_int8(
++            x,
++            self.weight.data,
++            self.variance_epsilon,
++            residual=residual,
++        )
++        prequantized = (x_q, x_scale, x.dtype)
++        if residual is not None:
++            return prequantized, residual
++        return prequantized
++
+     def forward_npu(
+         self,
+         x: torch.Tensor,
+diff --git a/python/sglang/srt/layers/quantization/compressed_tensors/schemes/compressed_tensors_w8a8_int8.py b/python/sglang/srt/layers/quantization/compressed_tensors/schemes/compressed_tensors_w8a8_int8.py
+index 7634e81..ff9684c 100644
+--- a/python/sglang/srt/layers/quantization/compressed_tensors/schemes/compressed_tensors_w8a8_int8.py
++++ b/python/sglang/srt/layers/quantization/compressed_tensors/schemes/compressed_tensors_w8a8_int8.py
+@@ -172,10 +172,20 @@ class CompressedTensorsW8A8Int8(CompressedTensorsLinearScheme):
+         self, layer: torch.nn.Module, x: torch.Tensor, bias: Optional[torch.Tensor]
+     ) -> torch.Tensor:
+         # TODO: add cutlass_scaled_mm_azp support
+-        x_q, x_scale = per_token_quant_int8(x)
++        if isinstance(x, tuple):
++            x_q, x_scale, output_dtype = x
++            assert x_q.dtype == torch.int8
++        else:
++            output_dtype = x.dtype
++            x_q, x_scale = per_token_quant_int8(x)
+ 
+         return int8_scaled_mm(
+-            x_q, layer.weight, x_scale, layer.weight_scale, out_dtype=x.dtype, bias=bias
++            x_q,
++            layer.weight,
++            x_scale,
++            layer.weight_scale,
++            out_dtype=output_dtype,
++            bias=bias,
+         )
+ 
+ 
+diff --git a/python/sglang/srt/models/qwen3.py b/python/sglang/srt/models/qwen3.py
+index 9fbd046..2b585a0 100644
+--- a/python/sglang/srt/models/qwen3.py
++++ b/python/sglang/srt/models/qwen3.py
+@@ -399,8 +399,14 @@ class Qwen3DecoderLayer(nn.Module):
+             residual,
+             forward_batch,
+             post_residual_addition=post_residual_addition,
++            quant_linear=(
++                self.self_attn.qkv_proj if get_parallel().tp_size == 1 else None
++            ),
++        )
++        hidden_states_for_shape = (
++            hidden_states[0] if isinstance(hidden_states, tuple) else hidden_states
+         )
+-        if hidden_states.shape[0] != 0:
++        if hidden_states_for_shape.shape[0] != 0:
+             hidden_states = self.self_attn(
+                 positions=positions,
+                 hidden_states=hidden_states,
+@@ -412,6 +418,9 @@ class Qwen3DecoderLayer(nn.Module):
+             hidden_states,
+             residual,
+             forward_batch,
++            quant_linear=(
++                self.mlp.gate_up_proj if get_parallel().tp_size == 1 else None
++            ),
+             cache=(
+                 [self.mlp.gate_up_proj.weight, self.mlp.down_proj.weight]
+                 if _is_npu
+diff --git a/test/registered/quant/test_int8_kernel.py b/test/registered/quant/test_int8_kernel.py
+index 85cc9ca..99bf43a 100644
+--- a/test/registered/quant/test_int8_kernel.py
++++ b/test/registered/quant/test_int8_kernel.py
+@@ -2,8 +2,12 @@ import itertools
+ import unittest
+ 
+ import torch
++from sgl_kernel import fused_add_rmsnorm, rmsnorm
+ 
+-from sglang.kernels.ops.quantization.int8_kernel import per_token_quant_int8
++from sglang.kernels.ops.quantization.int8_kernel import (
++    per_token_quant_int8,
++    rmsnorm_quant_int8,
++)
+ from sglang.srt.layers.activation import SiluAndMul
+ from sglang.srt.layers.moe.moe_runner.triton_utils.fused_moe import fused_moe
+ from sglang.srt.layers.moe.topk import TopKConfig, select_experts
+@@ -80,6 +84,46 @@ def torch_w8a8_per_column_moe(a, w1, w2, w1_s, w2_s, score, topk):
+     ).sum(dim=1)
+ 
+ 
++class TestFusedRMSNormInt8Quant(CustomTestCase):
++    @classmethod
++    def setUpClass(cls):
++        if not torch.cuda.is_available():
++            raise unittest.SkipTest("CUDA is not available")
++
++    def _check(self, dtype: torch.dtype, use_residual: bool):
++        torch.manual_seed(7)
++        x = torch.randn((17, 4096), device="cuda", dtype=dtype)
++        weight = torch.randn((4096,), device="cuda", dtype=dtype)
++        residual = (
++            torch.randn_like(x, device="cuda") if use_residual else None
++        )
++        x_ref = x.clone()
++        residual_ref = residual.clone() if residual is not None else None
++        if residual_ref is None:
++            normed = rmsnorm(x_ref, weight, 1e-6)
++        else:
++            fused_add_rmsnorm(x_ref, residual_ref, weight, 1e-6)
++            normed = x_ref
++        expected_q, expected_scale = per_token_quant_int8(normed)
++
++        actual_q, actual_scale = rmsnorm_quant_int8(
++            x, weight, 1e-6, residual=residual
++        )
++
++        self.assertTrue(torch.equal(actual_q, expected_q))
++        torch.testing.assert_close(actual_scale, expected_scale, rtol=1e-5, atol=1e-6)
++        if residual is not None:
++            torch.testing.assert_close(residual, residual_ref, rtol=0, atol=0)
++
++    def test_matches_unfused_fp16(self):
++        self._check(torch.float16, use_residual=False)
++        self._check(torch.float16, use_residual=True)
++
++    def test_matches_unfused_bf16(self):
++        self._check(torch.bfloat16, use_residual=False)
++        self._check(torch.bfloat16, use_residual=True)
++
++
+ class TestW8A8Int8FusedMoE(CustomTestCase):
+     DTYPES = [torch.half, torch.bfloat16]
+     M = [1, 33]
+-- 
+2.47.1.windows.2
+
