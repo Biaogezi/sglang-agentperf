@@ -21,8 +21,10 @@ dynamic symmetric per-token W8A8, and published as
   residual buffer also matches exactly (`2 passed`, one unrelated test deselected).
 - The fixed 335-token prompt-NLL corpus is bit-for-bit identical at the aggregate and per-document
   level: mean NLL `2.8919478789`, perplexity `18.02839255`, delta `0.0`.
-- Serving generations are not used as a strict equivalence gate because benchmark sampling is not
-  deterministic across launches; the fixed teacher-forced NLL gate is the numerical criterion.
+- Generated text differs in all nine matched core workload repetitions, while output lengths and
+  errors match. The benchmark defaults to temperature zero; random sampling is not an explanation.
+  Numerical differences or changes in batch execution may contribute, but their cause has not been
+  isolated. Passing this short teacher-forced NLL corpus does not establish long-sequence parity.
 
 ## Kernel-only result
 
@@ -43,8 +45,10 @@ pair and must not be described as end-to-end speedups.
 
 ## End-to-end result
 
-Every serving point contains three repetitions and uses the same checkpoint, SGLang commit,
-container, request counts, concurrency and workload seed as its control.
+Every serving point contains three repetitions and uses the same checkpoint, container, request
+counts and concurrency as its control. The manifests record the actual source commits; these
+historical controls are not an interleaved, same-commit on/off experiment, so small differences
+cannot be attributed exclusively to the fused kernel.
 
 | Workload / control | Input tok/s change | p99 E2E change | p99 TTFT change | p99 TPOT change | p99 ITL change |
 |---|---:|---:|---:|---:|---:|
@@ -77,4 +81,3 @@ gate/up, and down projections. `_int_mm` does not support `M <= 16` on this stac
 Triton epilogue path is 11.27% faster. One isolated large-prefill shape cannot justify a runtime
 dispatch and cannot meet the end-to-end acceptance gate; the next candidate is A10-specific
 CUTLASS tile/dispatch tuning rather than wholesale backend replacement.
-
