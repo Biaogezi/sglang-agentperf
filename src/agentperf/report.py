@@ -10,8 +10,12 @@ from pathlib import Path
 from typing import Any
 
 METRIC_ALIASES = {
+    "completed": ("completed",),
     "request_throughput": ("request_throughput",),
+    "input_throughput": ("input_throughput", "input_throughput_tok_s"),
     "output_throughput": ("output_throughput", "output_throughput_tok_s"),
+    "total_throughput": ("total_throughput", "total_throughput_tok_s"),
+    "e2e_p99_ms": ("p99_e2e_latency_ms", "e2e_p99_ms"),
     "ttft_p99_ms": ("p99_ttft_ms", "ttft_p99_ms"),
     "tpot_p99_ms": ("p99_tpot_ms", "tpot_p99_ms"),
     "itl_p99_ms": ("p99_itl_ms", "itl_p99_ms"),

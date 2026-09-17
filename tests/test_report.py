@@ -7,8 +7,12 @@ from agentperf.report import summarize_run
 def test_summarize_repetitions(tmp_path: Path) -> None:
     for repetition, throughput in enumerate((100.0, 110.0, 120.0), start=1):
         record = {
+            "completed": 10,
             "request_throughput": 2.0,
+            "input_throughput": throughput * 10,
             "output_throughput": throughput,
+            "total_throughput": throughput * 11,
+            "p99_e2e_latency_ms": 75.0,
             "p99_ttft_ms": 50.0,
         }
         path = tmp_path / f"model__profile__workload__r{repetition}.jsonl"
@@ -23,6 +27,10 @@ def test_summarize_repetitions(tmp_path: Path) -> None:
     )
     rows = summarize_run(tmp_path, output)
     assert rows[0]["repetitions"] == 3
+    assert rows[0]["completed_mean"] == 10.0
+    assert rows[0]["input_throughput_mean"] == 1100.0
     assert rows[0]["output_throughput_mean"] == 110.0
+    assert rows[0]["total_throughput_mean"] == 1210.0
+    assert rows[0]["e2e_p99_ms_mean"] == 75.0
     assert rows[0]["retracted_requests_mean"] == 2 / 3
     assert output.exists()
