@@ -1,0 +1,29 @@
+{
+  "created_at": "20260917T160515Z",
+  "harness_commit": "3667cf8846b4844753a41dff4ecaf91eb8a2f24f",
+  "upstream_commit": "0bcd822377da7b5718e674eaf9c870d349424dd1",
+  "upstream_worktree_commit": "8f8acc8df0d7e7fc6d491f5db1ce3ef366e4094a",
+  "model": "qwen3_8b_fp16",
+  "profile": "baseline",
+  "corpus": "configs/quality_corpus.jsonl",
+  "server_command": [
+    "/opt/sglang/bin/python",
+    "-m",
+    "sglang.launch_server",
+    "--model-path",
+    "/data/models/Qwen3-8B",
+    "--host",
+    "127.0.0.1",
+    "--port",
+    "30000",
+    "--dtype",
+    "float16",
+    "--mem-fraction-static",
+    "0.82",
+    "--attention-backend",
+    "flashinfer",
+    "--enable-metrics",
+    "--enable-cache-report"
+  ],
+  "server_environment": {}
+}

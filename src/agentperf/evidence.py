@@ -18,7 +18,16 @@ def _sha256(path: Path) -> str:
 
 def snapshot_evidence(run_dir: Path, output_dir: Path) -> dict[str, Any]:
     """Publish small aggregates plus checksums that identify ignored raw artifacts."""
-    required = [run_dir / "manifest.json", run_dir / "summary.csv"]
+    aggregate_names = [
+        name for name in ("summary.csv", "quality.json") if (run_dir / name).is_file()
+    ]
+    if not aggregate_names:
+        raise FileNotFoundError(
+            f"Run is missing required aggregate: {run_dir / 'summary.csv'} or "
+            f"{run_dir / 'quality.json'}"
+        )
+
+    required = [run_dir / "manifest.json", *(run_dir / name for name in aggregate_names)]
     missing = [str(path) for path in required if not path.is_file()]
     if missing:
         raise FileNotFoundError(f"Run is missing required evidence: {', '.join(missing)}")
@@ -36,7 +45,7 @@ def snapshot_evidence(run_dir: Path, output_dir: Path) -> dict[str, Any]:
                 "name": path.name,
                 "size_bytes": path.stat().st_size,
                 "sha256": _sha256(path),
-                "published": path.name in {"manifest.json", "summary.csv"},
+                "published": path.name in {"manifest.json", *aggregate_names},
             }
         )
     index = {

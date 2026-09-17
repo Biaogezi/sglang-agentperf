@@ -1,9 +1,9 @@
 # NVIDIA A10 evidence snapshot
 
 These directories contain the small, reviewable portion of each accepted run: the exact manifest,
-the three-repetition aggregate, and SHA-256/size records for every ignored raw JSONL and log file.
-Raw request traces remain local because they are large; their hashes make later substitutions
-detectable.
+the three-repetition aggregate or quality report, and SHA-256/size records for ignored raw JSONL
+and log files. Raw request traces remain local because they are large; their hashes make later
+substitutions detectable.
 
 ## Environment
 
@@ -15,6 +15,22 @@ detectable.
 
 The exact container digest, SGLang commit, server command, workload command and request sizes are in
 each `manifest.json`.
+
+## Quantization quality gate
+
+The fixed corpus is a fast numerical regression gate, not a replacement for downstream task
+evaluation. All three paths score the same 335 tokens.
+
+| Precision path | Mean NLL | Perplexity | NLL delta vs FP16 | Gate |
+|---|---:|---:|---:|---|
+| FP16 | 2.89436 | 18.0719 | — | baseline |
+| AWQ-Marlin INT4 | 2.91211 | 18.3955 | +0.01775 | pass |
+| calibrated W8A8 INT8 | 2.89195 | 18.0284 | -0.00241 | pass |
+
+The allowed mean-NLL increase is 0.02. The W8A8 checkpoint is pinned to revision
+`13e255a9648ec08d3873bce1c3d9886a76494c43`, and both weight shards are verified by byte size and
+SHA-256 before launch. The earlier experiment that interpreted ordinary FP16 weights as W8A8 is
+invalidated and is not published here.
 
 ## Accepted observations
 

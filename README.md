@@ -105,8 +105,8 @@ ordinary FP16 weights can produce plausible throughput with unusable output; `ru
 mandatory gate before any W8A8 performance result is accepted.
 
 To publish a compact, auditable result without committing multi-megabyte request traces, use
-`agentperf snapshot-evidence`. It copies the manifest and aggregate CSV and records the size and
-SHA-256 of every ignored raw artifact.
+`agentperf snapshot-evidence`. It copies the manifest plus either the benchmark aggregate CSV or
+the quality JSON, and records the size and SHA-256 of every ignored raw artifact.
 
 ## Evidence policy
 
@@ -116,6 +116,9 @@ results are labelled kernel-only. Simulator results are never presented as end-t
 
 ## Current findings
 
+- A revision-pinned, calibrated W8A8 checkpoint passes the pre-registered prompt-NLL gate:
+  mean NLL is 2.89195 versus 2.89436 for FP16 across the same 335 scored tokens (delta -0.00241;
+  acceptance threshold +0.02). Performance results are accepted only after this gate.
 - AWQ-Marlin removes the A10 KV-capacity failure mode seen in the FP16 load test and materially
   improves decode-bound and shared-prefix serving.
 - The extra KV capacity exposes long-prefill/decode interference: default AWQ reaches high input

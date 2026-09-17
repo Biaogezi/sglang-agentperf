@@ -1,0 +1,67 @@
+{
+  "schema_version": 1,
+  "created_at": "2026-09-17T17:01:38.631953+00:00",
+  "endpoint": "http://127.0.0.1:30000",
+  "corpus": "configs/quality_corpus.jsonl",
+  "corpus_sha256": "19b7485c1bc38397dfb1959e7e98877c84a27ef648df9cb94079c6c770c88831",
+  "documents": [
+    {
+      "id": "en_systems_01",
+      "scored_tokens": 28,
+      "mean_nll": 4.164802209411781
+    },
+    {
+      "id": "en_systems_02",
+      "scored_tokens": 34,
+      "mean_nll": 4.194894520929665
+    },
+    {
+      "id": "en_science_01",
+      "scored_tokens": 27,
+      "mean_nll": 3.1143555881345595
+    },
+    {
+      "id": "en_reasoning_01",
+      "scored_tokens": 33,
+      "mean_nll": 2.3951312527705424
+    },
+    {
+      "id": "zh_systems_01",
+      "scored_tokens": 41,
+      "mean_nll": 2.7743726550653243
+    },
+    {
+      "id": "zh_systems_02",
+      "scored_tokens": 32,
+      "mean_nll": 4.047495209262706
+    },
+    {
+      "id": "zh_general_01",
+      "scored_tokens": 25,
+      "mean_nll": 3.7258687815780287
+    },
+    {
+      "id": "code_python_01",
+      "scored_tokens": 47,
+      "mean_nll": 0.7908172008233316
+    },
+    {
+      "id": "code_cpp_01",
+      "scored_tokens": 34,
+      "mean_nll": 1.3713709204239688
+    },
+    {
+      "id": "agent_tool_01",
+      "scored_tokens": 34,
+      "mean_nll": 3.712466670524223
+    }
+  ],
+  "document_count": 10,
+  "scored_tokens": 335,
+  "mean_nll": 2.8919478788676725,
+  "perplexity": 18.028392546653617,
+  "model": "qwen3_8b_w8a8",
+  "profile": "baseline",
+  "harness_commit": "e83235bd284031ef44696406872b0f7b2bca3445",
+  "upstream_worktree_commit": "8f8acc8df0d7e7fc6d491f5db1ce3ef366e4094a"
+}

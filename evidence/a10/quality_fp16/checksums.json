@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "created_at": "2026-09-17T17:05:40.438306+00:00",
+  "source_run": "20260917T160515Z__qwen3_8b_fp16__baseline",
+  "files": [
+    {
+      "name": "manifest.json",
+      "size_bytes": 737,
+      "sha256": "8e68e6d0933e8114065dc6eaaad5b9384dc81a65617b709012ea6cbaa7094d4f",
+      "published": true
+    },
+    {
+      "name": "quality.json",
+      "size_bytes": 1630,
+      "sha256": "7bd095000eed2b291e2a9bb5e3b455357be9b1adfc51911c70d566aef930320a",
+      "published": true
+    },
+    {
+      "name": "server.log",
+      "size_bytes": 35510,
+      "sha256": "cf90a8c09bda624c3e3d398bb2c1b5960c028769bd2df28409ae09542d94103f",
+      "published": false
+    }
+  ]
+}

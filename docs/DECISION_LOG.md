@@ -44,3 +44,14 @@ criterion. Add the trace evidence and decision here before coding the patch.
   activations use per-token dynamic quantization; the FP16 checkpoint does not satisfy that contract.
 - Decision: invalidate all performance numbers from this configuration and exclude them from
   accepted evidence. Pin and test a calibrated W8A8 checkpoint before rerunning performance.
+
+## 2026-09-18 — Accept calibrated W8A8 for performance evaluation
+
+- Pinned `nytopop/Qwen3-8B.w8a8` at revision
+  `13e255a9648ec08d3873bce1c3d9886a76494c43` and verified both shards by size and SHA-256.
+- SGLang confirmed that the checkpoint's `compressed-tensors` metadata is compatible with
+  `w8a8_int8`; reported weight memory is 8.81 GB and KV capacity is 65,770 tokens on the A10.
+- The fixed 335-token regression corpus measured mean NLL 2.89195 versus 2.89436 for FP16,
+  a delta of -0.00241 against the pre-registered maximum increase of 0.02.
+- Decision: the calibrated W8A8 artifact clears the numerical gate and may proceed to the same
+  three-repetition serving matrix as FP16 and AWQ. This gate does not replace downstream task eval.
