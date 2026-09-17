@@ -1,0 +1,10 @@
+{"id":"en_systems_01","text":"A production inference service must balance throughput, latency, memory capacity, and output quality. Optimizing only one metric can move the bottleneck somewhere else."}
+{"id":"en_systems_02","text":"During autoregressive decoding, each request appends one key and one value vector per layer. A paged cache avoids reserving one contiguous region for the maximum sequence length."}
+{"id":"en_science_01","text":"Water changes state when temperature and pressure alter the balance between molecular motion and intermolecular attraction. The transition does not create or destroy matter."}
+{"id":"en_reasoning_01","text":"If a train travels sixty kilometers in one hour and then thirty kilometers in half an hour, its total distance is ninety kilometers and its average speed is sixty kilometers per hour."}
+{"id":"zh_systems_01","text":"大模型推理通常分为预填充和逐词解码两个阶段。预填充阶段更依赖矩阵乘法吞吐，解码阶段则更容易受到显存带宽和调度开销限制。"}
+{"id":"zh_systems_02","text":"性能优化必须建立在可复现实验上。固定模型版本、请求分布、并发度和测量方法之后，才能判断一个改动是否真的有效。"}
+{"id":"zh_general_01","text":"城市里的公共交通把不同社区连接起来。稳定的班次、清晰的换乘信息和合理的票价都会影响乘客的选择。"}
+{"id":"code_python_01","text":"def moving_average(values, window):\n    if window <= 0:\n        raise ValueError(\"window must be positive\")\n    return [sum(values[i:i + window]) / window for i in range(len(values) - window + 1)]"}
+{"id":"code_cpp_01","text":"template <typename T> T clamp_value(T value, T low, T high) { return value < low ? low : (value > high ? high : value); }"}
+{"id":"agent_tool_01","text":"When a tool returns an error, the agent should preserve the error message, check whether the request can be retried safely, and avoid repeating an operation that changes external state."}

@@ -6,6 +6,7 @@ from pathlib import Path
 
 from .commands import benchmark_command, server_command, shell_join
 from .config import build_plan, load_config
+from .quality import compare_quality, score_corpus
 from .report import check_run_equivalence, compare_summaries, summarize_run
 from .runner import run_plan
 from .trace import analyze_trace
@@ -49,6 +50,21 @@ def _parser() -> argparse.ArgumentParser:
     )
     equivalence.add_argument("--baseline-run", required=True)
     equivalence.add_argument("--candidate-run", required=True)
+
+    quality = subparsers.add_parser(
+        "score-corpus", help="score a fixed corpus with SGLang prompt logprobs"
+    )
+    quality.add_argument("--endpoint", default="http://127.0.0.1:30000")
+    quality.add_argument("--corpus", required=True)
+    quality.add_argument("--output", required=True)
+    quality.add_argument("--timeout-s", type=float, default=120.0)
+
+    quality_compare = subparsers.add_parser(
+        "compare-quality", help="gate candidate corpus NLL against a baseline"
+    )
+    quality_compare.add_argument("--baseline", required=True)
+    quality_compare.add_argument("--candidate", required=True)
+    quality_compare.add_argument("--max-nll-increase", type=float, default=0.02)
     return parser
 
 
@@ -91,6 +107,23 @@ def main() -> None:
         )
         print(json.dumps(result, indent=2, ensure_ascii=False))
         if not result["equivalent"]:
+            raise SystemExit(1)
+    elif args.command == "score-corpus":
+        result = score_corpus(
+            endpoint=args.endpoint,
+            corpus_path=Path(args.corpus),
+            output_path=Path(args.output),
+            timeout_s=args.timeout_s,
+        )
+        print(json.dumps(result, indent=2, ensure_ascii=False))
+    elif args.command == "compare-quality":
+        result = compare_quality(
+            Path(args.baseline),
+            Path(args.candidate),
+            max_nll_increase=args.max_nll_increase,
+        )
+        print(json.dumps(result, indent=2, ensure_ascii=False))
+        if not result["passed"]:
             raise SystemExit(1)
 
 
