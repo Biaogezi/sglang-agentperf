@@ -7,6 +7,7 @@ UPSTREAM_REPO="$(awk -F= '$1 == "repository" {print $2}' "${PROJECT_ROOT}/UPSTRE
 UPSTREAM_REF="$(awk -F= '$1 == "ref" {print $2}' "${PROJECT_ROOT}/UPSTREAM.lock")"
 UPSTREAM_COMMIT="$(awk -F= '$1 == "commit" {print $2}' "${PROJECT_ROOT}/UPSTREAM.lock")"
 CONTAINER_IMAGE="$(awk -F= '$1 == "image" {print $2}' "${PROJECT_ROOT}/CONTAINER.lock")"
+CONTAINER_MIRROR_IMAGE="$(awk -F= '$1 == "mirror_image" {print $2}' "${PROJECT_ROOT}/CONTAINER.lock")"
 CONTAINER_DIGEST="$(awk -F= '$1 == "digest" {print $2}' "${PROJECT_ROOT}/CONTAINER.lock")"
 
 python3 -m venv "${PROJECT_ROOT}/.venv"
@@ -22,7 +23,8 @@ git -C "${UPSTREAM_DIR}" fetch --depth 1 origin "${UPSTREAM_REF}"
 git -C "${UPSTREAM_DIR}" checkout --detach "${UPSTREAM_COMMIT}"
 
 if command -v docker >/dev/null 2>&1; then
-  docker pull "${CONTAINER_IMAGE}@${CONTAINER_DIGEST}"
+  docker pull "${CONTAINER_IMAGE}@${CONTAINER_DIGEST}" || \
+    docker pull "${CONTAINER_MIRROR_IMAGE}@${CONTAINER_DIGEST}"
 else
   echo "Docker is required for the pinned GPU environment." >&2
   exit 1

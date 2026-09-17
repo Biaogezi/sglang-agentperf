@@ -6,6 +6,10 @@ The host must provide an NVIDIA driver, Docker with the NVIDIA runtime, a mounte
 and at least 80 GiB free space. The project uses the host driver but pins all user-space CUDA and
 SGLang dependencies in `CONTAINER.lock`.
 
+For mainland-China hosts, `CONTAINER.lock` also records a mirror reference. The content digest is
+identical to the official Docker Hub image; the bootstrap tries the official registry first and
+falls back to the mirror without relaxing content verification.
+
 ```bash
 nvidia-smi
 docker info
@@ -78,4 +82,3 @@ to `docs/DECISION_LOG.md`.
 Create an optimization branch in `upstream/sglang`, never modify the detached baseline commit.
 Re-run the same commands, model revisions and workload inputs. A candidate is rejected unless it
 passes correctness, quality, memory and performance gates in `docs/EXPERIMENT_PROTOCOL.md`.
-

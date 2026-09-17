@@ -4,6 +4,7 @@ set -euo pipefail
 PROJECT_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 UPSTREAM_DIR="${PROJECT_ROOT}/upstream/sglang"
 CONTAINER_IMAGE="$(awk -F= '$1 == "image" {print $2}' "${PROJECT_ROOT}/CONTAINER.lock")"
+CONTAINER_MIRROR_IMAGE="$(awk -F= '$1 == "mirror_image" {print $2}' "${PROJECT_ROOT}/CONTAINER.lock")"
 CONTAINER_DIGEST="$(awk -F= '$1 == "digest" {print $2}' "${PROJECT_ROOT}/CONTAINER.lock")"
 
 if [[ ! -f "${PROJECT_ROOT}/.env" ]]; then
@@ -13,6 +14,11 @@ fi
 if [[ ! -d "${UPSTREAM_DIR}/.git" ]]; then
   echo "Missing pinned SGLang checkout; run scripts/bootstrap_remote.sh first." >&2
   exit 1
+fi
+
+RUNTIME_IMAGE="${CONTAINER_IMAGE}@${CONTAINER_DIGEST}"
+if ! docker image inspect "${RUNTIME_IMAGE}" >/dev/null 2>&1; then
+  RUNTIME_IMAGE="${CONTAINER_MIRROR_IMAGE}@${CONTAINER_DIGEST}"
 fi
 
 TTY_ARGS=()
@@ -31,5 +37,5 @@ exec docker run --rm "${TTY_ARGS[@]}" \
   -v "${UPSTREAM_DIR}:/workspace/sglang" \
   -v /data:/data \
   -w /workspace/agentperf \
-  "${CONTAINER_IMAGE}@${CONTAINER_DIGEST}" \
+  "${RUNTIME_IMAGE}" \
   "$@"
