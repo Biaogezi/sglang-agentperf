@@ -38,14 +38,22 @@ invalidated and is not published here.
 |---|---:|---:|---:|---:|---:|
 | FP16, decode 1K/512 | 510.40 | 255.20 | 26.06 s | 60.44 ms | 48.12 ms |
 | AWQ-Marlin, decode 1K/512 | 1129.33 | 564.67 | 5.21 s | 27.86 ms | 19.78 ms |
+| calibrated W8A8, decode 1K/512 | 1037.52 | 518.76 | 7.99 s | 30.54 ms | 27.17 ms |
 | FP16, prefill 8K/64 | 2240.92 | 17.51 | 29.22 s | 76.40 ms | 42.26 ms |
 | AWQ default chunk 2048, prefill 8K/64 | 2725.83 | 21.30 | 22.56 s | 342.08 ms | 5620.96 ms |
+| calibrated W8A8 default chunk 2048, prefill 8K/64 | 4349.44 | 33.98 | 17.24 s | 185.31 ms | 2848.82 ms |
 | AWQ static chunk 1024, prefill 8K/64 | 2512.28 | 19.63 | 22.93 s | 92.53 ms | 343.53 ms |
 
 AWQ-Marlin raises decode output throughput by 121.3% versus FP16 and cuts p99 TTFT by 80.0% on
 this memory-constrained load. For the interference-heavy 8K case, a static 1024-token chunk cuts
 p99 TPOT by 72.9% versus AWQ's default 2048-token chunk at a 7.8% input-throughput cost. This is a
 measured deployment operating point, not a claim that static chunking is a new algorithm.
+
+The calibrated W8A8 path exposes a phase-dependent crossover rather than a universally superior
+format. AWQ is 8.9% faster in decode output throughput, while W8A8 is 59.6% faster in 8K-prefill
+input throughput and reduces that workload's p99 TTFT by 23.6%. On the shared-prefix workload,
+W8A8 improves input/output throughput by 4.8% and p99 TTFT by 55.4%, but its p99 ITL is 20.9%
+worse. These trade-offs motivate phase-aware deployment rather than a single-format claim.
 
 The adaptive source patch and reduced-precision Marlin experiment were both rejected; see the
 decision log and optimization reports. Negative results are intentionally retained.

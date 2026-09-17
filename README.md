@@ -119,6 +119,11 @@ results are labelled kernel-only. Simulator results are never presented as end-t
 - A revision-pinned, calibrated W8A8 checkpoint passes the pre-registered prompt-NLL gate:
   mean NLL is 2.89195 versus 2.89436 for FP16 across the same 335 scored tokens (delta -0.00241;
   acceptance threshold +0.02). Performance results are accepted only after this gate.
+- Quantization has a measured phase crossover on the A10: AWQ-Marlin is 8.9% faster than W8A8 in
+  decode output throughput, while calibrated W8A8 is 59.6% faster than AWQ on 8K-prefill input
+  throughput and cuts p99 TTFT by 23.6%. The project therefore reports workload-specific operating
+  points instead of claiming one format is always best. See the
+  [quantization crossover report](docs/QUANTIZATION_CROSSOVER.md).
 - AWQ-Marlin removes the A10 KV-capacity failure mode seen in the FP16 load test and materially
   improves decode-bound and shared-prefix serving.
 - The extra KV capacity exposes long-prefill/decode interference: default AWQ reaches high input
