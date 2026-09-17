@@ -82,6 +82,18 @@
         "--enable-cache-report"
       ]
     },
+    "slo_chunk1024_i4_fp16_reduce": {
+      "env": {
+        "SGLANG_MARLIN_USE_FP32_REDUCE": "false"
+      },
+      "args": [
+        "--attention-backend", "flashinfer",
+        "--chunked-prefill-size", "1024",
+        "--prefill-decode-interval", "4",
+        "--enable-metrics",
+        "--enable-cache-report"
+      ]
+    },
     "slo_adaptive_i4": {
       "args": [
         "--attention-backend", "flashinfer",

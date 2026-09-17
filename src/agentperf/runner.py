@@ -86,6 +86,10 @@ def run_plan(
 
     plan = build_plan(config, model=model, profile=profile, suite=suite)
     server_argv = server_command(config, model, profile)
+    server_environment = {
+        str(key): str(value)
+        for key, value in config["server_profiles"][profile].get("env", {}).items()
+    }
     manifest = {
         "created_at": timestamp,
         "harness_commit": _git_head(),
@@ -96,6 +100,7 @@ def run_plan(
         "suite": suite,
         "cases": [case.__dict__ for case in plan],
         "server_command": server_argv,
+        "server_environment": server_environment,
         "benchmark_commands": [
             benchmark_command(config, case, run_dir / f"{case.case_id}.jsonl")
             for case in plan
@@ -112,6 +117,7 @@ def run_plan(
         "stdout": server_log,
         "stderr": subprocess.STDOUT,
         "text": True,
+        "env": {**os.environ, **server_environment},
     }
     if os.name != "nt":
         process_kwargs["start_new_session"] = True
