@@ -10,6 +10,12 @@ For mainland-China hosts, `CONTAINER.lock` also records a mirror reference. The 
 identical to the official Docker Hub image; the bootstrap tries the official registry first and
 falls back to the mirror without relaxing content verification.
 
+Large model downloads must be verified before launch. For sources with pinned file metadata:
+
+```bash
+agentperf verify-model --model qwen3_8b_w8a8 --model-dir /data/models/Qwen3-8B-W8A8
+```
+
 ```bash
 nvidia-smi
 docker info

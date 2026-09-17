@@ -17,7 +17,17 @@
       "huggingface_id": "nytopop/Qwen3-8B.w8a8",
       "revision": "13e255a9648ec08d3873bce1c3d9886a76494c43",
       "required": true,
-      "notes": "Ampere-targeted calibrated W8A8 checkpoint; third-party, quality-gate before use"
+      "notes": "Ampere-targeted calibrated W8A8 checkpoint; third-party, quality-gate before use",
+      "files": {
+        "model-00001-of-00002.safetensors": {
+          "size_bytes": 4954286136,
+          "sha256": "74cd2f3f56e3ebec6f819f5eecee3745ad4c24c3289b9b819fe59de554409b6d"
+        },
+        "model-00002-of-00002.safetensors": {
+          "size_bytes": 4484294568,
+          "sha256": "fead2abcd774faa8604194ed7f93091dc32ab525a5a19547077a58600431a05f"
+        }
+      }
     },
     "qwen3_8b_gptq": {
       "huggingface_id": "JunHowie/Qwen3-8B-GPTQ-Int4",

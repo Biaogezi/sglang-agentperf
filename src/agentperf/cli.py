@@ -7,6 +7,7 @@ from pathlib import Path
 from .commands import benchmark_command, server_command, shell_join
 from .config import build_plan, load_config
 from .evidence import snapshot_evidence
+from .models import verify_model_files
 from .quality import compare_quality, score_corpus
 from .report import check_run_equivalence, compare_summaries, summarize_run
 from .runner import run_plan, run_quality_plan
@@ -81,6 +82,13 @@ def _parser() -> argparse.ArgumentParser:
     )
     snapshot.add_argument("--run-dir", required=True)
     snapshot.add_argument("--output-dir", required=True)
+
+    verify_model = subparsers.add_parser(
+        "verify-model", help="verify model file sizes and SHA-256 against pinned metadata"
+    )
+    verify_model.add_argument("--sources", default="configs/model_sources.json")
+    verify_model.add_argument("--model", required=True)
+    verify_model.add_argument("--model-dir", required=True)
     return parser
 
 
@@ -153,6 +161,13 @@ def main() -> None:
     elif args.command == "snapshot-evidence":
         result = snapshot_evidence(Path(args.run_dir), Path(args.output_dir))
         print(json.dumps(result, indent=2, ensure_ascii=False))
+    elif args.command == "verify-model":
+        result = verify_model_files(
+            Path(args.sources), args.model, Path(args.model_dir)
+        )
+        print(json.dumps(result, indent=2, ensure_ascii=False))
+        if not result["valid"]:
+            raise SystemExit(1)
 
 
 if __name__ == "__main__":
