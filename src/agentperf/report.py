@@ -210,3 +210,32 @@ def compare_summaries(
         writer.writeheader()
         writer.writerows(rows)
     return rows
+
+
+def check_run_equivalence(baseline_dir: Path, candidate_dir: Path) -> dict[str, Any]:
+    """Check deterministic output fields for matching workload repetitions."""
+
+    def records(run_dir: Path) -> dict[tuple[str, str], dict[str, Any]]:
+        output = {}
+        for path in run_dir.glob("*.jsonl"):
+            parts = path.stem.rsplit("__", 2)
+            if len(parts) != 3:
+                continue
+            output[(parts[-2], parts[-1])] = read_last_json(path)
+        return output
+
+    baseline = records(baseline_dir)
+    candidate = records(candidate_dir)
+    matched = sorted(baseline.keys() & candidate.keys())
+    fields = ("generated_texts", "output_lens", "errors")
+    mismatches = [
+        {"workload": key[0], "repetition": key[1], "field": field}
+        for key in matched
+        for field in fields
+        if baseline[key].get(field) != candidate[key].get(field)
+    ]
+    return {
+        "matched_repetitions": len(matched),
+        "equivalent": bool(matched) and not mismatches,
+        "mismatches": mismatches,
+    }

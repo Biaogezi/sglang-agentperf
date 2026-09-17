@@ -6,7 +6,7 @@ from pathlib import Path
 
 from .commands import benchmark_command, server_command, shell_join
 from .config import build_plan, load_config
-from .report import compare_summaries, summarize_run
+from .report import check_run_equivalence, compare_summaries, summarize_run
 from .runner import run_plan
 from .trace import analyze_trace
 
@@ -43,6 +43,12 @@ def _parser() -> argparse.ArgumentParser:
     trace = subparsers.add_parser("analyze-trace", help="aggregate a Torch profiler trace")
     trace.add_argument("--trace", required=True)
     trace.add_argument("--output-dir", required=True)
+
+    equivalence = subparsers.add_parser(
+        "check-equivalence", help="compare deterministic output fields between two runs"
+    )
+    equivalence.add_argument("--baseline-run", required=True)
+    equivalence.add_argument("--candidate-run", required=True)
     return parser
 
 
@@ -79,6 +85,13 @@ def main() -> None:
     elif args.command == "analyze-trace":
         summary = analyze_trace(Path(args.trace), Path(args.output_dir))
         print(json.dumps(summary, indent=2, ensure_ascii=False))
+    elif args.command == "check-equivalence":
+        result = check_run_equivalence(
+            Path(args.baseline_run), Path(args.candidate_run)
+        )
+        print(json.dumps(result, indent=2, ensure_ascii=False))
+        if not result["equivalent"]:
+            raise SystemExit(1)
 
 
 if __name__ == "__main__":

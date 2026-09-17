@@ -3,7 +3,7 @@ from pathlib import Path
 
 import pytest
 
-from agentperf.report import compare_summaries, summarize_run
+from agentperf.report import check_run_equivalence, compare_summaries, summarize_run
 
 
 def test_summarize_repetitions(tmp_path: Path) -> None:
@@ -64,3 +64,21 @@ def test_compare_summaries_uses_positive_improvement_direction(tmp_path: Path) -
     assert rows[0]["input_throughput_mean_improvement_pct"] == pytest.approx(10.0)
     assert rows[0]["tpot_p99_ms_mean_improvement_pct"] == 50.0
     assert output.exists()
+
+
+def test_check_run_equivalence_matches_workload_and_repetition(tmp_path: Path) -> None:
+    baseline = tmp_path / "baseline"
+    candidate = tmp_path / "candidate"
+    baseline.mkdir()
+    candidate.mkdir()
+    record = {"generated_texts": ["same"], "output_lens": [4], "errors": [""]}
+    (baseline / "model__base__smoke__r1.jsonl").write_text(
+        json.dumps(record) + "\n", encoding="utf-8"
+    )
+    (candidate / "model__candidate__smoke__r1.jsonl").write_text(
+        json.dumps(record) + "\n", encoding="utf-8"
+    )
+
+    result = check_run_equivalence(baseline, candidate)
+
+    assert result == {"matched_repetitions": 1, "equivalent": True, "mismatches": []}
