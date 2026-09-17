@@ -3,6 +3,7 @@ set -euo pipefail
 
 PROJECT_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 UPSTREAM_COMMIT="$(awk -F= '$1 == "commit" {print $2}' "${PROJECT_ROOT}/UPSTREAM.lock")"
+UPSTREAM_PATCHED_COMMIT="$(awk -F= '$1 == "patched_commit" {print $2}' "${PROJECT_ROOT}/UPSTREAM.lock")"
 CONTAINER_IMAGE="$(awk -F= '$1 == "image" {print $2}' "${PROJECT_ROOT}/CONTAINER.lock")"
 CONTAINER_MIRROR_IMAGE="$(awk -F= '$1 == "mirror_image" {print $2}' "${PROJECT_ROOT}/CONTAINER.lock")"
 CONTAINER_DIGEST="$(awk -F= '$1 == "digest" {print $2}' "${PROJECT_ROOT}/CONTAINER.lock")"
@@ -21,8 +22,9 @@ FREE_GIB="$(df -BG --output=avail /data | tail -1 | tr -dc '0-9')"
 [[ "${FREE_GIB}" -ge 80 ]] || fail "/data has only ${FREE_GIB} GiB free; at least 80 GiB is required"
 
 ACTUAL_COMMIT="$(git -C "${PROJECT_ROOT}/upstream/sglang" rev-parse HEAD)"
-[[ "${ACTUAL_COMMIT}" == "${UPSTREAM_COMMIT}" ]] || \
-  fail "SGLang commit ${ACTUAL_COMMIT} does not match ${UPSTREAM_COMMIT}"
+EXPECTED_COMMIT="${UPSTREAM_PATCHED_COMMIT:-${UPSTREAM_COMMIT}}"
+[[ "${ACTUAL_COMMIT}" == "${EXPECTED_COMMIT}" ]] || \
+  fail "SGLang commit ${ACTUAL_COMMIT} does not match ${EXPECTED_COMMIT}"
 
 RUNTIME_IMAGE="${CONTAINER_IMAGE}@${CONTAINER_DIGEST}"
 if ! docker image inspect "${RUNTIME_IMAGE}" >/dev/null 2>&1; then
@@ -37,4 +39,4 @@ docker run --rm --gpus all \
 
 nvidia-smi --query-gpu=name,driver_version,memory.total,temperature.gpu,pstate \
   --format=csv,noheader
-echo "PRECHECK PASSED: ${FREE_GIB} GiB free on /data; upstream ${UPSTREAM_COMMIT}"
+echo "PRECHECK PASSED: ${FREE_GIB} GiB free on /data; upstream ${EXPECTED_COMMIT}"

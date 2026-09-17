@@ -15,9 +15,13 @@ from .commands import benchmark_command, server_command
 from .config import build_plan
 
 
-def _git_head() -> str | None:
+def _git_head(path: Path | None = None) -> str | None:
+    command = ["git"]
+    if path is not None:
+        command.extend(["-C", str(path)])
+    command.extend(["rev-parse", "HEAD"])
     completed = subprocess.run(
-        ["git", "rev-parse", "HEAD"],
+        command,
         capture_output=True,
         text=True,
         check=False,
@@ -80,6 +84,7 @@ def run_plan(
         "created_at": timestamp,
         "harness_commit": _git_head(),
         "upstream_commit": config["upstream_commit"],
+        "upstream_worktree_commit": _git_head(Path("/workspace/sglang")),
         "model": model,
         "profile": profile,
         "suite": suite,

@@ -6,6 +6,8 @@ UPSTREAM_DIR="${PROJECT_ROOT}/upstream/sglang"
 UPSTREAM_REPO="$(awk -F= '$1 == "repository" {print $2}' "${PROJECT_ROOT}/UPSTREAM.lock")"
 UPSTREAM_REF="$(awk -F= '$1 == "ref" {print $2}' "${PROJECT_ROOT}/UPSTREAM.lock")"
 UPSTREAM_COMMIT="$(awk -F= '$1 == "commit" {print $2}' "${PROJECT_ROOT}/UPSTREAM.lock")"
+UPSTREAM_PATCH="$(awk -F= '$1 == "patch" {print $2}' "${PROJECT_ROOT}/UPSTREAM.lock")"
+UPSTREAM_PATCHED_COMMIT="$(awk -F= '$1 == "patched_commit" {print $2}' "${PROJECT_ROOT}/UPSTREAM.lock")"
 CONTAINER_IMAGE="$(awk -F= '$1 == "image" {print $2}' "${PROJECT_ROOT}/CONTAINER.lock")"
 CONTAINER_MIRROR_IMAGE="$(awk -F= '$1 == "mirror_image" {print $2}' "${PROJECT_ROOT}/CONTAINER.lock")"
 CONTAINER_DIGEST="$(awk -F= '$1 == "digest" {print $2}' "${PROJECT_ROOT}/CONTAINER.lock")"
@@ -21,6 +23,14 @@ if [[ ! -d "${UPSTREAM_DIR}/.git" ]]; then
 fi
 git -C "${UPSTREAM_DIR}" fetch --depth 1 origin "${UPSTREAM_REF}"
 git -C "${UPSTREAM_DIR}" checkout --detach "${UPSTREAM_COMMIT}"
+if [[ -n "${UPSTREAM_PATCH}" ]]; then
+  git -C "${UPSTREAM_DIR}" am "${PROJECT_ROOT}/${UPSTREAM_PATCH}"
+  ACTUAL_PATCHED_COMMIT="$(git -C "${UPSTREAM_DIR}" rev-parse HEAD)"
+  [[ "${ACTUAL_PATCHED_COMMIT}" == "${UPSTREAM_PATCHED_COMMIT}" ]] || {
+    echo "Patched SGLang commit ${ACTUAL_PATCHED_COMMIT} does not match ${UPSTREAM_PATCHED_COMMIT}." >&2
+    exit 1
+  }
+fi
 
 if command -v docker >/dev/null 2>&1; then
   docker pull "${CONTAINER_IMAGE}@${CONTAINER_DIGEST}" || \
