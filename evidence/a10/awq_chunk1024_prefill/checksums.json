@@ -1,0 +1,61 @@
+{
+  "schema_version": 1,
+  "created_at": "2026-09-17T16:23:05.343075+00:00",
+  "source_run": "20260917T142024Z__qwen3_8b_awq__slo_chunk1024_i4__prefill_only",
+  "files": [
+    {
+      "name": "manifest.json",
+      "size_bytes": 8924,
+      "sha256": "3bfa36f2caa106f2e38f70e22111f042b9dfa0bb70d20258809e2cffa0e64e9f",
+      "published": true
+    },
+    {
+      "name": "qwen3_8b_awq__slo_chunk1024_i4__prefill_8k_64__r1.jsonl",
+      "size_bytes": 176936,
+      "sha256": "d77b4b311a900928565f7e7cbc69d267c77f5e8462cd3c37cec8c64b0523bcef",
+      "published": false
+    },
+    {
+      "name": "qwen3_8b_awq__slo_chunk1024_i4__prefill_8k_64__r1.log",
+      "size_bytes": 11522,
+      "sha256": "a4b4f4b33ca0abca3423cb2b8156b3c6ca926d2acfd3932c41d27d2867591ba1",
+      "published": false
+    },
+    {
+      "name": "qwen3_8b_awq__slo_chunk1024_i4__prefill_8k_64__r2.jsonl",
+      "size_bytes": 176890,
+      "sha256": "7c5b2dbd58741e47ad1405649a2e83dfafffb27d7655fbe1c5df764b638dc8a1",
+      "published": false
+    },
+    {
+      "name": "qwen3_8b_awq__slo_chunk1024_i4__prefill_8k_64__r2.log",
+      "size_bytes": 11522,
+      "sha256": "836612f5dc8ea26442207ccddf23dfac3b0d873b217913c4eee9a2b80e5853f8",
+      "published": false
+    },
+    {
+      "name": "qwen3_8b_awq__slo_chunk1024_i4__prefill_8k_64__r3.jsonl",
+      "size_bytes": 176994,
+      "sha256": "7ac90e7e86241734e82de9ee362829708041c9f7e2e68271e735b01ff1a35498",
+      "published": false
+    },
+    {
+      "name": "qwen3_8b_awq__slo_chunk1024_i4__prefill_8k_64__r3.log",
+      "size_bytes": 11522,
+      "sha256": "43b3f07018db8253f91786a45044ef4068d8380118ecdb97929662263ff88bf8",
+      "published": false
+    },
+    {
+      "name": "server.log",
+      "size_bytes": 530124,
+      "sha256": "ddb68b698414e4536c04278d8d101bb3273304d6e2cbc0ff08bd26590dfb4abf",
+      "published": false
+    },
+    {
+      "name": "summary.csv",
+      "size_bytes": 931,
+      "sha256": "ea6807aba7968c7f0aaf0f8b0d44bf9a27d86f9b2dfea470b3a7d168b5812965",
+      "published": true
+    }
+  ]
+}
