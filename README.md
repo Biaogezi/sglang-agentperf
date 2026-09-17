@@ -50,6 +50,29 @@ upstream/sglang/          ignored checkout of the pinned SGLang revision
 results/ and profiles/   ignored generated evidence
 ```
 
+## Experiment flow
+
+```mermaid
+flowchart LR
+    C[Versioned model/profile/workload matrix] --> R[AgentPerf runner]
+    P[Pinned SGLang fork + patch series] --> R
+    R --> S[SGLang server on GPU]
+    S --> B[Serving benchmark]
+    S --> Q[Prompt-NLL quality gate]
+    S --> T[Torch CPU/GPU trace]
+    B --> A[Three-run aggregate]
+    Q --> G[FP16-relative quality decision]
+    T --> H[Kernel/runtime hotspot tables]
+    A --> E[Evidence snapshot + raw hashes]
+    G --> D[Accept or reject]
+    H --> D
+    E --> D
+```
+
+Each optimization starts from a trace-backed hypothesis. Static controls and the source candidate
+run through the same matrix; the patch is retained only when it clears both the performance and
+quality gates.
+
 ## Local preparation
 
 ```bash

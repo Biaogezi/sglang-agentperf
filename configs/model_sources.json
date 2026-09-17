@@ -3,13 +3,13 @@
   "models": {
     "qwen3_8b_fp16": {
       "huggingface_id": "Qwen/Qwen3-8B",
-      "revision": "main",
+      "revision": "b968826d9c46dd6066d109eabc6255188de91218",
       "required": true,
       "notes": "Primary correctness and performance baseline"
     },
     "qwen3_8b_awq": {
       "huggingface_id": "Qwen/Qwen3-8B-AWQ",
-      "revision": "main",
+      "revision": "4da05a8edb55c6046cce958586c33b61da07bb79",
       "required": true,
       "notes": "Official AWQ checkpoint; benchmark with SGLang AWQ-Marlin"
     },
