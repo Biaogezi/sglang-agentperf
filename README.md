@@ -91,3 +91,7 @@ results are labelled kernel-only. Simulator results are never presented as end-t
 
 See [Optimization 001](docs/OPTIMIZATION_001_SLO_CHUNKING.md) for absolute values, controls, and
 the negative-result decision.
+
+The first bounded CPU+GPU trace shows 98.25% GPU activity and attributes 77.7% of kernel time to
+AWQ-Marlin variants. See [Profile 001](docs/PROFILE_001_AWQ_MIXED_PREFILL.md) for the hotspot table
+and next hypothesis.
