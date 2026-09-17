@@ -197,7 +197,9 @@
   "suites": {
     "smoke": ["smoke"],
     "core": ["decode_1k_512", "prefill_8k_64", "agent_prefix_4k"],
+    "decode_only": ["decode_1k_512"],
     "prefill_only": ["prefill_8k_64"],
+    "agent_prefix_only": ["agent_prefix_4k"],
     "mixed_prefill_only": ["mixed_prefill_2k_8k"],
     "profile": ["profile_mixed_prefill"],
     "all": ["smoke", "decode_1k_512", "prefill_8k_64", "agent_prefix_4k"]
