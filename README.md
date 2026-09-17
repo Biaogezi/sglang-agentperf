@@ -81,6 +81,10 @@ Run the smoke gate before downloading every quantized checkpoint or launching th
 ordinary FP16 weights can produce plausible throughput with unusable output; `run-quality` is the
 mandatory gate before any W8A8 performance result is accepted.
 
+To publish a compact, auditable result without committing multi-megabyte request traces, use
+`agentperf snapshot-evidence`. It copies the manifest and aggregate CSV and records the size and
+SHA-256 of every ignored raw artifact.
+
 ## Evidence policy
 
 No percentage enters the README or resume unless the raw SGLang JSONL output, launch command,

@@ -6,6 +6,7 @@ from pathlib import Path
 
 from .commands import benchmark_command, server_command, shell_join
 from .config import build_plan, load_config
+from .evidence import snapshot_evidence
 from .quality import compare_quality, score_corpus
 from .report import check_run_equivalence, compare_summaries, summarize_run
 from .runner import run_plan, run_quality_plan
@@ -74,6 +75,12 @@ def _parser() -> argparse.ArgumentParser:
     quality_run.add_argument("--profile", default="baseline")
     quality_run.add_argument("--corpus", required=True)
     quality_run.add_argument("--output-root", default="quality")
+
+    snapshot = subparsers.add_parser(
+        "snapshot-evidence", help="copy aggregates and checksum ignored raw artifacts"
+    )
+    snapshot.add_argument("--run-dir", required=True)
+    snapshot.add_argument("--output-dir", required=True)
     return parser
 
 
@@ -143,6 +150,9 @@ def main() -> None:
             output_root=Path(args.output_root),
         )
         print(run_dir)
+    elif args.command == "snapshot-evidence":
+        result = snapshot_evidence(Path(args.run_dir), Path(args.output_dir))
+        print(json.dumps(result, indent=2, ensure_ascii=False))
 
 
 if __name__ == "__main__":
