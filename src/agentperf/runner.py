@@ -16,10 +16,16 @@ from .config import build_plan
 
 
 def _git_head(path: Path | None = None) -> str | None:
-    command = ["git"]
-    if path is not None:
-        command.extend(["-C", str(path)])
-    command.extend(["rev-parse", "HEAD"])
+    repository = path or Path.cwd()
+    command = [
+        "git",
+        "-c",
+        f"safe.directory={repository}",
+        "-C",
+        str(repository),
+        "rev-parse",
+        "HEAD",
+    ]
     completed = subprocess.run(
         command,
         capture_output=True,
