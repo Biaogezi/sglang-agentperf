@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+import os
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
@@ -105,3 +106,50 @@ def build_plan(
                 )
             )
     return cases
+
+
+def validate_model_artifact(config: dict[str, Any], model_name: str) -> Path:
+    """Validate on-disk metadata that is required by performance-sensitive loaders."""
+    model = config["models"].get(model_name)
+    if model is None:
+        raise ConfigError(f"Unknown model: {model_name}")
+    env_name = model["path_env"]
+    raw_path = os.environ.get(env_name)
+    if not raw_path:
+        raise ConfigError(f"Environment variable {env_name} is required for {model_name}")
+    model_path = Path(raw_path)
+    config_path = model_path / "config.json"
+    if not config_path.is_file():
+        raise ConfigError(f"Model config does not exist: {config_path}")
+
+    metadata = json.loads(config_path.read_text(encoding="utf-8"))
+    if model.get("quantization") == "w8a8_int8":
+        quantization = metadata.get("quantization_config")
+        if not isinstance(quantization, dict):
+            raise ConfigError(
+                "w8a8_int8 requires a calibrated INT8 checkpoint with quantization_config; "
+                f"{model_path} appears to be an unquantized checkpoint"
+            )
+        groups = quantization.get("config_groups")
+        schemes = groups.values() if isinstance(groups, dict) else []
+        compatible = False
+        for scheme in schemes:
+            if not isinstance(scheme, dict):
+                continue
+            weights = scheme.get("weights", {})
+            activations = scheme.get("input_activations", {})
+            compatible = compatible or (
+                weights.get("type") == "int"
+                and weights.get("num_bits") == 8
+                and weights.get("strategy") == "channel"
+                and activations.get("type") == "int"
+                and activations.get("num_bits") == 8
+                and activations.get("strategy") == "token"
+                and activations.get("dynamic") is True
+            )
+        if not compatible:
+            raise ConfigError(
+                "w8a8_int8 requires per-channel INT8 weights and dynamic per-token INT8 "
+                f"activations; incompatible metadata in {config_path}"
+            )
+    return model_path

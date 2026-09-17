@@ -12,7 +12,7 @@ from pathlib import Path
 from typing import Any
 
 from .commands import benchmark_command, server_command
-from .config import build_plan
+from .config import build_plan, validate_model_artifact
 from .quality import score_corpus
 
 
@@ -81,6 +81,7 @@ def run_plan(
     suite: str,
     output_root: Path,
 ) -> Path:
+    validate_model_artifact(config, model)
     timestamp = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ")
     run_dir = output_root / f"{timestamp}__{model}__{profile}__{suite}"
     run_dir.mkdir(parents=True, exist_ok=False)
@@ -170,6 +171,7 @@ def run_quality_plan(
     output_root: Path,
 ) -> Path:
     """Launch one configured server and collect a fixed-corpus prompt-NLL result."""
+    validate_model_artifact(config, model)
     timestamp = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ")
     run_dir = output_root / f"{timestamp}__{model}__{profile}"
     run_dir.mkdir(parents=True, exist_ok=False)

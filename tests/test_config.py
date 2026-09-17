@@ -1,9 +1,16 @@
 import copy
+import json
 from pathlib import Path
 
 import pytest
 
-from agentperf.config import ConfigError, build_plan, load_config, validate_config
+from agentperf.config import (
+    ConfigError,
+    build_plan,
+    load_config,
+    validate_config,
+    validate_model_artifact,
+)
 
 ROOT = Path(__file__).resolve().parents[1]
 CONFIG = ROOT / "configs" / "experiment_matrix.json"
@@ -33,3 +40,37 @@ def test_unknown_workload_in_suite_is_rejected() -> None:
     broken["suites"]["broken"] = ["missing"]
     with pytest.raises(ConfigError, match="unknown workloads"):
         validate_config(broken)
+
+
+def test_w8a8_artifact_rejects_unquantized_checkpoint(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    config = load_config(CONFIG)
+    (tmp_path / "config.json").write_text('{"model_type":"qwen3"}', encoding="utf-8")
+    monkeypatch.setenv("AGENTPERF_MODEL_QWEN3_8B_W8A8", str(tmp_path))
+    with pytest.raises(ConfigError, match="calibrated INT8 checkpoint"):
+        validate_model_artifact(config, "qwen3_8b_w8a8")
+
+
+def test_w8a8_artifact_accepts_channel_weight_token_activation_scheme(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    config = load_config(CONFIG)
+    metadata = {
+        "quantization_config": {
+            "config_groups": {
+                "group_0": {
+                    "weights": {"type": "int", "num_bits": 8, "strategy": "channel"},
+                    "input_activations": {
+                        "type": "int",
+                        "num_bits": 8,
+                        "strategy": "token",
+                        "dynamic": True,
+                    },
+                }
+            }
+        }
+    }
+    (tmp_path / "config.json").write_text(json.dumps(metadata), encoding="utf-8")
+    monkeypatch.setenv("AGENTPERF_MODEL_QWEN3_8B_W8A8", str(tmp_path))
+    assert validate_model_artifact(config, "qwen3_8b_w8a8") == tmp_path
