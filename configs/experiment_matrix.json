@@ -23,10 +23,10 @@
       "role": "primary-int4"
     },
     "qwen3_8b_w8a8": {
-      "path_env": "AGENTPERF_MODEL_QWEN3_8B_FP16",
+      "path_env": "AGENTPERF_MODEL_QWEN3_8B_W8A8",
       "dtype": "float16",
       "quantization": "w8a8_int8",
-      "role": "primary-int8-online"
+      "role": "primary-int8-calibrated"
     },
     "qwen3_8b_gptq": {
       "path_env": "AGENTPERF_MODEL_QWEN3_8B_GPTQ",

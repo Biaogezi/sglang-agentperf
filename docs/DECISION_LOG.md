@@ -34,3 +34,13 @@ criterion. Add the trace evidence and decision here before coding the patch.
 - Long-prefill generated text changed in all three repetitions.
 - Decision: reject because it provides no hot-workload speedup and is numerically observable.
 - Full evidence: [Optimization 002](OPTIMIZATION_002_MARLIN_REDUCTION.md).
+
+## 2026-09-18 — Reject uncalibrated W8A8 launch
+
+- A first W8A8 experiment incorrectly pointed `--quantization w8a8_int8` at the FP16 checkpoint.
+- The run appeared fast on 8K prefill, but the new prompt-NLL gate measured mean NLL 18.21 versus
+  2.89 for FP16 across the same 335 scored tokens.
+- SGLang documents this flag for checkpoints whose weights are already per-channel INT8 and whose
+  activations use per-token dynamic quantization; the FP16 checkpoint does not satisfy that contract.
+- Decision: invalidate all performance numbers from this configuration and exclude them from
+  accepted evidence. Pin and test a calibrated W8A8 checkpoint before rerunning performance.

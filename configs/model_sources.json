@@ -13,6 +13,12 @@
       "required": true,
       "notes": "Official AWQ checkpoint; benchmark with SGLang AWQ-Marlin"
     },
+    "qwen3_8b_w8a8": {
+      "huggingface_id": "nytopop/Qwen3-8B.w8a8",
+      "revision": "13e255a9648ec08d3873bce1c3d9886a76494c43",
+      "required": true,
+      "notes": "Ampere-targeted calibrated W8A8 checkpoint; third-party, quality-gate before use"
+    },
     "qwen3_8b_gptq": {
       "huggingface_id": "JunHowie/Qwen3-8B-GPTQ-Int4",
       "revision": "main",
