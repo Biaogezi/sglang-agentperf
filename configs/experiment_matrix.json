@@ -139,6 +139,17 @@
         "--random-range-ratio", "1"
       ]
     },
+    "mixed_prefill_2k_8k": {
+      "dataset": "random-ids",
+      "num_prompts": 80,
+      "max_concurrency": 8,
+      "request_rate": "inf",
+      "args": [
+        "--random-input-len", "8192",
+        "--random-output-len", "64",
+        "--random-range-ratio", "0.25"
+      ]
+    },
     "agent_prefix_4k": {
       "dataset": "generated-shared-prefix",
       "num_prompts": 160,
@@ -157,6 +168,7 @@
     "smoke": ["smoke"],
     "core": ["decode_1k_512", "prefill_8k_64", "agent_prefix_4k"],
     "prefill_only": ["prefill_8k_64"],
+    "mixed_prefill_only": ["mixed_prefill_2k_8k"],
     "all": ["smoke", "decode_1k_512", "prefill_8k_64", "agent_prefix_4k"]
   }
 }
