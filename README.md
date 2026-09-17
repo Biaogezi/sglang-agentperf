@@ -95,3 +95,7 @@ the negative-result decision.
 The first bounded CPU+GPU trace shows 98.25% GPU activity and attributes 77.7% of kernel time to
 AWQ-Marlin variants. See [Profile 001](docs/PROFILE_001_AWQ_MIXED_PREFILL.md) for the hotspot table
 and next hypothesis.
+
+The resulting FP16-reduction experiment did not improve the trace-relevant 8K workload and changed
+long-sequence outputs, so it was rejected. See
+[Optimization 002](docs/OPTIMIZATION_002_MARLIN_REDUCTION.md).

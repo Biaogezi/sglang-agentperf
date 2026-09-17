@@ -25,3 +25,12 @@ criterion. Add the trace evidence and decision here before coding the patch.
 - The adaptive patch did not beat static 1024 on either fixed-length or heterogeneous input.
 - Decision: retain the measured static profile and evidence tooling; reject the source candidate.
 - Full evidence: [Optimization 001](OPTIMIZATION_001_SLO_CHUNKING.md).
+
+## 2026-09-17 — Reject Marlin FP16 reduction
+
+- A bounded trace showed AWQ-Marlin variants consuming 77.7% of kernel time.
+- Added a default-safe environment switch for FP32 versus FP16 global reduction.
+- FP16 reduction improved a tiny smoke by about 0.8%, but reduced 8K-prefill throughput by 0.50%.
+- Long-prefill generated text changed in all three repetitions.
+- Decision: reject because it provides no hot-workload speedup and is numerically observable.
+- Full evidence: [Optimization 002](OPTIMIZATION_002_MARLIN_REDUCTION.md).
