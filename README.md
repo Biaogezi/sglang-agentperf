@@ -1,5 +1,8 @@
 # SGLang-AgentPerf
 
+[![CI](https://github.com/Biaogezi/sglang-agentperf/actions/workflows/ci.yml/badge.svg)](https://github.com/Biaogezi/sglang-agentperf/actions/workflows/ci.yml)
+[![License](https://img.shields.io/badge/license-Apache--2.0-blue.svg)](LICENSE)
+
 Profiling-driven optimization of quantized agentic LLM serving on the real SGLang runtime.
 
 This repository is the experiment and evidence layer for an upstream SGLang optimization
@@ -73,6 +76,10 @@ bash scripts/run_gpu_smoke.sh
 ```
 
 Run the smoke gate before downloading every quantized checkpoint or launching the full matrix.
+
+`w8a8_int8` requires an already calibrated, per-channel INT8 checkpoint. Pointing that flag at
+ordinary FP16 weights can produce plausible throughput with unusable output; `run-quality` is the
+mandatory gate before any W8A8 performance result is accepted.
 
 ## Evidence policy
 
