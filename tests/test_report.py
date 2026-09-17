@@ -21,6 +21,10 @@ def test_summarize_repetitions(tmp_path: Path) -> None:
     output = tmp_path / "summary.csv"
     (tmp_path / "server.log").write_text(
         "AGENTPERF_CASE_BEGIN model__profile__workload__r1\n"
+        "Prefill batch, #new-seq: 1, #new-token: 2048, #cached-token: 0, "
+        "token usage: 0.1, #running-req: 0, #queue-req: 1\n"
+        "Prefill batch, #new-seq: 1, #new-token: 512, #cached-token: 0, "
+        "token usage: 0.2, #running-req: 2, #queue-req: 1\n"
         "KV cache pool is full. Retract requests. #retracted_reqs: 2\n"
         "AGENTPERF_CASE_END model__profile__workload__r1 returncode=0\n",
         encoding="utf-8",
@@ -33,4 +37,5 @@ def test_summarize_repetitions(tmp_path: Path) -> None:
     assert rows[0]["total_throughput_mean"] == 1210.0
     assert rows[0]["e2e_p99_ms_mean"] == 75.0
     assert rows[0]["retracted_requests_mean"] == 2 / 3
+    assert rows[0]["mixed_prefill_chunk_size_mean"] == 512.0
     assert output.exists()
