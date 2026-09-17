@@ -10,7 +10,7 @@ $ProjectRoot = (Resolve-Path (Join-Path $PSScriptRoot "..")).Path
 $ArchivePath = Join-Path ([System.IO.Path]::GetTempPath()) "sglang-agentperf-sync.tar.gz"
 
 try {
-    tar --exclude=.venv --exclude=results --exclude=profiles `
+    tar --exclude=.venv --exclude=results --exclude=profiles --exclude='upstream/*.bundle' `
         --exclude=upstream/sglang -czf $ArchivePath -C $ProjectRoot .
     ssh -i $KeyPath "$UserName@$HostName" "mkdir -p '$RemotePath'"
     scp -i $KeyPath $ArchivePath "$UserName@${HostName}:/tmp/sglang-agentperf-sync.tar.gz"
