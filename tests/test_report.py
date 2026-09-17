@@ -58,5 +58,5 @@ def test_compare_summaries_uses_positive_improvement_direction(tmp_path: Path) -
     rows = compare_summaries(baseline, candidate, output)
 
     assert rows[0]["input_throughput_mean_improvement_pct"] == pytest.approx(10.0)
-    assert rows[0]["tpot_p99_ms_mean_improvement_pct"] == 100.0
+    assert rows[0]["tpot_p99_ms_mean_improvement_pct"] == 50.0
     assert output.exists()

@@ -173,9 +173,9 @@ def compare_summaries(
             baseline_value = float(baseline[metric])
             candidate_value = float(candidate[metric])
             improvement = (
-                candidate_value / baseline_value - 1
+                (candidate_value - baseline_value) / baseline_value
                 if higher_is_better
-                else baseline_value / candidate_value - 1
+                else (baseline_value - candidate_value) / baseline_value
             )
             row[f"baseline_{metric}"] = baseline_value
             row[f"candidate_{metric}"] = candidate_value
