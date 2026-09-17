@@ -36,6 +36,7 @@ exec docker run --rm "${TTY_ARGS[@]}" \
   --shm-size=32g \
   --env-file "${PROJECT_ROOT}/.env" \
   -e PYTHONPATH=/workspace/sglang/python:/workspace/agentperf/src \
+  -e SGLANG_TORCH_PROFILER_DIR=/workspace/agentperf/profiles/torch \
   -v "${AGENTPERF_CACHE_DIR}:/root/.cache" \
   -v "${PROJECT_ROOT}:/workspace/agentperf" \
   -v "${UPSTREAM_DIR}:/workspace/sglang" \

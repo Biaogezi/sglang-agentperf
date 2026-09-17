@@ -61,6 +61,8 @@ def validate_config(config: dict[str, Any]) -> None:
                 f"Workload {name!r} needs num_prompts >= 5 * max_concurrency "
                 "for a steady-state measurement"
             )
+        if int(workload.get("repetitions", config["defaults"]["repetitions"])) < 1:
+            raise ConfigError(f"Workload {name!r} needs repetitions >= 1")
 
     for suite_name, suite_workloads in config["suites"].items():
         unknown = sorted(set(suite_workloads) - workloads.keys())
@@ -84,9 +86,13 @@ def build_plan(
     if suite not in config["suites"]:
         raise ConfigError(f"Unknown suite: {suite}")
 
-    repetitions = int(config["defaults"]["repetitions"])
     cases: list[ExperimentCase] = []
     for workload in config["suites"][suite]:
+        repetitions = int(
+            config["workloads"][workload].get(
+                "repetitions", config["defaults"]["repetitions"]
+            )
+        )
         for repetition in range(1, repetitions + 1):
             case_id = f"{model}__{profile}__{workload}__r{repetition}"
             cases.append(

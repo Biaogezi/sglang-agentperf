@@ -150,6 +150,24 @@
         "--random-range-ratio", "0.25"
       ]
     },
+    "profile_mixed_prefill": {
+      "dataset": "random-ids",
+      "num_prompts": 40,
+      "max_concurrency": 8,
+      "request_rate": "inf",
+      "repetitions": 1,
+      "args": [
+        "--random-input-len", "8192",
+        "--random-output-len", "64",
+        "--random-range-ratio", "0.25",
+        "--profile",
+        "--profile-activities", "CPU", "GPU",
+        "--profile-start-step", "10",
+        "--profile-steps", "30",
+        "--profile-output-dir", "/workspace/agentperf/profiles/torch",
+        "--profile-prefix", "awq-mixed-prefill"
+      ]
+    },
     "agent_prefix_4k": {
       "dataset": "generated-shared-prefix",
       "num_prompts": 160,
@@ -169,6 +187,7 @@
     "core": ["decode_1k_512", "prefill_8k_64", "agent_prefix_4k"],
     "prefill_only": ["prefill_8k_64"],
     "mixed_prefill_only": ["mixed_prefill_2k_8k"],
+    "profile": ["profile_mixed_prefill"],
     "all": ["smoke", "decode_1k_512", "prefill_8k_64", "agent_prefix_4k"]
   }
 }

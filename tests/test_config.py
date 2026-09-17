@@ -21,6 +21,12 @@ def test_smoke_plan_has_three_repetitions() -> None:
     assert len({case.case_id for case in plan}) == 3
 
 
+def test_profile_plan_uses_workload_repetition_override() -> None:
+    config = load_config(CONFIG)
+    plan = build_plan(config, model="qwen3_8b_awq", profile="slo_chunk1024_i4", suite="profile")
+    assert len(plan) == 1
+
+
 def test_unknown_workload_in_suite_is_rejected() -> None:
     config = load_config(CONFIG)
     broken = copy.deepcopy(config)
