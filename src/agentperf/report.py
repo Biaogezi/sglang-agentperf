@@ -36,6 +36,7 @@ RETRACTED_REQUESTS = re.compile(r"#retracted_reqs:\s*(\d+)")
 PREFILL_BATCH = re.compile(
     r"Prefill batch,.*#new-token:\s*(\d+),.*#running-req:\s*(\d+)"
 )
+CACHE_HIT_RATE = re.compile(r"Cache hit rate:\s*([0-9.]+)%")
 
 
 def read_server_case_stats(path: Path) -> dict[str, dict[str, int]]:
@@ -89,6 +90,13 @@ def read_last_json(path: Path) -> dict[str, Any]:
     return records[-1]
 
 
+def read_cache_hit_rate(path: Path) -> float | None:
+    if not path.exists():
+        return None
+    matches = CACHE_HIT_RATE.findall(path.read_text(encoding="utf-8", errors="replace"))
+    return float(matches[-1]) / 100 if matches else None
+
+
 def summarize_run(run_dir: Path, output_csv: Path) -> list[dict[str, Any]]:
     grouped: dict[str, list[dict[str, Any]]] = defaultdict(list)
     grouped_case_ids: dict[str, list[str]] = defaultdict(list)
@@ -115,6 +123,19 @@ def summarize_run(run_dir: Path, output_csv: Path) -> list[dict[str, Any]]:
             values = [server_stats.get(case_id, {}).get(metric, 0) for case_id in grouped_case_ids[group]]
             row[f"{metric}_mean"] = statistics.fmean(values)
             row[f"{metric}_stdev"] = statistics.stdev(values) if len(values) >= 2 else 0.0
+        cache_hit_rates = [
+            value
+            for case_id in grouped_case_ids[group]
+            if (value := read_cache_hit_rate(run_dir / f"{case_id}.log")) is not None
+        ]
+        row["cache_hit_rate_mean"] = (
+            statistics.fmean(cache_hit_rates) if cache_hit_rates else ""
+        )
+        row["cache_hit_rate_stdev"] = (
+            statistics.stdev(cache_hit_rates)
+            if len(cache_hit_rates) >= 2
+            else 0.0 if cache_hit_rates else ""
+        )
         mixed_chunk_sizes = []
         for case_id in grouped_case_ids[group]:
             case_stats = server_stats.get(case_id, {})

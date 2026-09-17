@@ -19,6 +19,9 @@ def test_summarize_repetitions(tmp_path: Path) -> None:
         }
         path = tmp_path / f"model__profile__workload__r{repetition}.jsonl"
         path.write_text(json.dumps(record) + "\n", encoding="utf-8")
+        path.with_suffix(".log").write_text(
+            "Cache hit rate: 25.0%\n", encoding="utf-8"
+        )
 
     output = tmp_path / "summary.csv"
     (tmp_path / "server.log").write_text(
@@ -39,6 +42,7 @@ def test_summarize_repetitions(tmp_path: Path) -> None:
     assert rows[0]["total_throughput_mean"] == 1210.0
     assert rows[0]["e2e_p99_ms_mean"] == 75.0
     assert rows[0]["retracted_requests_mean"] == 2 / 3
+    assert rows[0]["cache_hit_rate_mean"] == 0.25
     assert rows[0]["mixed_prefill_chunk_size_mean"] == 512.0
     assert output.exists()
 
