@@ -11,10 +11,13 @@ if [[ ! -f "${PROJECT_ROOT}/.env" ]]; then
   echo "Missing ${PROJECT_ROOT}/.env; copy configs/host.env.example and edit model paths." >&2
   exit 1
 fi
+ENV_CACHE_DIR="$(awk -F= '$1 == "AGENTPERF_CACHE_DIR" {print substr($0, index($0, "=") + 1)}' "${PROJECT_ROOT}/.env")"
+AGENTPERF_CACHE_DIR="${AGENTPERF_CACHE_DIR:-${ENV_CACHE_DIR:-/data/agentperf-cache}}"
 if [[ ! -d "${UPSTREAM_DIR}/.git" ]]; then
   echo "Missing pinned SGLang checkout; run scripts/bootstrap_remote.sh first." >&2
   exit 1
 fi
+mkdir -p "${AGENTPERF_CACHE_DIR}"
 
 RUNTIME_IMAGE="${CONTAINER_IMAGE}@${CONTAINER_DIGEST}"
 if ! docker image inspect "${RUNTIME_IMAGE}" >/dev/null 2>&1; then
@@ -33,6 +36,7 @@ exec docker run --rm "${TTY_ARGS[@]}" \
   --shm-size=32g \
   --env-file "${PROJECT_ROOT}/.env" \
   -e PYTHONPATH=/workspace/sglang/python:/workspace/agentperf/src \
+  -v "${AGENTPERF_CACHE_DIR}:/root/.cache" \
   -v "${PROJECT_ROOT}:/workspace/agentperf" \
   -v "${UPSTREAM_DIR}:/workspace/sglang" \
   -v /data:/data \

@@ -67,7 +67,7 @@
   },
   "workloads": {
     "smoke": {
-      "dataset": "random",
+      "dataset": "random-ids",
       "num_prompts": 8,
       "max_concurrency": 1,
       "request_rate": "inf",
@@ -78,7 +78,7 @@
       ]
     },
     "decode_1k_512": {
-      "dataset": "random",
+      "dataset": "random-ids",
       "num_prompts": 160,
       "max_concurrency": 16,
       "request_rate": "inf",
@@ -89,7 +89,7 @@
       ]
     },
     "prefill_8k_64": {
-      "dataset": "random",
+      "dataset": "random-ids",
       "num_prompts": 80,
       "max_concurrency": 8,
       "request_rate": "inf",

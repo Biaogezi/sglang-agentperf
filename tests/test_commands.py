@@ -16,5 +16,8 @@ def test_commands_include_pinned_experiment_parameters(monkeypatch) -> None:
 
     case = build_plan(config, model="qwen3_8b_fp16", profile="baseline", suite="smoke")[0]
     benchmark = benchmark_command(config, case, Path("out.jsonl"))
+    assert benchmark[2] == "sglang.benchmark.serving"
+    assert benchmark[benchmark.index("--dataset-name") + 1] == "random-ids"
     assert benchmark[benchmark.index("--num-prompts") + 1] == "8"
     assert "--output-details" in benchmark
+    assert "--flush-cache" in benchmark

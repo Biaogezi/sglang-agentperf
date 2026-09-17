@@ -52,7 +52,7 @@ def benchmark_command(
     command = [
         sys.executable,
         "-m",
-        "sglang.bench_serving",
+        "sglang.benchmark.serving",
         "--backend",
         "sglang",
         "--host",
@@ -75,6 +75,7 @@ def benchmark_command(
         str(output_file),
         "--output-details",
         "--cache-report",
+        "--flush-cache",
     ]
     command += [str(item) for item in workload["args"]]
     return command

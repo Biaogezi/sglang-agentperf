@@ -56,6 +56,7 @@ def main() -> None:
             suite=args.suite,
             output_root=Path(args.output_root),
         )
+        summarize_run(run_dir, run_dir / "summary.csv")
         print(run_dir)
     elif args.command == "summarize":
         rows = summarize_run(Path(args.run_dir), Path(args.output))
