@@ -65,3 +65,17 @@ criterion. Add the trace evidence and decision here before coding the patch.
 - Decision: run the prepared Norm+quant fusion only as a bounded microbenchmark/negative-result
   check; use exact-shape W8A8 GEMM dispatch or tuning as the primary retained-optimization target.
 - Full evidence: [Profile 002](PROFILE_002_W8A8_KERNELS.md).
+
+## 2026-09-18 — Reject W8A8 RMSNorm + quantization fusion for serving
+
+- Implemented a default-off Triton fusion for residual add, RMSNorm, dynamic per-token INT8
+  quantization, and pre-quantized handoff to QKV/gate-up linear layers.
+- GPU unit tests match the existing operator path for FP16/BF16 with and without residuals; the
+  335-token prompt-NLL result is exactly unchanged.
+- Seven-round kernel microbenchmarks improve the local operator pair by 31.5%–110.3% across the
+  tested Qwen3 hidden-size shapes.
+- Three-repetition serving controls show no end-to-end win: throughput changes range from -0.01%
+  to -0.77%; the static chunk-1024 control also loses 0.59% throughput.
+- Decision: reject for serving. The trace correctly showed this pair was too small a share of the
+  critical path; continue with A10-specific W8A8 GEMM dispatch/tile tuning.
+- Full evidence: [Optimization 003](OPTIMIZATION_003_W8A8_NORM_QUANT_FUSION.md).

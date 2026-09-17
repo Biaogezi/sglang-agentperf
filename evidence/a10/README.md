@@ -65,6 +65,13 @@ algorithm.
 The adaptive source patch and reduced-precision Marlin experiment were both rejected; see the
 decision log and optimization reports. Negative results are intentionally retained.
 
+The W8A8 RMSNorm + activation-quantization fusion is also rejected for serving. It speeds up its
+local operator pair by 31.5%–110.3% on stable seven-round microbenchmarks and preserves the fixed
+prompt-NLL result exactly, but loses 0.01%–0.77% throughput across three serving workloads. A
+matching static chunk-1024 control loses 0.59%. Compact serving snapshots are in
+`w8a8_fused_rejected_core/`, `w8a8_fused_chunk1024_rejected/`, and `w8a8_fused_quality/`; exact
+kernel results are in `w8a8_kernel_microbench/`.
+
 ## W8A8 profiler evidence
 
 Compact profiler aggregates are published in `w8a8_profile_mixed_prefill/` and

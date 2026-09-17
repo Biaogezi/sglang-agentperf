@@ -147,6 +147,13 @@ to CUTLASS INT8 GEMM. Separate dynamic activation quantization plus RMSNorm acco
 and 3.5%, respectively. See [Profile 002](docs/PROFILE_002_W8A8_KERNELS.md) for the phase-separated
 analysis and optimization selection decision.
 
+A real Triton source candidate fused RMSNorm with dynamic per-token INT8 quantization and
+pre-quantized linear handoff. It improves the local operator pair by 31.5%–110.3% and preserves
+the fixed prompt-NLL result exactly, but does not improve any three-repetition serving control
+(-0.01% to -0.77% throughput). It is therefore rejected rather than promoted from a
+microbenchmark-only win. See
+[Optimization 003](docs/OPTIMIZATION_003_W8A8_NORM_QUANT_FUSION.md).
+
 The resulting FP16-reduction experiment did not improve the trace-relevant 8K workload and changed
 long-sequence outputs, so it was rejected. See
 [Optimization 002](docs/OPTIMIZATION_002_MARLIN_REDUCTION.md).

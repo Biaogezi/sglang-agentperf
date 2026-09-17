@@ -1,0 +1,61 @@
+{
+  "schema_version": 1,
+  "created_at": "2026-09-17T18:42:32.598637+00:00",
+  "source_run": "20260917T183039Z__qwen3_8b_w8a8__w8a8_fused_chunk1024__prefill_only",
+  "files": [
+    {
+      "name": "manifest.json",
+      "size_bytes": 12803,
+      "sha256": "fda30d3755806133e9597abc369ef566a7ff4cd61fa3c07fba88206af52aef3b",
+      "published": true
+    },
+    {
+      "name": "qwen3_8b_w8a8__w8a8_fused_chunk1024__prefill_8k_64__r1.jsonl",
+      "size_bytes": 176510,
+      "sha256": "d89b991e343fd8c255f82edd669fd6d7b7b4f5d451fa57e8a4ae309d266680d8",
+      "published": false
+    },
+    {
+      "name": "qwen3_8b_w8a8__w8a8_fused_chunk1024__prefill_8k_64__r1.log",
+      "size_bytes": 11544,
+      "sha256": "fdb9640e405810f2ccd7785371aa7c1dbe5dee28edfe9dbb8ca49f4e5dbc510d",
+      "published": false
+    },
+    {
+      "name": "qwen3_8b_w8a8__w8a8_fused_chunk1024__prefill_8k_64__r2.jsonl",
+      "size_bytes": 176452,
+      "sha256": "52bcbd36b1ef2fa458d3a74f051dcffa9a1045acb6f0a72cdadbcaec1c7d5b77",
+      "published": false
+    },
+    {
+      "name": "qwen3_8b_w8a8__w8a8_fused_chunk1024__prefill_8k_64__r2.log",
+      "size_bytes": 11544,
+      "sha256": "8f1208a5e93843cef5dd31ccf10a7ce8d5fbf287e0061d1f7f0bd22fddfea6d8",
+      "published": false
+    },
+    {
+      "name": "qwen3_8b_w8a8__w8a8_fused_chunk1024__prefill_8k_64__r3.jsonl",
+      "size_bytes": 176433,
+      "sha256": "c861fe6e676f34e472f185094acf47be7762e4898b596e2336369a4977a6d291",
+      "published": false
+    },
+    {
+      "name": "qwen3_8b_w8a8__w8a8_fused_chunk1024__prefill_8k_64__r3.log",
+      "size_bytes": 11544,
+      "sha256": "01995d065018d392581ddb00c50bb5b59c9793f419d7be13fc852ac095188f97",
+      "published": false
+    },
+    {
+      "name": "server.log",
+      "size_bytes": 531584,
+      "sha256": "3698a318ea843f889ba7a66b134c7f03e309fb0b8fa5ba74bf35123a3aa56d4e",
+      "published": false
+    },
+    {
+      "name": "summary.csv",
+      "size_bytes": 976,
+      "sha256": "136d5947b9358354df6cfb952eb6bde302c7c96df570c8a1172da6ee0269a88e",
+      "published": true
+    }
+  ]
+}

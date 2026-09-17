@@ -1,0 +1,33 @@
+{
+  "created_at": "20260917T184211Z",
+  "harness_commit": "58274508c39d3e8ea3c31b3cf0dba4926747f7e9",
+  "upstream_commit": "0bcd822377da7b5718e674eaf9c870d349424dd1",
+  "upstream_worktree_commit": "24de973244a1be5cd594528d3a0f8a2a347acf18",
+  "model": "qwen3_8b_w8a8",
+  "profile": "w8a8_fused",
+  "corpus": "configs/quality_corpus.jsonl",
+  "server_command": [
+    "/opt/sglang/bin/python",
+    "-m",
+    "sglang.launch_server",
+    "--model-path",
+    "/data/models/Qwen3-8B-W8A8",
+    "--host",
+    "127.0.0.1",
+    "--port",
+    "30000",
+    "--dtype",
+    "float16",
+    "--mem-fraction-static",
+    "0.82",
+    "--quantization",
+    "w8a8_int8",
+    "--attention-backend",
+    "flashinfer",
+    "--enable-metrics",
+    "--enable-cache-report"
+  ],
+  "server_environment": {
+    "SGLANG_W8A8_FUSED_RMSNORM_QUANT": "true"
+  }
+}
