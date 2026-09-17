@@ -63,6 +63,15 @@
         "--enable-metrics",
         "--enable-cache-report"
       ]
+    },
+    "slo_chunk512_i4": {
+      "args": [
+        "--attention-backend", "flashinfer",
+        "--chunked-prefill-size", "512",
+        "--prefill-decode-interval", "4",
+        "--enable-metrics",
+        "--enable-cache-report"
+      ]
     }
   },
   "workloads": {
@@ -116,6 +125,7 @@
   "suites": {
     "smoke": ["smoke"],
     "core": ["decode_1k_512", "prefill_8k_64", "agent_prefix_4k"],
+    "prefill_only": ["prefill_8k_64"],
     "all": ["smoke", "decode_1k_512", "prefill_8k_64", "agent_prefix_4k"]
   }
 }
