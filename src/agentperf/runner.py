@@ -13,6 +13,7 @@ from typing import Any
 
 from .commands import benchmark_command, server_command
 from .config import build_plan
+from .quality import score_corpus
 
 
 def _git_head(path: Path | None = None) -> str | None:
@@ -154,6 +155,82 @@ def run_plan(
                     f"Benchmark {case.case_id} failed with code {completed.returncode}; "
                     f"see {log_file}"
                 )
+    finally:
+        terminate_process_group(process)
+        server_log.close()
+    return run_dir
+
+
+def run_quality_plan(
+    config: dict[str, Any],
+    *,
+    model: str,
+    profile: str,
+    corpus_path: Path,
+    output_root: Path,
+) -> Path:
+    """Launch one configured server and collect a fixed-corpus prompt-NLL result."""
+    timestamp = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ")
+    run_dir = output_root / f"{timestamp}__{model}__{profile}"
+    run_dir.mkdir(parents=True, exist_ok=False)
+
+    server_argv = server_command(config, model, profile)
+    server_environment = {
+        str(key): str(value)
+        for key, value in config["server_profiles"][profile].get("env", {}).items()
+    }
+    manifest = {
+        "created_at": timestamp,
+        "harness_commit": _git_head(),
+        "upstream_commit": config["upstream_commit"],
+        "upstream_worktree_commit": _git_head(Path("/workspace/sglang")),
+        "model": model,
+        "profile": profile,
+        "corpus": str(corpus_path),
+        "server_command": server_argv,
+        "server_environment": server_environment,
+    }
+    (run_dir / "manifest.json").write_text(
+        json.dumps(manifest, indent=2, ensure_ascii=False) + "\n", encoding="utf-8"
+    )
+
+    server_log = (run_dir / "server.log").open("w", encoding="utf-8")
+    process_kwargs: dict[str, Any] = {
+        "stdout": server_log,
+        "stderr": subprocess.STDOUT,
+        "text": True,
+        "env": {**os.environ, **server_environment},
+    }
+    if os.name != "nt":
+        process_kwargs["start_new_session"] = True
+    process = subprocess.Popen(server_argv, **process_kwargs)
+
+    try:
+        defaults = config["defaults"]
+        host = str(defaults["host"])
+        port = int(defaults["port"])
+        wait_for_server(
+            host,
+            port,
+            int(defaults["server_ready_timeout_s"]),
+            process,
+        )
+        result = score_corpus(
+            endpoint=f"http://{host}:{port}",
+            corpus_path=corpus_path,
+            output_path=run_dir / "quality.json",
+        )
+        result.update(
+            {
+                "model": model,
+                "profile": profile,
+                "harness_commit": manifest["harness_commit"],
+                "upstream_worktree_commit": manifest["upstream_worktree_commit"],
+            }
+        )
+        (run_dir / "quality.json").write_text(
+            json.dumps(result, indent=2, ensure_ascii=False) + "\n", encoding="utf-8"
+        )
     finally:
         terminate_process_group(process)
         server_log.close()

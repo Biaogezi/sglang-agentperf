@@ -8,7 +8,7 @@ from .commands import benchmark_command, server_command, shell_join
 from .config import build_plan, load_config
 from .quality import compare_quality, score_corpus
 from .report import check_run_equivalence, compare_summaries, summarize_run
-from .runner import run_plan
+from .runner import run_plan, run_quality_plan
 from .trace import analyze_trace
 
 
@@ -65,6 +65,15 @@ def _parser() -> argparse.ArgumentParser:
     quality_compare.add_argument("--baseline", required=True)
     quality_compare.add_argument("--candidate", required=True)
     quality_compare.add_argument("--max-nll-increase", type=float, default=0.02)
+
+    quality_run = subparsers.add_parser(
+        "run-quality", help="launch a configured SGLang server and score a fixed corpus"
+    )
+    quality_run.add_argument("--config", required=True)
+    quality_run.add_argument("--model", required=True)
+    quality_run.add_argument("--profile", default="baseline")
+    quality_run.add_argument("--corpus", required=True)
+    quality_run.add_argument("--output-root", default="quality")
     return parser
 
 
@@ -125,6 +134,15 @@ def main() -> None:
         print(json.dumps(result, indent=2, ensure_ascii=False))
         if not result["passed"]:
             raise SystemExit(1)
+    elif args.command == "run-quality":
+        run_dir = run_quality_plan(
+            config,
+            model=args.model,
+            profile=args.profile,
+            corpus_path=Path(args.corpus),
+            output_root=Path(args.output_root),
+        )
+        print(run_dir)
 
 
 if __name__ == "__main__":

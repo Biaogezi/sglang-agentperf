@@ -20,9 +20,9 @@ a universal acceptance requirement.
 ## Planned commands
 
 ```bash
-agentperf score-corpus --endpoint http://127.0.0.1:30000 \
-  --corpus configs/quality_corpus.jsonl --output quality/fp16.json
-agentperf compare-quality --baseline quality/fp16.json --candidate quality/awq.json \
+agentperf run-quality --config configs/experiment_matrix.json --model qwen3_8b_fp16 \
+  --corpus configs/quality_corpus.jsonl --output-root quality/cloud
+agentperf compare-quality --baseline quality/fp16/quality.json --candidate quality/awq/quality.json \
   --max-nll-increase 0.02
 ```
 
