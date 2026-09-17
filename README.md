@@ -79,3 +79,15 @@ Run the smoke gate before downloading every quantized checkpoint or launching th
 No percentage enters the README or resume unless the raw SGLang JSONL output, launch command,
 environment manifest, pinned commits, and at least three repetitions are present. Kernel-only
 results are labelled kernel-only. Simulator results are never presented as end-to-end latency.
+
+## Current findings
+
+- AWQ-Marlin removes the A10 KV-capacity failure mode seen in the FP16 load test and materially
+  improves decode-bound and shared-prefix serving.
+- The extra KV capacity exposes long-prefill/decode interference: default AWQ reaches high input
+  throughput but poor streaming tail latency on the 8K workload.
+- A measured static 1024-token chunk profile reduces p99 TPOT by 72.9% at a 7.8% input-throughput
+  cost. The first adaptive source patch did **not** beat that tuned static control and was rejected.
+
+See [Optimization 001](docs/OPTIMIZATION_001_SLO_CHUNKING.md) for absolute values, controls, and
+the negative-result decision.
