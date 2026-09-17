@@ -118,6 +118,8 @@ def run_plan(
             output_file = run_dir / f"{case.case_id}.jsonl"
             log_file = run_dir / f"{case.case_id}.log"
             command = benchmark_command(config, case, output_file)
+            server_log.write(f"\nAGENTPERF_CASE_BEGIN {case.case_id}\n")
+            server_log.flush()
             with log_file.open("w", encoding="utf-8") as handle:
                 completed = subprocess.run(
                     command,
@@ -126,6 +128,10 @@ def run_plan(
                     text=True,
                     check=False,
                 )
+            server_log.write(
+                f"\nAGENTPERF_CASE_END {case.case_id} returncode={completed.returncode}\n"
+            )
+            server_log.flush()
             if completed.returncode != 0:
                 raise RuntimeError(
                     f"Benchmark {case.case_id} failed with code {completed.returncode}; "
