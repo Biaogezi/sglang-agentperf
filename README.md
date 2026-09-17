@@ -130,6 +130,8 @@ results are labelled kernel-only. Simulator results are never presented as end-t
   throughput but poor streaming tail latency on the 8K workload.
 - A measured static 1024-token chunk profile reduces p99 TPOT by 72.9% at a 7.8% input-throughput
   cost. The first adaptive source patch did **not** beat that tuned static control and was rejected.
+- On calibrated W8A8, the same static 1024-token operating point reduces p99 E2E by 21.9%, p99
+  TPOT by 63.2%, and p99 ITL by 92.2% at a 21.5% input-throughput cost versus W8A8's default.
 
 See [Optimization 001](docs/OPTIMIZATION_001_SLO_CHUNKING.md) for absolute values, controls, and
 the negative-result decision.

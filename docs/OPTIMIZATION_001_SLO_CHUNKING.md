@@ -45,6 +45,23 @@ metric.
 The apparent throughput gain is 0.046%, far below run-to-run variation. TPOT and ITL regress by
 0.17% and 0.26%. The candidate therefore does not pass the repository's retention gate.
 
+### Quantization generalization check
+
+The same adaptive 2048→1024 candidate was retested with the calibrated Qwen3-8B W8A8 model
+against its best static 1024 control. Both points use the same FlashInfer backend, seed, cold
+cache, 80 prompts, concurrency 8, and three repetitions.
+
+| W8A8 profile | Input tok/s | p99 E2E ms | p99 TTFT ms | p99 TPOT ms | p99 ITL ms |
+|---|---:|---:|---:|---:|---:|
+| Static 1024, interval 4 | 3414.11 | 20844.48 | 16561.50 | 68.24 | 222.47 |
+| Adaptive 2048→1024, interval 4 | 3421.63 | 20708.72 | 16453.54 | 67.98 | 221.61 |
+
+The adaptive candidate gains only 0.22% input throughput and improves p99 E2E by 0.65%. That
+is directionally positive but far below the 10% throughput / 15% p99 retention threshold and
+too small to distinguish from environmental variation. The rejection therefore generalizes
+across AWQ and W8A8 rather than depending on one quantization backend. Reproducible aggregate
+evidence is published in `evidence/a10/w8a8_adaptive_chunk1024_rejected/`.
+
 ## What remains valuable
 
 - The causal diagnosis is retained: quantization relieved KV pressure, which allowed more long
@@ -55,4 +72,3 @@ The apparent throughput gain is 0.046%, far below run-to-run variation. TPOT and
   are not used as a resume speedup claim.
 - The next source target must be selected from a profiler trace and must beat the best static
   control, not merely the default configuration.
-

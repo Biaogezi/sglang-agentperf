@@ -56,6 +56,8 @@ with 8,192 input and 64 output tokens. Shared-prefix uses ten 4K-token prefix gr
 | 8K prefill — FP16 | 2240.92 | 17.51 | 29.22 s | 76.40 ms | 42.26 ms |
 | 8K prefill — AWQ | 2725.83 | 21.30 | 22.56 s | 342.08 ms | 5620.96 ms |
 | 8K prefill — W8A8 | 4349.44 | 33.98 | 17.24 s | 185.31 ms | 2848.82 ms |
+| 8K prefill — AWQ static chunk 1024 | 2512.28 | 19.63 | 22.93 s | 92.53 ms | 343.53 ms |
+| 8K prefill — W8A8 static chunk 1024 | 3414.11 | 26.67 | 16.56 s | 68.24 ms | 222.47 ms |
 | Shared prefix — AWQ | 12297.41 | 344.30 | 9.17 s | 85.10 ms | 31.65 ms |
 | Shared prefix — W8A8 | 12890.07 | 360.90 | 4.09 s | 64.02 ms | 38.25 ms |
 
@@ -71,6 +73,10 @@ All three paths reported zero retraction events in these accepted runs.
   evaluated separately.
 - Shared-prefix serving is mixed. W8A8 improves input/output throughput by 4.8%, p99 TTFT by
   55.4%, and p99 TPOT by 24.8%, but p99 ITL regresses by 20.9%.
+- W8A8's static 1024-token chunk is a latency-oriented operating point: versus its default 2048
+  setting, it sacrifices 21.5% input throughput while improving p99 E2E by 21.9%, p99 TPOT by
+  63.2%, and p99 ITL by 92.2%. Against AWQ at the same static chunk, it is 35.9% faster in input
+  throughput and has lower values for all four reported tail-latency metrics.
 
 The defensible deployment conclusion is phase-aware: prefer AWQ for decode-heavy traffic and W8A8
 for long-prefill-heavy traffic. A disaggregated prefill/decode deployment could assign a different

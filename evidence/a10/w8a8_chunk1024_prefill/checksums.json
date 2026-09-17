@@ -1,0 +1,61 @@
+{
+  "schema_version": 1,
+  "created_at": "2026-09-17T17:37:33.403116+00:00",
+  "source_run": "20260917T172419Z__qwen3_8b_w8a8__chunk1024__prefill_only",
+  "files": [
+    {
+      "name": "manifest.json",
+      "size_bytes": 10834,
+      "sha256": "22339327fdc37ec3ddce48fae0b1b1ee0fe70655c680a6a7f178eb905ad90a58",
+      "published": true
+    },
+    {
+      "name": "qwen3_8b_w8a8__chunk1024__prefill_8k_64__r1.jsonl",
+      "size_bytes": 176465,
+      "sha256": "ca53919c3a916cd1004dd5da205ba66a4ffe79cf0bc74fbe4249cafe4fd04d49",
+      "published": false
+    },
+    {
+      "name": "qwen3_8b_w8a8__chunk1024__prefill_8k_64__r1.log",
+      "size_bytes": 11500,
+      "sha256": "e0e51b58871aaeffc29d31bde2fe2c14210653bff8789336c25501c3efcc4eb7",
+      "published": false
+    },
+    {
+      "name": "qwen3_8b_w8a8__chunk1024__prefill_8k_64__r2.jsonl",
+      "size_bytes": 176462,
+      "sha256": "8e1401a4b36da8eeabffe1280f229aaa26a0d316079d36b76da07e854429d723",
+      "published": false
+    },
+    {
+      "name": "qwen3_8b_w8a8__chunk1024__prefill_8k_64__r2.log",
+      "size_bytes": 11500,
+      "sha256": "b880b51f6c05c469db7c3b5260b1ec996d6f88a68c7e6fe020756f5639335f0c",
+      "published": false
+    },
+    {
+      "name": "qwen3_8b_w8a8__chunk1024__prefill_8k_64__r3.jsonl",
+      "size_bytes": 176431,
+      "sha256": "5756630589c6f857a49ffb166bd30944660e3458edfaa92280c760d671a371cd",
+      "published": false
+    },
+    {
+      "name": "qwen3_8b_w8a8__chunk1024__prefill_8k_64__r3.log",
+      "size_bytes": 11500,
+      "sha256": "97f8165ea47fef5f9d738218baa3b43233e9263816d3d66cf853ce14096a02c3",
+      "published": false
+    },
+    {
+      "name": "server.log",
+      "size_bytes": 531209,
+      "sha256": "a061e20be0ffcc203fafc8ddb2ad7631bb80a00d51bd19e48a1d843cf666aaf5",
+      "published": false
+    },
+    {
+      "name": "summary.csv",
+      "size_bytes": 977,
+      "sha256": "a950fc82e541039add18de3d321b440b4f12568c32ecb0506c25f8cc21b5c499",
+      "published": true
+    }
+  ]
+}

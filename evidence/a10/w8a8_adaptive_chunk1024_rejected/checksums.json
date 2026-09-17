@@ -1,0 +1,61 @@
+{
+  "schema_version": 1,
+  "created_at": "2026-09-17T17:49:00.408304+00:00",
+  "source_run": "20260917T173638Z__qwen3_8b_w8a8__adaptive_chunk1024__prefill_only",
+  "files": [
+    {
+      "name": "manifest.json",
+      "size_bytes": 11439,
+      "sha256": "838407b537bc75dd5a67572b860107a630078414bdc3afab32c775b72f9040e5",
+      "published": true
+    },
+    {
+      "name": "qwen3_8b_w8a8__adaptive_chunk1024__prefill_8k_64__r1.jsonl",
+      "size_bytes": 176559,
+      "sha256": "9704f3a2889c9607b98e454f74aee8baeb9dd5c07993a8845b9a922600dd6fde",
+      "published": false
+    },
+    {
+      "name": "qwen3_8b_w8a8__adaptive_chunk1024__prefill_8k_64__r1.log",
+      "size_bytes": 11536,
+      "sha256": "0f8e3d791f1363b79a029ffae61caa67039c1957f90527d0ac726f0e99cc08b8",
+      "published": false
+    },
+    {
+      "name": "qwen3_8b_w8a8__adaptive_chunk1024__prefill_8k_64__r2.jsonl",
+      "size_bytes": 176524,
+      "sha256": "c0e28a580848287117629325f1f21b178793cdb5e19e6280a358c9e45e878d4f",
+      "published": false
+    },
+    {
+      "name": "qwen3_8b_w8a8__adaptive_chunk1024__prefill_8k_64__r2.log",
+      "size_bytes": 11536,
+      "sha256": "7814f8da13a97792cf272ddad5f3563f6e4b7c5c176759916aec2fb41290e479",
+      "published": false
+    },
+    {
+      "name": "qwen3_8b_w8a8__adaptive_chunk1024__prefill_8k_64__r3.jsonl",
+      "size_bytes": 176594,
+      "sha256": "8943586a72124e1594c8cad264877048ce82cf870eb6f2b993a83368ca683e7b",
+      "published": false
+    },
+    {
+      "name": "qwen3_8b_w8a8__adaptive_chunk1024__prefill_8k_64__r3.log",
+      "size_bytes": 11536,
+      "sha256": "e2f95560996efeeb3d844b88b261be5a54489f70c8d512928e0799c8c6d4d355",
+      "published": false
+    },
+    {
+      "name": "server.log",
+      "size_bytes": 527106,
+      "sha256": "7d73b58b7ce45a9c089beba2ce47386f9f49954bca9651dcb7122a4a205883c1",
+      "published": false
+    },
+    {
+      "name": "summary.csv",
+      "size_bytes": 982,
+      "sha256": "a8d4d42049b0cdd95f94b0f41a0cb73662f79822e9a6c701aa6fe8c4d3e5d1cc",
+      "published": true
+    }
+  ]
+}

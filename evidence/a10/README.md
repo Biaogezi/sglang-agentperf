@@ -43,6 +43,7 @@ invalidated and is not published here.
 | AWQ default chunk 2048, prefill 8K/64 | 2725.83 | 21.30 | 22.56 s | 342.08 ms | 5620.96 ms |
 | calibrated W8A8 default chunk 2048, prefill 8K/64 | 4349.44 | 33.98 | 17.24 s | 185.31 ms | 2848.82 ms |
 | AWQ static chunk 1024, prefill 8K/64 | 2512.28 | 19.63 | 22.93 s | 92.53 ms | 343.53 ms |
+| calibrated W8A8 static chunk 1024, prefill 8K/64 | 3414.11 | 26.67 | 16.56 s | 68.24 ms | 222.47 ms |
 
 AWQ-Marlin raises decode output throughput by 121.3% versus FP16 and cuts p99 TTFT by 80.0% on
 this memory-constrained load. For the interference-heavy 8K case, a static 1024-token chunk cuts
@@ -54,6 +55,12 @@ format. AWQ is 8.9% faster in decode output throughput, while W8A8 is 59.6% fast
 input throughput and reduces that workload's p99 TTFT by 23.6%. On the shared-prefix workload,
 W8A8 improves input/output throughput by 4.8% and p99 TTFT by 55.4%, but its p99 ITL is 20.9%
 worse. These trade-offs motivate phase-aware deployment rather than a single-format claim.
+
+Within W8A8, the static 1024-token profile trades 21.5% input throughput for a 21.9% p99 E2E
+reduction, 63.2% lower p99 TPOT, and 92.2% lower p99 ITL versus its default 2048-token profile.
+At the same static 1024-token setting, W8A8 is 35.9% faster in input throughput than AWQ and also
+has lower p99 E2E, TTFT, TPOT, and ITL. This is a measured SLO operating point, not a new scheduler
+algorithm.
 
 The adaptive source patch and reduced-precision Marlin experiment were both rejected; see the
 decision log and optimization reports. Negative results are intentionally retained.
