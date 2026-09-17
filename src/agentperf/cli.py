@@ -8,6 +8,7 @@ from .commands import benchmark_command, server_command, shell_join
 from .config import build_plan, load_config
 from .report import compare_summaries, summarize_run
 from .runner import run_plan
+from .trace import analyze_trace
 
 
 def _parser() -> argparse.ArgumentParser:
@@ -38,6 +39,10 @@ def _parser() -> argparse.ArgumentParser:
     compare.add_argument("--baseline", required=True)
     compare.add_argument("--candidate", required=True)
     compare.add_argument("--output", required=True)
+
+    trace = subparsers.add_parser("analyze-trace", help="aggregate a Torch profiler trace")
+    trace.add_argument("--trace", required=True)
+    trace.add_argument("--output-dir", required=True)
     return parser
 
 
@@ -71,6 +76,9 @@ def main() -> None:
             Path(args.baseline), Path(args.candidate), Path(args.output)
         )
         print(json.dumps(rows, indent=2, ensure_ascii=False))
+    elif args.command == "analyze-trace":
+        summary = analyze_trace(Path(args.trace), Path(args.output_dir))
+        print(json.dumps(summary, indent=2, ensure_ascii=False))
 
 
 if __name__ == "__main__":
