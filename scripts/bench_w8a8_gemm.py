@@ -32,7 +32,10 @@ def torch_int_mm(
 def benchmark(name: str, rows: int, k: int, n: int) -> dict[str, object]:
     generator = torch.Generator(device="cuda").manual_seed(rows + k + n)
     a = torch.randint(-16, 17, (rows, k), device="cuda", dtype=torch.int8, generator=generator)
-    b = torch.randint(-16, 17, (k, n), device="cuda", dtype=torch.int8, generator=generator)
+    # Match SGLang's loaded weight layout: logical [K, N], physically transposed from [N, K].
+    b = torch.randint(
+        -16, 17, (n, k), device="cuda", dtype=torch.int8, generator=generator
+    ).t()
     scale_a = torch.rand((rows, 1), device="cuda", generator=generator) * 0.01
     scale_b = torch.rand((n, 1), device="cuda", generator=generator) * 0.01
 
