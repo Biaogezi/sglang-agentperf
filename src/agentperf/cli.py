@@ -6,7 +6,7 @@ from pathlib import Path
 
 from .commands import benchmark_command, server_command, shell_join
 from .config import build_plan, load_config
-from .report import summarize_run
+from .report import compare_summaries, summarize_run
 from .runner import run_plan
 
 
@@ -33,6 +33,11 @@ def _parser() -> argparse.ArgumentParser:
     summarize = subparsers.add_parser("summarize", help="aggregate repeated SGLang JSONL results")
     summarize.add_argument("--run-dir", required=True)
     summarize.add_argument("--output", required=True)
+
+    compare = subparsers.add_parser("compare", help="compare matching workloads in two summaries")
+    compare.add_argument("--baseline", required=True)
+    compare.add_argument("--candidate", required=True)
+    compare.add_argument("--output", required=True)
     return parser
 
 
@@ -60,6 +65,11 @@ def main() -> None:
         print(run_dir)
     elif args.command == "summarize":
         rows = summarize_run(Path(args.run_dir), Path(args.output))
+        print(json.dumps(rows, indent=2, ensure_ascii=False))
+    elif args.command == "compare":
+        rows = compare_summaries(
+            Path(args.baseline), Path(args.candidate), Path(args.output)
+        )
         print(json.dumps(rows, indent=2, ensure_ascii=False))
 
 

@@ -1,7 +1,9 @@
 import json
 from pathlib import Path
 
-from agentperf.report import summarize_run
+import pytest
+
+from agentperf.report import compare_summaries, summarize_run
 
 
 def test_summarize_repetitions(tmp_path: Path) -> None:
@@ -38,4 +40,23 @@ def test_summarize_repetitions(tmp_path: Path) -> None:
     assert rows[0]["e2e_p99_ms_mean"] == 75.0
     assert rows[0]["retracted_requests_mean"] == 2 / 3
     assert rows[0]["mixed_prefill_chunk_size_mean"] == 512.0
+    assert output.exists()
+
+
+def test_compare_summaries_uses_positive_improvement_direction(tmp_path: Path) -> None:
+    baseline = tmp_path / "baseline.csv"
+    candidate = tmp_path / "candidate.csv"
+    output = tmp_path / "comparison.csv"
+    header = "case,input_throughput_mean,tpot_p99_ms_mean\n"
+    baseline.write_text(
+        header + "model__baseline__prefill,100,200\n", encoding="utf-8"
+    )
+    candidate.write_text(
+        header + "model__candidate__prefill,110,100\n", encoding="utf-8"
+    )
+
+    rows = compare_summaries(baseline, candidate, output)
+
+    assert rows[0]["input_throughput_mean_improvement_pct"] == pytest.approx(10.0)
+    assert rows[0]["tpot_p99_ms_mean_improvement_pct"] == 100.0
     assert output.exists()

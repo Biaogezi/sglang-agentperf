@@ -21,6 +21,15 @@ METRIC_ALIASES = {
     "itl_p99_ms": ("p99_itl_ms", "itl_p99_ms"),
 }
 
+COMPARISON_METRICS = {
+    "input_throughput_mean": True,
+    "output_throughput_mean": True,
+    "e2e_p99_ms_mean": False,
+    "ttft_p99_ms_mean": False,
+    "tpot_p99_ms_mean": False,
+    "itl_p99_ms_mean": False,
+}
+
 CASE_BEGIN = "AGENTPERF_CASE_BEGIN "
 CASE_END = "AGENTPERF_CASE_END "
 RETRACTED_REQUESTS = re.compile(r"#retracted_reqs:\s*(\d+)")
@@ -124,6 +133,57 @@ def summarize_run(run_dir: Path, output_csv: Path) -> list[dict[str, Any]]:
 
     output_csv.parent.mkdir(parents=True, exist_ok=True)
     fieldnames = list(rows[0].keys()) if rows else ["case", "repetitions"]
+    with output_csv.open("w", encoding="utf-8", newline="") as handle:
+        writer = csv.DictWriter(handle, fieldnames=fieldnames)
+        writer.writeheader()
+        writer.writerows(rows)
+    return rows
+
+
+def _workload_name(case: str) -> str:
+    parts = case.split("__", 2)
+    return parts[-1]
+
+
+def compare_summaries(
+    baseline_csv: Path, candidate_csv: Path, output_csv: Path
+) -> list[dict[str, Any]]:
+    """Compare matching workloads; positive percentages always mean improvement."""
+
+    def read_rows(path: Path) -> dict[str, dict[str, str]]:
+        with path.open(encoding="utf-8", newline="") as handle:
+            return {
+                _workload_name(row["case"]): row for row in csv.DictReader(handle)
+            }
+
+    baseline_rows = read_rows(baseline_csv)
+    candidate_rows = read_rows(candidate_csv)
+    rows: list[dict[str, Any]] = []
+    for workload in sorted(baseline_rows.keys() & candidate_rows.keys()):
+        baseline = baseline_rows[workload]
+        candidate = candidate_rows[workload]
+        row: dict[str, Any] = {
+            "workload": workload,
+            "baseline_case": baseline["case"],
+            "candidate_case": candidate["case"],
+        }
+        for metric, higher_is_better in COMPARISON_METRICS.items():
+            if not baseline.get(metric) or not candidate.get(metric):
+                continue
+            baseline_value = float(baseline[metric])
+            candidate_value = float(candidate[metric])
+            improvement = (
+                candidate_value / baseline_value - 1
+                if higher_is_better
+                else baseline_value / candidate_value - 1
+            )
+            row[f"baseline_{metric}"] = baseline_value
+            row[f"candidate_{metric}"] = candidate_value
+            row[f"{metric}_improvement_pct"] = improvement * 100
+        rows.append(row)
+
+    output_csv.parent.mkdir(parents=True, exist_ok=True)
+    fieldnames = list(rows[0].keys()) if rows else ["workload", "baseline_case", "candidate_case"]
     with output_csv.open("w", encoding="utf-8", newline="") as handle:
         writer = csv.DictWriter(handle, fieldnames=fieldnames)
         writer.writeheader()
