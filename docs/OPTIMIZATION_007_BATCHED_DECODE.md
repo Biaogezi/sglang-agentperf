@@ -45,3 +45,23 @@ python scripts/run_paired_prefill.py --suite batch_decode --candidate gemm \
 
 The profiled result is diagnostic, never a second performance sample. Source manifests and
 screening summaries are in `evidence/a10/batch_decode_screen_off/on/`.
+
+## Configuration boundary found before further measurement
+
+The screening server logs show the default decode graph capture list is
+`[1, 2, 4, 8, 12, 16, 24]`, while actual decode batches have 128 requests and log
+`cuda graph: False`. Prefill graphs remain enabled. Thus “CUDA Graph enabled” did not mean
+the tested decode shapes were covered. This is a confirmed configuration boundary; whether
+CPU launch overhead hides kernel gains still requires measurement, not assumption.
+
+Add a fair control with the existing upstream `--cuda-graph-max-bs-decode 128` on **both** arms:
+
+```bash
+python scripts/run_paired_prefill.py --suite batch_decode --candidate gemm \
+  --decode-graph-max-bs 128 --repetitions 1
+```
+
+If promising, repeat three times and collect independent trace proof. Compare custom OFF/ON
+within the same graph configuration. Any default-OFF → graph128-OFF gain belongs to upstream
+configuration/coverage, not our GEMM. Monitor capture-memory costs and do not silently lower
+KV capacity or change workload lengths if capture fails.

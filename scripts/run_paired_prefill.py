@@ -25,6 +25,7 @@ def main():
     parser.add_argument("--prefill-backend", choices=["disabled", "breakable", "tc_piecewise"])
     parser.add_argument("--candidate", choices=["gemm", "fusion", "combined"], default="gemm")
     parser.add_argument("--disable-overlap", action="store_true")
+    parser.add_argument("--decode-graph-max-bs", type=int)
     parser.add_argument(
         "--trace-steps", type=int, help="Diagnostic only; do not accept profiled timing"
     )
@@ -40,6 +41,13 @@ def main():
         }
         if args.disable_overlap:
             config["server_profiles"][profile]["args"].append("--disable-overlap-schedule")
+        if args.decode_graph_max_bs is not None:
+            if args.decode_graph_max_bs < 1:
+                parser.error("--decode-graph-max-bs must be positive")
+            config["server_profiles"][profile]["args"] += [
+                "--cuda-graph-max-bs-decode",
+                str(args.decode_graph_max_bs),
+            ]
         if args.prefill_backend:
             config["server_profiles"][profile]["args"] += [
                 "--cuda-graph-backend-prefill",
