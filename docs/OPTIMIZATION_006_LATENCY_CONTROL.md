@@ -55,3 +55,20 @@ for arbitrary prompts, concurrency or long generation, and the latency reduction
 the separate 15% tail-latency gate. The original default-overlap 128-token GEMM result was ~7.9%.
 Do not add the upstream configuration benefit to the custom-kernel gain. Final source hardening,
 32-output-token, mixed/core, and multi-turn checks remain separate acceptance work.
+
+## Final source retest
+
+On the seven-patch tree `bb70ae7f8fb7cede92b8655fbc503aeb5c42bcbd`, run
+`20260918T044732Z__short` repeats the same three-round protocol:
+
+| Native tokens | OFF input tok/s, mean ± SD | ON input tok/s, mean ± SD | Change | p99 TTFT OFF → ON |
+|---|---:|---:|---:|---:|
+| 96 | 3302.26 ± 28.63 | 3502.28 ± 15.47 | +6.06% | 29.818 → 28.217 ms |
+| 128 | 4143.97 ± 20.08 | 4688.91 ± 27.87 | **+13.15%** | **31.705 → 28.115 ms** |
+| 160, fallback | 3904.22 ± 17.65 | 3920.42 ± 33.43 | +0.41% | 42.061 → 41.966 ms |
+
+All 2,880 requests complete, nine paired output records match, and all source fingerprints agree.
+The final same-checkpoint quality test scores 8,128 tokens: NLL delta +8.466e-7, all 40 greedy
+task outputs identical, no lost correct task. Snapshots: `final_short_off/on` and
+`final_quality_off/on` under `evidence/a10/`. Long-output/core/agent regression is reported
+separately in the [final report](FINAL_REPORT.zh-CN.md); do not extrapolate this table.

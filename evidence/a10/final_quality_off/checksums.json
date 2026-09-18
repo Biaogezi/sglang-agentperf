@@ -1,0 +1,37 @@
+{
+  "schema_version": 1,
+  "created_at": "2026-09-18T05:01:30.749336+00:00",
+  "source_run": "off",
+  "files": [
+    {
+      "name": "manifest.json",
+      "size_bytes": 5092,
+      "sha256": "396cddc639e76eaeaa62c02ba51e6931ac3838ac7560209ffc9b21d0122772b7",
+      "published": true
+    },
+    {
+      "name": "quality.json",
+      "size_bytes": 7832,
+      "sha256": "4563bfbe4d269351c3fae5d1dc6533e1831afa95a6c2994df82f9f3d0b7fefff",
+      "published": true
+    },
+    {
+      "name": "server.log",
+      "size_bytes": 78141,
+      "sha256": "f346e5a6a3414c6981f43b7749a31dd0708b74cba1cec50c3b362c992b517571",
+      "published": false
+    },
+    {
+      "name": "task_outputs.json",
+      "size_bytes": 12658,
+      "sha256": "517a73e617ac2a8fabe98206e0adec36a98dcc6522af572be9d02400be8fff6f",
+      "published": true
+    },
+    {
+      "name": "tasks_summary.json",
+      "size_bytes": 357,
+      "sha256": "0b916376e23187a0c474dd28690d45351f53f01d4ef9571cdfd3216ab8dcafe4",
+      "published": true
+    }
+  ]
+}

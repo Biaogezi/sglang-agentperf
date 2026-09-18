@@ -1,0 +1,20 @@
+{
+  "arithmetic": {
+    "correct": 0,
+    "total": 16,
+    "min_input_tokens": 32,
+    "max_input_tokens": 33
+  },
+  "json_extraction": {
+    "correct": 16,
+    "total": 16,
+    "min_input_tokens": 49,
+    "max_input_tokens": 51
+  },
+  "long_retrieval": {
+    "correct": 8,
+    "total": 8,
+    "min_input_tokens": 10988,
+    "max_input_tokens": 10988
+  }
+}

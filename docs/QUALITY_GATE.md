@@ -60,3 +60,8 @@ FP16 scores 0/16 strict arithmetic-format, 16/16 JSON and 8/8 retrieval; AWQ sco
 The W8A8 source candidate is evaluated separately against both FP16 and its same-checkpoint OFF
 control. Published data: `evidence/a10/fp16_quality_expanded/` and
 `evidence/a10/awq_quality_expanded/`, including original synthetic-task answers.
+
+Final W8A8 GEMM-only source test: OFF NLL 2.9490910677, ON 2.9490919142, delta +8.466e-7;
+all 40 greedy outputs match and no correct task is lost. ON versus the FP16 reference has NLL
+delta +0.00487721 (+0.489% exponentiated NLL), passing the +0.02 gate. JSON/retrieval remain
+16/16 and 8/8; strict arithmetic-format remains 0/16. See `final_quality_off/on` evidence.
