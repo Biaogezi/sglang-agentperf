@@ -1,6 +1,6 @@
 # Optimization 005 — connect norm fusion to the native W8A8 method
 
-Status: GPU integration and positive trace proof passed; serving/quality validation in progress.
+Status: numerical/task regression passed; default-overlap serving gain remains below acceptance gate.
 
 ## Hypothesis and controls
 
@@ -58,4 +58,30 @@ not the performance acceptance data.
 
 ## Serving and quality results
 
-Pending. Historical Optimization 003 serving numbers must not be reused here.
+Three alternating repetitions (`20260918T041033Z__short`) yield:
+
+| Native input tokens | Throughput change | p99 TTFT reduction |
+|---|---:|---:|
+| 96 | +3.85% | 3.74% |
+| 128 | +9.02% | 8.54% |
+| 160 | +0.67% | 0.87% |
+
+All 2,880 requests complete, but generated token strings are not identical. In repetition one,
+the exact-match counts are 145/160, 149/160 and 145/160 for 96/128/160 respectively. Random
+unstructured prompts are not task accuracy, and these differences cannot be called lossless.
+Output lengths and errors match, so timing is not made faster by shorter generations.
+
+The separate quality run (`20260918T042120Z`) scores 8,128 tokens: OFF NLL 2.9490919142,
+ON NLL 2.9522406621, delta +0.0031487479 (within the +0.02 gate). Both pass 16/16 JSON and
+8/8 long retrieval and fail 16/16 strict arithmetic format. Greedy text is identical on 34/40
+tasks, with no lost correct tasks. This is bounded numerical/task regression, not broad quality
+equivalence. Evidence is in `combined_native_v1_off/on` and `combined_quality_v1_off/on`.
+
+The combined candidate does not clear the original performance gate on the default overlap
+configuration. Keep it default-off. Investigate the scheduler/latency control separately in
+Optimization 006, and do not retrofit these results into the invalid historical experiment.
+
+Patch 0007 further gates the Qwen3 call-site hints on the explicit norm-fusion switch. This
+preserves original default call sites for other quantization formats instead of inadvertently
+enabling an existing FP8 fusion when our INT8 switch is off. The measurements above precede
+that call-site safety hardening; final-release validation is tracked separately.

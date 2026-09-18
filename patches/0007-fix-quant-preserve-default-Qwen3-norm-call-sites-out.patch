@@ -1,0 +1,47 @@
+From b2f2238b821ef18fcce1fe4ed2680f5be3bd52f6 Mon Sep 17 00:00:00 2001
+From: biaogezi <scwang@bupt.edu.cn>
+Date: Fri, 18 Sep 2026 12:27:21 +0800
+Subject: [PATCH] fix(quant): preserve default Qwen3 norm call sites outside
+ opt-in
+
+---
+ python/sglang/srt/models/qwen3.py | 9 +++++++--
+ 1 file changed, 7 insertions(+), 2 deletions(-)
+
+diff --git a/python/sglang/srt/models/qwen3.py b/python/sglang/srt/models/qwen3.py
+index 2b585a0..2d89f3d 100644
+--- a/python/sglang/srt/models/qwen3.py
++++ b/python/sglang/srt/models/qwen3.py
+@@ -43,6 +43,7 @@ _is_cuda = is_cuda()
+ _is_hip = is_hip()
+ _is_npu = is_npu()
+ _use_aiter = get_bool_env_var("SGLANG_USE_AITER") and _is_hip
++_enable_w8a8_norm_fusion = get_bool_env_var("SGLANG_W8A8_FUSED_RMSNORM_QUANT")
+ 
+ _has_fused_qk_norm_mrope = False
+ if _use_aiter:
+@@ -400,7 +401,9 @@ class Qwen3DecoderLayer(nn.Module):
+             forward_batch,
+             post_residual_addition=post_residual_addition,
+             quant_linear=(
+-                self.self_attn.qkv_proj if get_parallel().tp_size == 1 else None
++                self.self_attn.qkv_proj
++                if _enable_w8a8_norm_fusion and get_parallel().tp_size == 1
++                else None
+             ),
+         )
+         hidden_states_for_shape = (
+@@ -419,7 +422,9 @@ class Qwen3DecoderLayer(nn.Module):
+             residual,
+             forward_batch,
+             quant_linear=(
+-                self.mlp.gate_up_proj if get_parallel().tp_size == 1 else None
++                self.mlp.gate_up_proj
++                if _enable_w8a8_norm_fusion and get_parallel().tp_size == 1
++                else None
+             ),
+             cache=(
+                 [self.mlp.gate_up_proj.weight, self.mlp.down_proj.weight]
+-- 
+2.47.1.windows.2
+
