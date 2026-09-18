@@ -1,0 +1,43 @@
+{
+  "schema_version": 1,
+  "created_at": "2026-09-18T07:57:21.215150+00:00",
+  "source_trace": "batch_decode-dispatch-proof-1789717973.6807535-TP-0.trace.json.gz",
+  "files": [
+    {
+      "name": "batch_decode-dispatch-proof-1789717973.6807535-TP-0.trace.json.gz",
+      "size_bytes": 4640613,
+      "sha256": "067595a9d491c8843eab3e5634dc5139515899524450ebe937faca8704d5e64e",
+      "published": false
+    },
+    {
+      "name": "summary.json",
+      "size_bytes": 13149,
+      "sha256": "cf289665b68d34d01fbbd548f3c2d1260afab986b84110e3fe913672fcf72e3c",
+      "published": true
+    },
+    {
+      "name": "kernels.csv",
+      "size_bytes": 13299,
+      "sha256": "e56ca29a3f1f9ed92d15cfc65ae185af1e49ca61501b58a4190ee8ca4e2e0a5a",
+      "published": true
+    },
+    {
+      "name": "cuda_runtime.csv",
+      "size_bytes": 1207,
+      "sha256": "989f0b89cbd0d6dc7187533a3363b7dde3b800d6bf2851e0e0ca18e838e7f3c5",
+      "published": true
+    },
+    {
+      "name": "cpu_ops.csv",
+      "size_bytes": 2164,
+      "sha256": "673a9cf9d8e40a71ad791e1a818b38d984d573f67e3b6e2919b39291404789d2",
+      "published": true
+    },
+    {
+      "name": "user_annotations.csv",
+      "size_bytes": 599,
+      "sha256": "6725cda7aa3a36f87a213628c29264be08c8ea65d3bac429bfb1dcb5a8108094",
+      "published": true
+    }
+  ]
+}

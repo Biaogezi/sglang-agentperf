@@ -81,7 +81,7 @@ and the same 0.82 memory fraction. These are launch-reported capture allocations
 whole-process peaks. The +1.7% difference between the two OFF screens is not a repeated
 configuration-performance result. Public snapshots: `batch_graph128_screen_off/on`.
 
-Three independent alternating graph128 pairs are run next, **without mixing in the screening
+Three independent alternating graph128 pairs were run next, **without mixing in the screening
 pair or changing the gate**. Separate default-coverage and graph128 traces are diagnostic only.
 
 ## Independent three-repeat graph128 result
@@ -102,3 +102,33 @@ The short-prefill acceptance remains separate. The original default-coverage res
 one pair, so this is not a three-repeat difference-in-differences study of graph configuration.
 Public summaries and per-request arrays: `final_batch_graph128_off/on` and
 `final_batch_graph128_requests_off/on`. Screening data is retained, not mixed into the table.
+
+The six launches all report 74,673 KV token slots and 0.36 GB decode-graph capture memory.
+One-second launch-wide telemetry reaches the same sampled maximum 21,847 MiB and 61°C in both
+arms. Sampling does not prove an exact instantaneous allocation peak or absence of all throttling.
+
+## Independent execution/overhead diagnostics
+
+The default-coverage pair is `20260918T074739Z__batch_decode`; graph128 is
+`20260918T075146Z__batch_decode`. Each trace contains exactly **20 `DECODE bs=128` steps**.
+All 2,560 diagnostic requests complete, but their profiled durations are excluded from serving
+acceptance. Trace files reside in profile-ID subdirectories, not directly in the output root.
+
+| Captured mode | Custom GEMM calls OFF / ON | `cudaGraphLaunch` OFF / ON | Captured GPU activity OFF / ON |
+|---|---:|---:|---:|
+| Default coverage, eager at batch 128 | 0 / 1440 | 0 / 0 | 35.67% / 30.61% |
+| Expanded graph128 | 0 / 1440 | 20 / 20 | 99.35% / 99.30% |
+
+Thus the eager result is not a no-op switch: the candidate really runs in both modes. Graph
+replay bypasses repeated Python dispatch/launch work inside the captured model. The eager
+diagnostic has substantial host-side gaps and more intrusive Python profiling work; graph128
+keeps the device busy in this capture. This is consistent with host overhead masking a faster
+kernel, **not** a measurement of unprofiled production idle time or a precise causal allocation
+of every saved millisecond. CPU step spans in graph mode measure asynchronous enqueue work,
+not complete GPU step latency. No Nsight Compute counters were collected.
+
+Compact trace evidence: `batch_eager_proof_off/on`, `batch_graph128_proof_off/on`.
+The matching profiled launch/config manifests and explicitly diagnostic timing summaries are
+`batch_eager_diagnostic_off/on`, `batch_graph128_diagnostic_off/on`. Raw traces and full server
+logs are backed up locally. Decision: preserve the reproducible +7.40% secondary result while
+retaining the original acceptance threshold and the narrow primary short-prefill claim.

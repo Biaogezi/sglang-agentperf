@@ -11,6 +11,14 @@ runtime. Runtime changes live as reviewable patches against a pinned SGLang chec
 owns workload definitions, launch configurations, profiling automation, result validation, and
 performance reports.
 
+**A10 v1 is complete:** the scoped 128-input/1-output/concurrency-one native-ID result improves
+throughput by **13.15%** under matched no-overlap settings. A separate graph-covered high-batch
+decode experiment gives **+7.40%**, below the pre-registered acceptance gate. Core and multi-turn
+workloads show no meaningful general speedup. Read the [final report](docs/FINAL_REPORT.zh-CN.md),
+[delivery checklist](docs/PROJECT_STATUS.zh-CN.md), and [resume description](docs/RESUME.zh-CN.md)
+for evidence and limits. `python scripts/verify_primary_result.py` reconstructs the primary claim
+from public request-level artifacts without a GPU.
+
 ## Research question
 
 For long-prefix, multi-turn agent workloads on a 24 GiB NVIDIA A10, where does time go after
@@ -175,7 +183,9 @@ passes (+8.466e-7 same-checkpoint NLL delta, all 40 task texts unchanged). Three
 regressions complete all 2,400 requests with throughput changes within ±0.3%; shared-prefix text
 matches 468/480 pairs rather than all pairs. Multi-turn replay completes all 576 turns with
 essentially unchanged output throughput; 259/288 paired texts match, so later histories can differ.
-Graph-coverage checks are still running. See
+Graph-covered high-batch decode separately improves output throughput by 7.40% over three pairs,
+below the unchanged 10% gate; independent traces prove execution in both eager and graph modes.
+See [Optimization 007](docs/OPTIMIZATION_007_BATCHED_DECODE.md),
 [Optimization 006](docs/OPTIMIZATION_006_LATENCY_CONTROL.md) and the full experiment history in
 [Optimization 004](docs/OPTIMIZATION_004_SM86_INT8_PREFILL.md).
 

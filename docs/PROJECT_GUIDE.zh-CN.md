@@ -341,6 +341,10 @@ teacher-forced NLL、固定批次/确定性执行，再判断是哪一层导致�
 只捕获到 batch 24，而 128 并发运行明确显示 `cuda graph: False`；prefill graph 仍在使用。
 扩大覆盖是已有上游配置调优，需要比较覆盖前后以及同一覆盖下 kernel OFF/ON，不能把两份
 收益混成一项“自研 kernel 加速”。还要记录额外 Graph 显存，避免用降低 KV 容量隐瞒代价。
+最终三轮 graph128 同配置下，自定义 GEMM 的输出吞吐提升 7.40%，低于预设 10% 门槛。
+两种模式的独立 trace 都证明了 20 个 decode 步里执行 1440 次自定义 GEMM，所以 eager
+筛查无收益不能解释为开关没生效。Graph 减少重复主机分派/发射工作；但 profiler 会扰动
+Python 开销，不能拿诊断窗口里的 GPU idle 百分比冒充生产利用率。
 
 ## 面试前亲手完成的四个练习（操作）
 
