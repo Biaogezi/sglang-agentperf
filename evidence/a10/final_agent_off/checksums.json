@@ -1,0 +1,61 @@
+{
+  "schema_version": 1,
+  "created_at": "2026-09-18T07:29:11.074699+00:00",
+  "source_run": "prefill_off",
+  "files": [
+    {
+      "name": "manifest.json",
+      "size_bytes": 74070,
+      "sha256": "594c67fd02355c186a4fee0c63e70a58bdf1374c8bec4f466762a3625446d9e2",
+      "published": true
+    },
+    {
+      "name": "qwen3_8b_w8a8__prefill_off__synthetic_agent_replay__r1.jsonl",
+      "size_bytes": 123216,
+      "sha256": "252bff286723395e52b94b07f04ed987d2b7717f758275fa180b9f0a3e6c2fce",
+      "published": false
+    },
+    {
+      "name": "qwen3_8b_w8a8__prefill_off__synthetic_agent_replay__r1.log",
+      "size_bytes": 7734,
+      "sha256": "c1216bb5366fe32fe84091f77c632eba5676b3b9bac8da4f871c35707335f1a8",
+      "published": false
+    },
+    {
+      "name": "qwen3_8b_w8a8__prefill_off__synthetic_agent_replay__r2.jsonl",
+      "size_bytes": 123279,
+      "sha256": "8523c60a2e454a649b7db69a5bbbf99737725baf78f7f57b9f6b6a04332d6473",
+      "published": false
+    },
+    {
+      "name": "qwen3_8b_w8a8__prefill_off__synthetic_agent_replay__r2.log",
+      "size_bytes": 7734,
+      "sha256": "a6a0a1aad715967b27ffe0bf072c7053092238d599fab90a6157ed877193dad6",
+      "published": false
+    },
+    {
+      "name": "qwen3_8b_w8a8__prefill_off__synthetic_agent_replay__r3.jsonl",
+      "size_bytes": 123187,
+      "sha256": "77b612c3628db4d1d23f6ea39341253f8c7d1e3b65d6f867ea263f293f4b821e",
+      "published": false
+    },
+    {
+      "name": "qwen3_8b_w8a8__prefill_off__synthetic_agent_replay__r3.log",
+      "size_bytes": 7734,
+      "sha256": "9c9e4ea1e003cd65381be0d0df0d61ef171e313ba3908380b51323726af59717",
+      "published": false
+    },
+    {
+      "name": "server.log",
+      "size_bytes": 188893,
+      "sha256": "1e8f6706d1375f7c9e2d2ecfd13c362d1d5ae74fb671fd4910fe11304a9baa75",
+      "published": false
+    },
+    {
+      "name": "summary.csv",
+      "size_bytes": 971,
+      "sha256": "4484907d803a109560c6b39acc748d681e94e8b70da17a550c1021c0a86fd307",
+      "published": true
+    }
+  ]
+}

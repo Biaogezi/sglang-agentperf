@@ -172,7 +172,9 @@ unchanged 10% gate only for that measured regime, not arbitrary agent traffic. W
 tokens at concurrency one, throughput gain is only 0.27% at 128 input tokens. Final quality
 passes (+8.466e-7 same-checkpoint NLL delta, all 40 task texts unchanged). Three-round core
 regressions complete all 2,400 requests with throughput changes within ±0.3%; shared-prefix text
-matches 468/480 pairs rather than all pairs. Multi-turn and graph-coverage checks are still running. See
+matches 468/480 pairs rather than all pairs. Multi-turn replay completes all 576 turns with
+essentially unchanged output throughput; 259/288 paired texts match, so later histories can differ.
+Graph-coverage checks are still running. See
 [Optimization 006](docs/OPTIMIZATION_006_LATENCY_CONTROL.md) and the full experiment history in
 [Optimization 004](docs/OPTIMIZATION_004_SM86_INT8_PREFILL.md).
 

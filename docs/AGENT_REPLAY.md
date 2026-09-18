@@ -33,7 +33,15 @@ python scripts/audit_paired_run.py results/paired/RUN_DIRECTORY
 
 Native fixed-token prefill micro-workloads and natural-text multi-turn replay answer different
 questions; their absolute throughput must not be compared as though they were the same inputs.
-Status/results are recorded in the final experiment report once measurements finish.
+## Final-source regression result
+
+Run `20260918T071846Z__agent` completes three alternating pairs: all 576 turn requests succeed
+and every recorded output length is 32. Mean output throughput is 136.273→136.289 tok/s;
+mean-of-run p99 TTFT is 1125.779→1126.150 ms and p99 TPOT is 44.496→44.507 ms.
+There is no meaningful serving gain. Text matches are 92/96, 71/96 and 96/96 per pair, so later
+histories can differ. Do not present this as identical-input causal performance evidence or
+as a task-success improvement. Public snapshots are `final_agent_off/on` and
+`final_agent_requests_off/on`; full raw results are retained locally.
 
 ## Upstream metric limitation
 

@@ -1,0 +1,61 @@
+{
+  "schema_version": 1,
+  "created_at": "2026-09-18T07:29:11.197378+00:00",
+  "source_run": "prefill_on",
+  "files": [
+    {
+      "name": "manifest.json",
+      "size_bytes": 74049,
+      "sha256": "16c58bc9cbe09927b2e07252e2f40de41ebeae3e0b307f0ef51918a1db610415",
+      "published": true
+    },
+    {
+      "name": "qwen3_8b_w8a8__prefill_on__synthetic_agent_replay__r1.jsonl",
+      "size_bytes": 123209,
+      "sha256": "d1dcaadfc8eda5aa0abb58ab313be8c31d474e85bc5560a609ed0fb78f610a36",
+      "published": false
+    },
+    {
+      "name": "qwen3_8b_w8a8__prefill_on__synthetic_agent_replay__r1.log",
+      "size_bytes": 7730,
+      "sha256": "1dfdd7c703a43562443704e3f9f159a69b940bcd7ea58a0057a7cee53ab3bc2e",
+      "published": false
+    },
+    {
+      "name": "qwen3_8b_w8a8__prefill_on__synthetic_agent_replay__r2.jsonl",
+      "size_bytes": 123240,
+      "sha256": "d484a6b8b8b3209b778479553cc0fbcad90d14ee059e39bc6364e7b7323d9269",
+      "published": false
+    },
+    {
+      "name": "qwen3_8b_w8a8__prefill_on__synthetic_agent_replay__r2.log",
+      "size_bytes": 7730,
+      "sha256": "c667fb85c7740cd0ba3331812e70176206a5adbc4c05e31cb00d1d6a36875f95",
+      "published": false
+    },
+    {
+      "name": "qwen3_8b_w8a8__prefill_on__synthetic_agent_replay__r3.jsonl",
+      "size_bytes": 123253,
+      "sha256": "e10cd7511866212f927d32d50627747ff17441b72db13e5dfa29b0ad92dbed3c",
+      "published": false
+    },
+    {
+      "name": "qwen3_8b_w8a8__prefill_on__synthetic_agent_replay__r3.log",
+      "size_bytes": 7730,
+      "sha256": "e6d94e4d82f3a0bd30712c2e2843c3d20b797134e81d08b7c6366f5bdbab5671",
+      "published": false
+    },
+    {
+      "name": "server.log",
+      "size_bytes": 189299,
+      "sha256": "4749bc0c7faf7dd394ba3a6a503b68675ca2719b99f6a119a069a1da3fad94be",
+      "published": false
+    },
+    {
+      "name": "summary.csv",
+      "size_bytes": 967,
+      "sha256": "9a2f993b2c03d62617ea68682676975d05c58500b87a0f9ba7904272273d0485",
+      "published": true
+    }
+  ]
+}
