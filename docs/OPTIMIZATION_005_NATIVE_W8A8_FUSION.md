@@ -1,6 +1,6 @@
 # Optimization 005 — connect norm fusion to the native W8A8 method
 
-Status: implementation prepared; GPU integration and serving validation pending.
+Status: GPU integration and positive trace proof passed; serving/quality validation in progress.
 
 ## Hypothesis and controls
 
@@ -40,6 +40,22 @@ the test reports mismatch fractions and output relative L2 instead of claiming
 all fused normalization arithmetic is bitwise invariant. Full-model NLL and
 greedy task regressions remain required.
 
-## Results
+## GPU integration and execution proof
+
+The exact six-patch source tree is `09b0d2afa4645626040d5bc54592b62bb798bc7f`;
+the measured remote commit is `7c699d0083`. All 64 native-fusion integration cases pass.
+Maximum observed INT8 element mismatch fraction is `3.0904e-6`; maximum linear output
+relative L2 is `2.1581e-4`. The 44-case GEMM, eight-shape method dispatch and eleven-row
+JIT-binary suites also pass. Logs and source fingerprints are published in
+`evidence/a10/native_fusion_gpu_validation/`.
+
+The paired native-token profile has 216 `_int8_prefill` calls and 360
+`_rmsnorm_quant_int8` calls in ON, and zero of either in OFF. The five captured steps
+include three 128-token EXTEND steps and two batch-one DECODE steps. Kernel counts
+agree with 36 layers × two selected projections × three/five steps respectively.
+See `evidence/a10/combined_proof_off/` and `combined_proof_on/`. Profiled timings are
+not the performance acceptance data.
+
+## Serving and quality results
 
 Pending. Historical Optimization 003 serving numbers must not be reused here.

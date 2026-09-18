@@ -3,6 +3,7 @@ from __future__ import annotations
 import hashlib
 import json
 import os
+import shutil
 import signal
 import subprocess
 import time
@@ -104,6 +105,32 @@ def terminate_process_group(process: subprocess.Popen[str]) -> None:
         process.wait(timeout=10)
 
 
+def start_gpu_telemetry(run_dir: Path):
+    """One-second NVML samples: sampled HBM maximum is not an exact allocation peak."""
+    executable = shutil.which("nvidia-smi")
+    if executable is None:
+        return None, None
+    handle = (run_dir / "gpu_metrics.csv").open("w")
+    command = [
+        executable,
+        (
+            "--query-gpu=timestamp,index,pstate,temperature.gpu,utilization.gpu,"
+            "memory.used,clocks.sm,clocks.mem,power.draw,power.limit"
+        ),
+        "--format=csv",
+        "-l",
+        "1",
+    ]
+    try:
+        process = subprocess.Popen(
+            command, stdout=handle, stderr=subprocess.STDOUT, start_new_session=os.name != "nt"
+        )
+    except OSError:
+        handle.close()
+        raise
+    return process, handle
+
+
 def run_plan(
     config: dict[str, Any],
     *,
@@ -162,7 +189,9 @@ def run_plan(
         process_kwargs["start_new_session"] = True
     process = subprocess.Popen(server_argv, **process_kwargs)
 
+    telemetry, telemetry_log = None, None
     try:
+        telemetry, telemetry_log = start_gpu_telemetry(run_dir)
         defaults = config["defaults"]
         wait_for_server(
             str(defaults["host"]),
@@ -195,6 +224,9 @@ def run_plan(
                 )
     finally:
         terminate_process_group(process)
+        if telemetry is not None:
+            terminate_process_group(telemetry)
+            telemetry_log.close()
         server_log.close()
     return run_dir
 

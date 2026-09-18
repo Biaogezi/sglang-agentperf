@@ -130,6 +130,16 @@ binary hashes: ten partial-row lengths share one binary, and M=128 uses a second
 for fixed N/K/dtype/bias, not the whole model. All outputs match CUTLASS bit-for-bit, and the
 44-case ragged-dimension/extreme-input suite also passes after removing provably redundant masks.
 
-The five-patch source tree is `b2bb6ee38d3bc33f5fdf6f4068ca42fa9fc9b9f0`; serving performance
-of this hardened revision still requires a separate measurement. A wider real-weight tile,
-warp-count and pipeline-depth search is in progress; screening winners are not accepted results.
+The five-patch source tree is `b2bb6ee38d3bc33f5fdf6f4068ca42fa9fc9b9f0`. A separate native-ID
+three-round run of this hardened revision (`20260918T035158Z__short`) yields throughput changes
+of +3.37%, +7.94%, and +0.10% at 96/128/160 tokens; p99 TTFT reductions are 3.41%, 7.31%, and
+0.26%. All 2,880 requests succeed and all nine paired output records match. Snapshots are
+`prefill_native_v2_off/` and `prefill_native_v2_on/`. The smaller 96-token gain is retained in the
+report; bounded compilation does not automatically improve hot-state throughput.
+
+The expanded real-weight search tests 108 tile/warp/pipeline configurations per projection at
+M=128 (invalid shared-memory configurations are recorded, not silently omitted). Its re-timed
+winners are 1.165× for QKV, 1.359× for gate/up, and only 1.038× for down. The down projection is
+not added to the runtime dispatch for this weak gain. These are screening results on actual
+layer-0 checkpoint weights with quantized Gaussian activations, not captured real activations
+or end-to-end gains. The production kernel remains the fixed, validated tile.

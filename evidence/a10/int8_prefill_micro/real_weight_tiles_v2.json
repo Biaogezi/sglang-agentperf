@@ -1,0 +1,3759 @@
+{
+  "torch": "2.13.0+cu129",
+  "triton": "3.7.1",
+  "gpu": "NVIDIA A10",
+  "timing": "CUDA Graph; 3 rounds; median",
+  "results": [
+    {
+      "projection": "down",
+      "m": 128,
+      "k": 12288,
+      "n": 4096,
+      "best": {
+        "bm": 128,
+        "bn": 64,
+        "bk": 128,
+        "splits": 1,
+        "warps": 4,
+        "stages": 4
+      },
+      "baseline_ms": 0.1623160974687665,
+      "candidate_ms": 0.15644642115664298,
+      "baseline_samples": [
+        0.16085169241263905,
+        0.1623160974687665,
+        0.16286412757624893
+      ],
+      "candidate_samples": [
+        0.15568946042044798,
+        0.15644642115664298,
+        0.1567720805311037
+      ],
+      "screen": [
+        {
+          "config": {
+            "bm": 32,
+            "bn": 64,
+            "bk": 64,
+            "splits": 1,
+            "warps": 4,
+            "stages": 2
+          },
+          "screen_ms": 0.23637811406453452
+        },
+        {
+          "config": {
+            "bm": 32,
+            "bn": 64,
+            "bk": 64,
+            "splits": 1,
+            "warps": 4,
+            "stages": 3
+          },
+          "screen_ms": 0.23891694762490012
+        },
+        {
+          "config": {
+            "bm": 32,
+            "bn": 64,
+            "bk": 64,
+            "splits": 1,
+            "warps": 4,
+            "stages": 4
+          },
+          "screen_ms": 0.2359401944039882
+        },
+        {
+          "config": {
+            "bm": 32,
+            "bn": 64,
+            "bk": 64,
+            "splits": 1,
+            "warps": 8,
+            "stages": 2
+          },
+          "screen_ms": 0.24547384471109468
+        },
+        {
+          "config": {
+            "bm": 32,
+            "bn": 64,
+            "bk": 64,
+            "splits": 1,
+            "warps": 8,
+            "stages": 3
+          },
+          "screen_ms": 0.26977191793507543
+        },
+        {
+          "config": {
+            "bm": 32,
+            "bn": 64,
+            "bk": 64,
+            "splits": 1,
+            "warps": 8,
+            "stages": 4
+          },
+          "screen_ms": 0.2732443398394543
+        },
+        {
+          "config": {
+            "bm": 32,
+            "bn": 64,
+            "bk": 128,
+            "splits": 1,
+            "warps": 4,
+            "stages": 2
+          },
+          "screen_ms": 0.24107785060487943
+        },
+        {
+          "config": {
+            "bm": 32,
+            "bn": 64,
+            "bk": 128,
+            "splits": 1,
+            "warps": 4,
+            "stages": 3
+          },
+          "screen_ms": 0.2285125143928633
+        },
+        {
+          "config": {
+            "bm": 32,
+            "bn": 64,
+            "bk": 128,
+            "splits": 1,
+            "warps": 4,
+            "stages": 4
+          },
+          "screen_ms": 0.237557996552566
+        },
+        {
+          "config": {
+            "bm": 32,
+            "bn": 64,
+            "bk": 128,
+            "splits": 1,
+            "warps": 8,
+            "stages": 2
+          },
+          "screen_ms": 0.24161753571791456
+        },
+        {
+          "config": {
+            "bm": 32,
+            "bn": 64,
+            "bk": 128,
+            "splits": 1,
+            "warps": 8,
+            "stages": 3
+          },
+          "screen_ms": 0.23125079236411522
+        },
+        {
+          "config": {
+            "bm": 32,
+            "bn": 64,
+            "bk": 128,
+            "splits": 1,
+            "warps": 8,
+            "stages": 4
+          },
+          "screen_ms": 0.2418717302594866
+        },
+        {
+          "config": {
+            "bm": 32,
+            "bn": 128,
+            "bk": 64,
+            "splits": 1,
+            "warps": 4,
+            "stages": 2
+          },
+          "screen_ms": 0.2253140149051196
+        },
+        {
+          "config": {
+            "bm": 32,
+            "bn": 128,
+            "bk": 64,
+            "splits": 1,
+            "warps": 4,
+            "stages": 3
+          },
+          "screen_ms": 0.2040673653086522
+        },
+        {
+          "config": {
+            "bm": 32,
+            "bn": 128,
+            "bk": 64,
+            "splits": 1,
+            "warps": 4,
+            "stages": 4
+          },
+          "screen_ms": 0.2100772051744058
+        },
+        {
+          "config": {
+            "bm": 32,
+            "bn": 128,
+            "bk": 64,
+            "splits": 1,
+            "warps": 8,
+            "stages": 2
+          },
+          "screen_ms": 0.23168465140816216
+        },
+        {
+          "config": {
+            "bm": 32,
+            "bn": 128,
+            "bk": 64,
+            "splits": 1,
+            "warps": 8,
+            "stages": 3
+          },
+          "screen_ms": 0.21453430645940016
+        },
+        {
+          "config": {
+            "bm": 32,
+            "bn": 128,
+            "bk": 64,
+            "splits": 1,
+            "warps": 8,
+            "stages": 4
+          },
+          "screen_ms": 0.21893566229404549
+        },
+        {
+          "config": {
+            "bm": 32,
+            "bn": 128,
+            "bk": 128,
+            "splits": 1,
+            "warps": 4,
+            "stages": 2
+          },
+          "screen_ms": 0.21828550282496229
+        },
+        {
+          "config": {
+            "bm": 32,
+            "bn": 128,
+            "bk": 128,
+            "splits": 1,
+            "warps": 4,
+            "stages": 3
+          },
+          "screen_ms": 0.2043583080529026
+        },
+        {
+          "config": {
+            "bm": 32,
+            "bn": 128,
+            "bk": 128,
+            "splits": 1,
+            "warps": 4,
+            "stages": 4
+          },
+          "screen_ms": 0.20460884941948784
+        },
+        {
+          "config": {
+            "bm": 32,
+            "bn": 128,
+            "bk": 128,
+            "splits": 1,
+            "warps": 8,
+            "stages": 2
+          },
+          "screen_ms": 0.219368072589446
+        },
+        {
+          "config": {
+            "bm": 32,
+            "bn": 128,
+            "bk": 128,
+            "splits": 1,
+            "warps": 8,
+            "stages": 3
+          },
+          "screen_ms": 0.2031874465942383
+        },
+        {
+          "config": {
+            "bm": 32,
+            "bn": 128,
+            "bk": 128,
+            "splits": 1,
+            "warps": 8,
+            "stages": 4
+          },
+          "screen_ms": 0.20741680771557253
+        },
+        {
+          "config": {
+            "bm": 32,
+            "bn": 256,
+            "bk": 64,
+            "splits": 1,
+            "warps": 4,
+            "stages": 2
+          },
+          "screen_ms": 0.25021979253094895
+        },
+        {
+          "config": {
+            "bm": 32,
+            "bn": 256,
+            "bk": 64,
+            "splits": 1,
+            "warps": 4,
+            "stages": 3
+          },
+          "screen_ms": 0.19429705452784307
+        },
+        {
+          "config": {
+            "bm": 32,
+            "bn": 256,
+            "bk": 64,
+            "splits": 1,
+            "warps": 4,
+            "stages": 4
+          },
+          "screen_ms": 0.18865149471561615
+        },
+        {
+          "config": {
+            "bm": 32,
+            "bn": 256,
+            "bk": 64,
+            "splits": 1,
+            "warps": 8,
+            "stages": 2
+          },
+          "screen_ms": 0.2509649545175058
+        },
+        {
+          "config": {
+            "bm": 32,
+            "bn": 256,
+            "bk": 64,
+            "splits": 1,
+            "warps": 8,
+            "stages": 3
+          },
+          "screen_ms": 0.20146146610804966
+        },
+        {
+          "config": {
+            "bm": 32,
+            "bn": 256,
+            "bk": 64,
+            "splits": 1,
+            "warps": 8,
+            "stages": 4
+          },
+          "screen_ms": 0.19509247985067246
+        },
+        {
+          "config": {
+            "bm": 32,
+            "bn": 256,
+            "bk": 128,
+            "splits": 1,
+            "warps": 4,
+            "stages": 2
+          },
+          "screen_ms": 0.2247528076171875
+        },
+        {
+          "config": {
+            "bm": 32,
+            "bn": 256,
+            "bk": 128,
+            "splits": 1,
+            "warps": 4,
+            "stages": 3
+          },
+          "screen_ms": 0.2163836806567747
+        },
+        {
+          "config": {
+            "bm": 32,
+            "bn": 256,
+            "bk": 128,
+            "splits": 1,
+            "warps": 8,
+            "stages": 2
+          },
+          "screen_ms": 0.22467731240907374
+        },
+        {
+          "config": {
+            "bm": 32,
+            "bn": 256,
+            "bk": 128,
+            "splits": 1,
+            "warps": 8,
+            "stages": 3
+          },
+          "screen_ms": 0.2168135473570848
+        },
+        {
+          "config": {
+            "bm": 64,
+            "bn": 64,
+            "bk": 64,
+            "splits": 1,
+            "warps": 4,
+            "stages": 2
+          },
+          "screen_ms": 0.2172848976698498
+        },
+        {
+          "config": {
+            "bm": 64,
+            "bn": 64,
+            "bk": 64,
+            "splits": 1,
+            "warps": 4,
+            "stages": 3
+          },
+          "screen_ms": 0.18851669746453292
+        },
+        {
+          "config": {
+            "bm": 64,
+            "bn": 64,
+            "bk": 64,
+            "splits": 1,
+            "warps": 4,
+            "stages": 4
+          },
+          "screen_ms": 0.18847199237992612
+        },
+        {
+          "config": {
+            "bm": 64,
+            "bn": 64,
+            "bk": 64,
+            "splits": 1,
+            "warps": 8,
+            "stages": 2
+          },
+          "screen_ms": 0.22481587771262732
+        },
+        {
+          "config": {
+            "bm": 64,
+            "bn": 64,
+            "bk": 64,
+            "splits": 1,
+            "warps": 8,
+            "stages": 3
+          },
+          "screen_ms": 0.20177170730218655
+        },
+        {
+          "config": {
+            "bm": 64,
+            "bn": 64,
+            "bk": 64,
+            "splits": 1,
+            "warps": 8,
+            "stages": 4
+          },
+          "screen_ms": 0.2096918718689938
+        },
+        {
+          "config": {
+            "bm": 64,
+            "bn": 64,
+            "bk": 128,
+            "splits": 1,
+            "warps": 4,
+            "stages": 2
+          },
+          "screen_ms": 0.19451806386311848
+        },
+        {
+          "config": {
+            "bm": 64,
+            "bn": 64,
+            "bk": 128,
+            "splits": 1,
+            "warps": 4,
+            "stages": 3
+          },
+          "screen_ms": 0.18508547960563188
+        },
+        {
+          "config": {
+            "bm": 64,
+            "bn": 64,
+            "bk": 128,
+            "splits": 1,
+            "warps": 4,
+            "stages": 4
+          },
+          "screen_ms": 0.17698023396153603
+        },
+        {
+          "config": {
+            "bm": 64,
+            "bn": 64,
+            "bk": 128,
+            "splits": 1,
+            "warps": 8,
+            "stages": 2
+          },
+          "screen_ms": 0.19696735865633253
+        },
+        {
+          "config": {
+            "bm": 64,
+            "bn": 64,
+            "bk": 128,
+            "splits": 1,
+            "warps": 8,
+            "stages": 3
+          },
+          "screen_ms": 0.18959048769009187
+        },
+        {
+          "config": {
+            "bm": 64,
+            "bn": 64,
+            "bk": 128,
+            "splits": 1,
+            "warps": 8,
+            "stages": 4
+          },
+          "screen_ms": 0.18489951783442402
+        },
+        {
+          "config": {
+            "bm": 64,
+            "bn": 128,
+            "bk": 64,
+            "splits": 1,
+            "warps": 4,
+            "stages": 2
+          },
+          "screen_ms": 0.23132305962698801
+        },
+        {
+          "config": {
+            "bm": 64,
+            "bn": 128,
+            "bk": 64,
+            "splits": 1,
+            "warps": 4,
+            "stages": 3
+          },
+          "screen_ms": 0.18511798078842584
+        },
+        {
+          "config": {
+            "bm": 64,
+            "bn": 128,
+            "bk": 64,
+            "splits": 1,
+            "warps": 4,
+            "stages": 4
+          },
+          "screen_ms": 0.17028947793520413
+        },
+        {
+          "config": {
+            "bm": 64,
+            "bn": 128,
+            "bk": 64,
+            "splits": 1,
+            "warps": 8,
+            "stages": 2
+          },
+          "screen_ms": 0.23970077151343935
+        },
+        {
+          "config": {
+            "bm": 64,
+            "bn": 128,
+            "bk": 64,
+            "splits": 1,
+            "warps": 8,
+            "stages": 3
+          },
+          "screen_ms": 0.18644807903903057
+        },
+        {
+          "config": {
+            "bm": 64,
+            "bn": 128,
+            "bk": 64,
+            "splits": 1,
+            "warps": 8,
+            "stages": 4
+          },
+          "screen_ms": 0.1728305220603943
+        },
+        {
+          "config": {
+            "bm": 64,
+            "bn": 128,
+            "bk": 128,
+            "splits": 1,
+            "warps": 4,
+            "stages": 2
+          },
+          "screen_ms": 0.18443677132589775
+        },
+        {
+          "config": {
+            "bm": 64,
+            "bn": 128,
+            "bk": 128,
+            "splits": 1,
+            "warps": 4,
+            "stages": 3
+          },
+          "screen_ms": 0.1587822847588118
+        },
+        {
+          "config": {
+            "bm": 64,
+            "bn": 128,
+            "bk": 128,
+            "splits": 1,
+            "warps": 4,
+            "stages": 4
+          },
+          "screen_ms": 0.1529696168457869
+        },
+        {
+          "config": {
+            "bm": 64,
+            "bn": 128,
+            "bk": 128,
+            "splits": 1,
+            "warps": 8,
+            "stages": 2
+          },
+          "screen_ms": 0.17981292870626495
+        },
+        {
+          "config": {
+            "bm": 64,
+            "bn": 128,
+            "bk": 128,
+            "splits": 1,
+            "warps": 8,
+            "stages": 3
+          },
+          "screen_ms": 0.15807042293411364
+        },
+        {
+          "config": {
+            "bm": 64,
+            "bn": 128,
+            "bk": 128,
+            "splits": 1,
+            "warps": 8,
+            "stages": 4
+          },
+          "screen_ms": 0.15587104876561148
+        },
+        {
+          "config": {
+            "bm": 64,
+            "bn": 256,
+            "bk": 64,
+            "splits": 1,
+            "warps": 4,
+            "stages": 2
+          },
+          "screen_ms": 0.2564169111705962
+        },
+        {
+          "config": {
+            "bm": 64,
+            "bn": 256,
+            "bk": 64,
+            "splits": 1,
+            "warps": 4,
+            "stages": 3
+          },
+          "screen_ms": 0.20283321631739507
+        },
+        {
+          "config": {
+            "bm": 64,
+            "bn": 256,
+            "bk": 64,
+            "splits": 1,
+            "warps": 4,
+            "stages": 4
+          },
+          "screen_ms": 0.1979397728329613
+        },
+        {
+          "config": {
+            "bm": 64,
+            "bn": 256,
+            "bk": 64,
+            "splits": 1,
+            "warps": 8,
+            "stages": 2
+          },
+          "screen_ms": 0.2685147132402585
+        },
+        {
+          "config": {
+            "bm": 64,
+            "bn": 256,
+            "bk": 64,
+            "splits": 1,
+            "warps": 8,
+            "stages": 3
+          },
+          "screen_ms": 0.22579572437614795
+        },
+        {
+          "config": {
+            "bm": 64,
+            "bn": 256,
+            "bk": 64,
+            "splits": 1,
+            "warps": 8,
+            "stages": 4
+          },
+          "screen_ms": 0.22406520437687003
+        },
+        {
+          "config": {
+            "bm": 64,
+            "bn": 256,
+            "bk": 128,
+            "splits": 1,
+            "warps": 4,
+            "stages": 2
+          },
+          "screen_ms": 0.2225914820728686
+        },
+        {
+          "config": {
+            "bm": 64,
+            "bn": 256,
+            "bk": 128,
+            "splits": 1,
+            "warps": 4,
+            "stages": 3
+          },
+          "screen_ms": 0.17792828696114676
+        },
+        {
+          "config": {
+            "bm": 64,
+            "bn": 256,
+            "bk": 128,
+            "splits": 1,
+            "warps": 8,
+            "stages": 2
+          },
+          "screen_ms": 0.24357663356896603
+        },
+        {
+          "config": {
+            "bm": 64,
+            "bn": 256,
+            "bk": 128,
+            "splits": 1,
+            "warps": 8,
+            "stages": 3
+          },
+          "screen_ms": 0.1842489903895699
+        },
+        {
+          "config": {
+            "bm": 128,
+            "bn": 64,
+            "bk": 64,
+            "splits": 1,
+            "warps": 4,
+            "stages": 2
+          },
+          "screen_ms": 0.2318126853083221
+        },
+        {
+          "config": {
+            "bm": 128,
+            "bn": 64,
+            "bk": 64,
+            "splits": 1,
+            "warps": 4,
+            "stages": 3
+          },
+          "screen_ms": 0.18402122072579058
+        },
+        {
+          "config": {
+            "bm": 128,
+            "bn": 64,
+            "bk": 64,
+            "splits": 1,
+            "warps": 4,
+            "stages": 4
+          },
+          "screen_ms": 0.16998954234403724
+        },
+        {
+          "config": {
+            "bm": 128,
+            "bn": 64,
+            "bk": 64,
+            "splits": 1,
+            "warps": 8,
+            "stages": 2
+          },
+          "screen_ms": 0.22797785005369386
+        },
+        {
+          "config": {
+            "bm": 128,
+            "bn": 64,
+            "bk": 64,
+            "splits": 1,
+            "warps": 8,
+            "stages": 3
+          },
+          "screen_ms": 0.1843989997781733
+        },
+        {
+          "config": {
+            "bm": 128,
+            "bn": 64,
+            "bk": 64,
+            "splits": 1,
+            "warps": 8,
+            "stages": 4
+          },
+          "screen_ms": 0.1753745580736495
+        },
+        {
+          "config": {
+            "bm": 128,
+            "bn": 64,
+            "bk": 128,
+            "splits": 1,
+            "warps": 4,
+            "stages": 2
+          },
+          "screen_ms": 0.18592598306473776
+        },
+        {
+          "config": {
+            "bm": 128,
+            "bn": 64,
+            "bk": 128,
+            "splits": 1,
+            "warps": 4,
+            "stages": 3
+          },
+          "screen_ms": 0.15715444412089372
+        },
+        {
+          "config": {
+            "bm": 128,
+            "bn": 64,
+            "bk": 128,
+            "splits": 1,
+            "warps": 4,
+            "stages": 4
+          },
+          "screen_ms": 0.15118734849237764
+        },
+        {
+          "config": {
+            "bm": 128,
+            "bn": 64,
+            "bk": 128,
+            "splits": 1,
+            "warps": 8,
+            "stages": 2
+          },
+          "screen_ms": 0.19007381946582513
+        },
+        {
+          "config": {
+            "bm": 128,
+            "bn": 64,
+            "bk": 128,
+            "splits": 1,
+            "warps": 8,
+            "stages": 3
+          },
+          "screen_ms": 0.16347571909988892
+        },
+        {
+          "config": {
+            "bm": 128,
+            "bn": 64,
+            "bk": 128,
+            "splits": 1,
+            "warps": 8,
+            "stages": 4
+          },
+          "screen_ms": 0.16010631202169254
+        },
+        {
+          "config": {
+            "bm": 128,
+            "bn": 128,
+            "bk": 64,
+            "splits": 1,
+            "warps": 4,
+            "stages": 2
+          },
+          "screen_ms": 0.24897353860862467
+        },
+        {
+          "config": {
+            "bm": 128,
+            "bn": 128,
+            "bk": 64,
+            "splits": 1,
+            "warps": 4,
+            "stages": 3
+          },
+          "screen_ms": 0.20478463768959046
+        },
+        {
+          "config": {
+            "bm": 128,
+            "bn": 128,
+            "bk": 64,
+            "splits": 1,
+            "warps": 4,
+            "stages": 4
+          },
+          "screen_ms": 0.20160245841505836
+        },
+        {
+          "config": {
+            "bm": 128,
+            "bn": 128,
+            "bk": 64,
+            "splits": 1,
+            "warps": 8,
+            "stages": 2
+          },
+          "screen_ms": 0.2601086483533639
+        },
+        {
+          "config": {
+            "bm": 128,
+            "bn": 128,
+            "bk": 64,
+            "splits": 1,
+            "warps": 8,
+            "stages": 3
+          },
+          "screen_ms": 0.21078875615046574
+        },
+        {
+          "config": {
+            "bm": 128,
+            "bn": 128,
+            "bk": 64,
+            "splits": 1,
+            "warps": 8,
+            "stages": 4
+          },
+          "screen_ms": 0.20730924139105278
+        },
+        {
+          "config": {
+            "bm": 128,
+            "bn": 128,
+            "bk": 128,
+            "splits": 1,
+            "warps": 4,
+            "stages": 2
+          },
+          "screen_ms": 0.20508955500676082
+        },
+        {
+          "config": {
+            "bm": 128,
+            "bn": 128,
+            "bk": 128,
+            "splits": 1,
+            "warps": 4,
+            "stages": 3
+          },
+          "screen_ms": 0.17228917943717148
+        },
+        {
+          "config": {
+            "bm": 128,
+            "bn": 128,
+            "bk": 128,
+            "splits": 1,
+            "warps": 4,
+            "stages": 4
+          },
+          "screen_ms": 0.17358222007751464
+        },
+        {
+          "config": {
+            "bm": 128,
+            "bn": 128,
+            "bk": 128,
+            "splits": 1,
+            "warps": 8,
+            "stages": 2
+          },
+          "screen_ms": 0.22792569288970732
+        },
+        {
+          "config": {
+            "bm": 128,
+            "bn": 128,
+            "bk": 128,
+            "splits": 1,
+            "warps": 8,
+            "stages": 3
+          },
+          "screen_ms": 0.18530517461645696
+        },
+        {
+          "config": {
+            "bm": 128,
+            "bn": 128,
+            "bk": 128,
+            "splits": 1,
+            "warps": 8,
+            "stages": 4
+          },
+          "screen_ms": 0.18520084692507374
+        },
+        {
+          "config": {
+            "bm": 128,
+            "bn": 256,
+            "bk": 64,
+            "splits": 1,
+            "warps": 4,
+            "stages": 2
+          },
+          "screen_ms": 0.7706211783669211
+        },
+        {
+          "config": {
+            "bm": 128,
+            "bn": 256,
+            "bk": 64,
+            "splits": 1,
+            "warps": 4,
+            "stages": 3
+          },
+          "screen_ms": 5.510543365478515
+        },
+        {
+          "config": {
+            "bm": 128,
+            "bn": 256,
+            "bk": 64,
+            "splits": 1,
+            "warps": 4,
+            "stages": 4
+          },
+          "screen_ms": 5.513789443969727
+        },
+        {
+          "config": {
+            "bm": 128,
+            "bn": 256,
+            "bk": 64,
+            "splits": 1,
+            "warps": 8,
+            "stages": 2
+          },
+          "screen_ms": 0.3247328023115794
+        },
+        {
+          "config": {
+            "bm": 128,
+            "bn": 256,
+            "bk": 64,
+            "splits": 1,
+            "warps": 8,
+            "stages": 3
+          },
+          "screen_ms": 0.28582503143447396
+        },
+        {
+          "config": {
+            "bm": 128,
+            "bn": 256,
+            "bk": 64,
+            "splits": 1,
+            "warps": 8,
+            "stages": 4
+          },
+          "screen_ms": 0.285950389571254
+        },
+        {
+          "config": {
+            "bm": 128,
+            "bn": 256,
+            "bk": 128,
+            "splits": 1,
+            "warps": 4,
+            "stages": 2
+          },
+          "screen_ms": 5.731850280761718
+        },
+        {
+          "config": {
+            "bm": 128,
+            "bn": 256,
+            "bk": 128,
+            "splits": 1,
+            "warps": 4,
+            "stages": 3
+          },
+          "screen_ms": 0.6315868621176861
+        },
+        {
+          "config": {
+            "bm": 128,
+            "bn": 256,
+            "bk": 128,
+            "splits": 1,
+            "warps": 8,
+            "stages": 2
+          },
+          "screen_ms": 0.3458315893661144
+        },
+        {
+          "config": {
+            "bm": 128,
+            "bn": 256,
+            "bk": 128,
+            "splits": 1,
+            "warps": 8,
+            "stages": 3
+          },
+          "screen_ms": 0.2709503994928882
+        }
+      ],
+      "speedup": 1.0375187637321948,
+      "gpu_state": "60, 810 MHz, 6251 MHz, 143.42 W"
+    },
+    {
+      "projection": "qkv",
+      "m": 128,
+      "k": 4096,
+      "n": 6144,
+      "best": {
+        "bm": 128,
+        "bn": 128,
+        "bk": 128,
+        "splits": 1,
+        "warps": 4,
+        "stages": 4
+      },
+      "baseline_ms": 0.08742697231075716,
+      "candidate_ms": 0.0750405213830931,
+      "baseline_samples": [
+        0.0871621104430596,
+        0.0876126937435546,
+        0.08742697231075716
+      ],
+      "candidate_samples": [
+        0.07448670093730636,
+        0.0750405213830931,
+        0.07507256030591981
+      ],
+      "screen": [
+        {
+          "config": {
+            "bm": 32,
+            "bn": 64,
+            "bk": 64,
+            "splits": 1,
+            "warps": 4,
+            "stages": 2
+          },
+          "screen_ms": 0.11842517245754325
+        },
+        {
+          "config": {
+            "bm": 32,
+            "bn": 64,
+            "bk": 64,
+            "splits": 1,
+            "warps": 4,
+            "stages": 3
+          },
+          "screen_ms": 0.12468030826394005
+        },
+        {
+          "config": {
+            "bm": 32,
+            "bn": 64,
+            "bk": 64,
+            "splits": 1,
+            "warps": 4,
+            "stages": 4
+          },
+          "screen_ms": 0.12574872828241604
+        },
+        {
+          "config": {
+            "bm": 32,
+            "bn": 64,
+            "bk": 64,
+            "splits": 1,
+            "warps": 8,
+            "stages": 2
+          },
+          "screen_ms": 0.13984502645639274
+        },
+        {
+          "config": {
+            "bm": 32,
+            "bn": 64,
+            "bk": 64,
+            "splits": 1,
+            "warps": 8,
+            "stages": 3
+          },
+          "screen_ms": 0.13884694794900554
+        },
+        {
+          "config": {
+            "bm": 32,
+            "bn": 64,
+            "bk": 64,
+            "splits": 1,
+            "warps": 8,
+            "stages": 4
+          },
+          "screen_ms": 0.13614161799129207
+        },
+        {
+          "config": {
+            "bm": 32,
+            "bn": 64,
+            "bk": 128,
+            "splits": 1,
+            "warps": 4,
+            "stages": 2
+          },
+          "screen_ms": 0.10991277507707184
+        },
+        {
+          "config": {
+            "bm": 32,
+            "bn": 64,
+            "bk": 128,
+            "splits": 1,
+            "warps": 4,
+            "stages": 3
+          },
+          "screen_ms": 0.12643839972359794
+        },
+        {
+          "config": {
+            "bm": 32,
+            "bn": 64,
+            "bk": 128,
+            "splits": 1,
+            "warps": 4,
+            "stages": 4
+          },
+          "screen_ms": 0.11313042694263244
+        },
+        {
+          "config": {
+            "bm": 32,
+            "bn": 64,
+            "bk": 128,
+            "splits": 1,
+            "warps": 8,
+            "stages": 2
+          },
+          "screen_ms": 0.12742652952392958
+        },
+        {
+          "config": {
+            "bm": 32,
+            "bn": 64,
+            "bk": 128,
+            "splits": 1,
+            "warps": 8,
+            "stages": 3
+          },
+          "screen_ms": 0.12997327144091955
+        },
+        {
+          "config": {
+            "bm": 32,
+            "bn": 64,
+            "bk": 128,
+            "splits": 1,
+            "warps": 8,
+            "stages": 4
+          },
+          "screen_ms": 0.11578687705037322
+        },
+        {
+          "config": {
+            "bm": 32,
+            "bn": 128,
+            "bk": 64,
+            "splits": 1,
+            "warps": 4,
+            "stages": 2
+          },
+          "screen_ms": 0.10870724857764252
+        },
+        {
+          "config": {
+            "bm": 32,
+            "bn": 128,
+            "bk": 64,
+            "splits": 1,
+            "warps": 4,
+            "stages": 3
+          },
+          "screen_ms": 0.11071694993179067
+        },
+        {
+          "config": {
+            "bm": 32,
+            "bn": 128,
+            "bk": 64,
+            "splits": 1,
+            "warps": 4,
+            "stages": 4
+          },
+          "screen_ms": 0.10899675134938491
+        },
+        {
+          "config": {
+            "bm": 32,
+            "bn": 128,
+            "bk": 64,
+            "splits": 1,
+            "warps": 8,
+            "stages": 2
+          },
+          "screen_ms": 0.11310396686042706
+        },
+        {
+          "config": {
+            "bm": 32,
+            "bn": 128,
+            "bk": 64,
+            "splits": 1,
+            "warps": 8,
+            "stages": 3
+          },
+          "screen_ms": 0.1113291939594274
+        },
+        {
+          "config": {
+            "bm": 32,
+            "bn": 128,
+            "bk": 64,
+            "splits": 1,
+            "warps": 8,
+            "stages": 4
+          },
+          "screen_ms": 0.1130834492410367
+        },
+        {
+          "config": {
+            "bm": 32,
+            "bn": 128,
+            "bk": 128,
+            "splits": 1,
+            "warps": 4,
+            "stages": 2
+          },
+          "screen_ms": 0.10380080044269561
+        },
+        {
+          "config": {
+            "bm": 32,
+            "bn": 128,
+            "bk": 128,
+            "splits": 1,
+            "warps": 4,
+            "stages": 3
+          },
+          "screen_ms": 0.10833109093992502
+        },
+        {
+          "config": {
+            "bm": 32,
+            "bn": 128,
+            "bk": 128,
+            "splits": 1,
+            "warps": 4,
+            "stages": 4
+          },
+          "screen_ms": 0.10246470977901032
+        },
+        {
+          "config": {
+            "bm": 32,
+            "bn": 128,
+            "bk": 128,
+            "splits": 1,
+            "warps": 8,
+            "stages": 2
+          },
+          "screen_ms": 0.10342800120512645
+        },
+        {
+          "config": {
+            "bm": 32,
+            "bn": 128,
+            "bk": 128,
+            "splits": 1,
+            "warps": 8,
+            "stages": 3
+          },
+          "screen_ms": 0.10980517259284632
+        },
+        {
+          "config": {
+            "bm": 32,
+            "bn": 128,
+            "bk": 128,
+            "splits": 1,
+            "warps": 8,
+            "stages": 4
+          },
+          "screen_ms": 0.1040148491477724
+        },
+        {
+          "config": {
+            "bm": 32,
+            "bn": 256,
+            "bk": 64,
+            "splits": 1,
+            "warps": 4,
+            "stages": 2
+          },
+          "screen_ms": 0.10456749495290207
+        },
+        {
+          "config": {
+            "bm": 32,
+            "bn": 256,
+            "bk": 64,
+            "splits": 1,
+            "warps": 4,
+            "stages": 3
+          },
+          "screen_ms": 0.10283387304235388
+        },
+        {
+          "config": {
+            "bm": 32,
+            "bn": 256,
+            "bk": 64,
+            "splits": 1,
+            "warps": 4,
+            "stages": 4
+          },
+          "screen_ms": 0.10912704904362538
+        },
+        {
+          "config": {
+            "bm": 32,
+            "bn": 256,
+            "bk": 64,
+            "splits": 1,
+            "warps": 8,
+            "stages": 2
+          },
+          "screen_ms": 0.11044863865293306
+        },
+        {
+          "config": {
+            "bm": 32,
+            "bn": 256,
+            "bk": 64,
+            "splits": 1,
+            "warps": 8,
+            "stages": 3
+          },
+          "screen_ms": 0.10473785737477276
+        },
+        {
+          "config": {
+            "bm": 32,
+            "bn": 256,
+            "bk": 64,
+            "splits": 1,
+            "warps": 8,
+            "stages": 4
+          },
+          "screen_ms": 0.11239426874481472
+        },
+        {
+          "config": {
+            "bm": 32,
+            "bn": 256,
+            "bk": 128,
+            "splits": 1,
+            "warps": 4,
+            "stages": 2
+          },
+          "screen_ms": 0.11943018968317326
+        },
+        {
+          "config": {
+            "bm": 32,
+            "bn": 256,
+            "bk": 128,
+            "splits": 1,
+            "warps": 4,
+            "stages": 3
+          },
+          "screen_ms": 0.11158665551079644
+        },
+        {
+          "config": {
+            "bm": 32,
+            "bn": 256,
+            "bk": 128,
+            "splits": 1,
+            "warps": 8,
+            "stages": 2
+          },
+          "screen_ms": 0.11372032663818714
+        },
+        {
+          "config": {
+            "bm": 32,
+            "bn": 256,
+            "bk": 128,
+            "splits": 1,
+            "warps": 8,
+            "stages": 3
+          },
+          "screen_ms": 0.11069870880968512
+        },
+        {
+          "config": {
+            "bm": 64,
+            "bn": 64,
+            "bk": 64,
+            "splits": 1,
+            "warps": 4,
+            "stages": 2
+          },
+          "screen_ms": 0.10219332862930045
+        },
+        {
+          "config": {
+            "bm": 64,
+            "bn": 64,
+            "bk": 64,
+            "splits": 1,
+            "warps": 4,
+            "stages": 3
+          },
+          "screen_ms": 0.09707276789682837
+        },
+        {
+          "config": {
+            "bm": 64,
+            "bn": 64,
+            "bk": 64,
+            "splits": 1,
+            "warps": 4,
+            "stages": 4
+          },
+          "screen_ms": 0.09766826182787575
+        },
+        {
+          "config": {
+            "bm": 64,
+            "bn": 64,
+            "bk": 64,
+            "splits": 1,
+            "warps": 8,
+            "stages": 2
+          },
+          "screen_ms": 0.10598912820195117
+        },
+        {
+          "config": {
+            "bm": 64,
+            "bn": 64,
+            "bk": 64,
+            "splits": 1,
+            "warps": 8,
+            "stages": 3
+          },
+          "screen_ms": 0.10065672496821257
+        },
+        {
+          "config": {
+            "bm": 64,
+            "bn": 64,
+            "bk": 64,
+            "splits": 1,
+            "warps": 8,
+            "stages": 4
+          },
+          "screen_ms": 0.10093881541619307
+        },
+        {
+          "config": {
+            "bm": 64,
+            "bn": 64,
+            "bk": 128,
+            "splits": 1,
+            "warps": 4,
+            "stages": 2
+          },
+          "screen_ms": 0.08645071607583371
+        },
+        {
+          "config": {
+            "bm": 64,
+            "bn": 64,
+            "bk": 128,
+            "splits": 1,
+            "warps": 4,
+            "stages": 3
+          },
+          "screen_ms": 0.08461175015524441
+        },
+        {
+          "config": {
+            "bm": 64,
+            "bn": 64,
+            "bk": 128,
+            "splits": 1,
+            "warps": 4,
+            "stages": 4
+          },
+          "screen_ms": 0.09378602654660527
+        },
+        {
+          "config": {
+            "bm": 64,
+            "bn": 64,
+            "bk": 128,
+            "splits": 1,
+            "warps": 8,
+            "stages": 2
+          },
+          "screen_ms": 0.09029776240606506
+        },
+        {
+          "config": {
+            "bm": 64,
+            "bn": 64,
+            "bk": 128,
+            "splits": 1,
+            "warps": 8,
+            "stages": 3
+          },
+          "screen_ms": 0.08789742067536618
+        },
+        {
+          "config": {
+            "bm": 64,
+            "bn": 64,
+            "bk": 128,
+            "splits": 1,
+            "warps": 8,
+            "stages": 4
+          },
+          "screen_ms": 0.08990732844750486
+        },
+        {
+          "config": {
+            "bm": 64,
+            "bn": 128,
+            "bk": 64,
+            "splits": 1,
+            "warps": 4,
+            "stages": 2
+          },
+          "screen_ms": 0.10448423401922242
+        },
+        {
+          "config": {
+            "bm": 64,
+            "bn": 128,
+            "bk": 64,
+            "splits": 1,
+            "warps": 4,
+            "stages": 3
+          },
+          "screen_ms": 0.09146706216662288
+        },
+        {
+          "config": {
+            "bm": 64,
+            "bn": 128,
+            "bk": 64,
+            "splits": 1,
+            "warps": 4,
+            "stages": 4
+          },
+          "screen_ms": 0.08849859959774167
+        },
+        {
+          "config": {
+            "bm": 64,
+            "bn": 128,
+            "bk": 64,
+            "splits": 1,
+            "warps": 8,
+            "stages": 2
+          },
+          "screen_ms": 0.10482411343546619
+        },
+        {
+          "config": {
+            "bm": 64,
+            "bn": 128,
+            "bk": 64,
+            "splits": 1,
+            "warps": 8,
+            "stages": 3
+          },
+          "screen_ms": 0.09281669544137043
+        },
+        {
+          "config": {
+            "bm": 64,
+            "bn": 128,
+            "bk": 64,
+            "splits": 1,
+            "warps": 8,
+            "stages": 4
+          },
+          "screen_ms": 0.09039580280269677
+        },
+        {
+          "config": {
+            "bm": 64,
+            "bn": 128,
+            "bk": 128,
+            "splits": 1,
+            "warps": 4,
+            "stages": 2
+          },
+          "screen_ms": 0.09588335192155902
+        },
+        {
+          "config": {
+            "bm": 64,
+            "bn": 128,
+            "bk": 128,
+            "splits": 1,
+            "warps": 4,
+            "stages": 3
+          },
+          "screen_ms": 0.0799871710445104
+        },
+        {
+          "config": {
+            "bm": 64,
+            "bn": 128,
+            "bk": 128,
+            "splits": 1,
+            "warps": 4,
+            "stages": 4
+          },
+          "screen_ms": 0.08435856890049484
+        },
+        {
+          "config": {
+            "bm": 64,
+            "bn": 128,
+            "bk": 128,
+            "splits": 1,
+            "warps": 8,
+            "stages": 2
+          },
+          "screen_ms": 0.09089681759947987
+        },
+        {
+          "config": {
+            "bm": 64,
+            "bn": 128,
+            "bk": 128,
+            "splits": 1,
+            "warps": 8,
+            "stages": 3
+          },
+          "screen_ms": 0.07996781957954623
+        },
+        {
+          "config": {
+            "bm": 64,
+            "bn": 128,
+            "bk": 128,
+            "splits": 1,
+            "warps": 8,
+            "stages": 4
+          },
+          "screen_ms": 0.0861222289008312
+        },
+        {
+          "config": {
+            "bm": 64,
+            "bn": 256,
+            "bk": 64,
+            "splits": 1,
+            "warps": 4,
+            "stages": 2
+          },
+          "screen_ms": 0.1029318416819853
+        },
+        {
+          "config": {
+            "bm": 64,
+            "bn": 256,
+            "bk": 64,
+            "splits": 1,
+            "warps": 4,
+            "stages": 3
+          },
+          "screen_ms": 0.097229355213254
+        },
+        {
+          "config": {
+            "bm": 64,
+            "bn": 256,
+            "bk": 64,
+            "splits": 1,
+            "warps": 4,
+            "stages": 4
+          },
+          "screen_ms": 0.091916437618068
+        },
+        {
+          "config": {
+            "bm": 64,
+            "bn": 256,
+            "bk": 64,
+            "splits": 1,
+            "warps": 8,
+            "stages": 2
+          },
+          "screen_ms": 0.10460529524026457
+        },
+        {
+          "config": {
+            "bm": 64,
+            "bn": 256,
+            "bk": 64,
+            "splits": 1,
+            "warps": 8,
+            "stages": 3
+          },
+          "screen_ms": 0.09977412375674885
+        },
+        {
+          "config": {
+            "bm": 64,
+            "bn": 256,
+            "bk": 64,
+            "splits": 1,
+            "warps": 8,
+            "stages": 4
+          },
+          "screen_ms": 0.09291212667447818
+        },
+        {
+          "config": {
+            "bm": 64,
+            "bn": 256,
+            "bk": 128,
+            "splits": 1,
+            "warps": 4,
+            "stages": 2
+          },
+          "screen_ms": 0.0949530682802523
+        },
+        {
+          "config": {
+            "bm": 64,
+            "bn": 256,
+            "bk": 128,
+            "splits": 1,
+            "warps": 4,
+            "stages": 3
+          },
+          "screen_ms": 0.07563014574218214
+        },
+        {
+          "config": {
+            "bm": 64,
+            "bn": 256,
+            "bk": 128,
+            "splits": 1,
+            "warps": 8,
+            "stages": 2
+          },
+          "screen_ms": 0.09515422081035343
+        },
+        {
+          "config": {
+            "bm": 64,
+            "bn": 256,
+            "bk": 128,
+            "splits": 1,
+            "warps": 8,
+            "stages": 3
+          },
+          "screen_ms": 0.07719803684826912
+        },
+        {
+          "config": {
+            "bm": 128,
+            "bn": 64,
+            "bk": 64,
+            "splits": 1,
+            "warps": 4,
+            "stages": 2
+          },
+          "screen_ms": 0.10306255748599819
+        },
+        {
+          "config": {
+            "bm": 128,
+            "bn": 64,
+            "bk": 64,
+            "splits": 1,
+            "warps": 4,
+            "stages": 3
+          },
+          "screen_ms": 0.09092210936314851
+        },
+        {
+          "config": {
+            "bm": 128,
+            "bn": 64,
+            "bk": 64,
+            "splits": 1,
+            "warps": 4,
+            "stages": 4
+          },
+          "screen_ms": 0.08737160066763561
+        },
+        {
+          "config": {
+            "bm": 128,
+            "bn": 64,
+            "bk": 64,
+            "splits": 1,
+            "warps": 8,
+            "stages": 2
+          },
+          "screen_ms": 0.10294081657575803
+        },
+        {
+          "config": {
+            "bm": 128,
+            "bn": 64,
+            "bk": 64,
+            "splits": 1,
+            "warps": 8,
+            "stages": 3
+          },
+          "screen_ms": 0.09418297564045766
+        },
+        {
+          "config": {
+            "bm": 128,
+            "bn": 64,
+            "bk": 64,
+            "splits": 1,
+            "warps": 8,
+            "stages": 4
+          },
+          "screen_ms": 0.09231708267074801
+        },
+        {
+          "config": {
+            "bm": 128,
+            "bn": 64,
+            "bk": 128,
+            "splits": 1,
+            "warps": 4,
+            "stages": 2
+          },
+          "screen_ms": 0.09580404671074833
+        },
+        {
+          "config": {
+            "bm": 128,
+            "bn": 64,
+            "bk": 128,
+            "splits": 1,
+            "warps": 4,
+            "stages": 3
+          },
+          "screen_ms": 0.07942005265230513
+        },
+        {
+          "config": {
+            "bm": 128,
+            "bn": 64,
+            "bk": 128,
+            "splits": 1,
+            "warps": 4,
+            "stages": 4
+          },
+          "screen_ms": 0.084879235523503
+        },
+        {
+          "config": {
+            "bm": 128,
+            "bn": 64,
+            "bk": 128,
+            "splits": 1,
+            "warps": 8,
+            "stages": 2
+          },
+          "screen_ms": 0.08633939536658253
+        },
+        {
+          "config": {
+            "bm": 128,
+            "bn": 64,
+            "bk": 128,
+            "splits": 1,
+            "warps": 8,
+            "stages": 3
+          },
+          "screen_ms": 0.08022168319684946
+        },
+        {
+          "config": {
+            "bm": 128,
+            "bn": 64,
+            "bk": 128,
+            "splits": 1,
+            "warps": 8,
+            "stages": 4
+          },
+          "screen_ms": 0.08784152264953689
+        },
+        {
+          "config": {
+            "bm": 128,
+            "bn": 128,
+            "bk": 64,
+            "splits": 1,
+            "warps": 4,
+            "stages": 2
+          },
+          "screen_ms": 0.10239254843361688
+        },
+        {
+          "config": {
+            "bm": 128,
+            "bn": 128,
+            "bk": 64,
+            "splits": 1,
+            "warps": 4,
+            "stages": 3
+          },
+          "screen_ms": 0.09593024012130526
+        },
+        {
+          "config": {
+            "bm": 128,
+            "bn": 128,
+            "bk": 64,
+            "splits": 1,
+            "warps": 4,
+            "stages": 4
+          },
+          "screen_ms": 0.08921066910640235
+        },
+        {
+          "config": {
+            "bm": 128,
+            "bn": 128,
+            "bk": 64,
+            "splits": 1,
+            "warps": 8,
+            "stages": 2
+          },
+          "screen_ms": 0.10319168519000618
+        },
+        {
+          "config": {
+            "bm": 128,
+            "bn": 128,
+            "bk": 64,
+            "splits": 1,
+            "warps": 8,
+            "stages": 3
+          },
+          "screen_ms": 0.09743847244429328
+        },
+        {
+          "config": {
+            "bm": 128,
+            "bn": 128,
+            "bk": 64,
+            "splits": 1,
+            "warps": 8,
+            "stages": 4
+          },
+          "screen_ms": 0.0913976554140251
+        },
+        {
+          "config": {
+            "bm": 128,
+            "bn": 128,
+            "bk": 128,
+            "splits": 1,
+            "warps": 4,
+            "stages": 2
+          },
+          "screen_ms": 0.08130080103874207
+        },
+        {
+          "config": {
+            "bm": 128,
+            "bn": 128,
+            "bk": 128,
+            "splits": 1,
+            "warps": 4,
+            "stages": 3
+          },
+          "screen_ms": 0.07285122098575747
+        },
+        {
+          "config": {
+            "bm": 128,
+            "bn": 128,
+            "bk": 128,
+            "splits": 1,
+            "warps": 4,
+            "stages": 4
+          },
+          "screen_ms": 0.07254186688047466
+        },
+        {
+          "config": {
+            "bm": 128,
+            "bn": 128,
+            "bk": 128,
+            "splits": 1,
+            "warps": 8,
+            "stages": 2
+          },
+          "screen_ms": 0.08918730183651573
+        },
+        {
+          "config": {
+            "bm": 128,
+            "bn": 128,
+            "bk": 128,
+            "splits": 1,
+            "warps": 8,
+            "stages": 3
+          },
+          "screen_ms": 0.0771630859375
+        },
+        {
+          "config": {
+            "bm": 128,
+            "bn": 128,
+            "bk": 128,
+            "splits": 1,
+            "warps": 8,
+            "stages": 4
+          },
+          "screen_ms": 0.07787771224975586
+        },
+        {
+          "config": {
+            "bm": 128,
+            "bn": 256,
+            "bk": 64,
+            "splits": 1,
+            "warps": 4,
+            "stages": 2
+          },
+          "screen_ms": 0.287889417883468
+        },
+        {
+          "config": {
+            "bm": 128,
+            "bn": 256,
+            "bk": 64,
+            "splits": 1,
+            "warps": 4,
+            "stages": 3
+          },
+          "screen_ms": 2.5864459162173064
+        },
+        {
+          "config": {
+            "bm": 128,
+            "bn": 256,
+            "bk": 64,
+            "splits": 1,
+            "warps": 4,
+            "stages": 4
+          },
+          "screen_ms": 2.5847273950991423
+        },
+        {
+          "config": {
+            "bm": 128,
+            "bn": 256,
+            "bk": 64,
+            "splits": 1,
+            "warps": 8,
+            "stages": 2
+          },
+          "screen_ms": 0.11943247279465521
+        },
+        {
+          "config": {
+            "bm": 128,
+            "bn": 256,
+            "bk": 64,
+            "splits": 1,
+            "warps": 8,
+            "stages": 3
+          },
+          "screen_ms": 0.11112546809699492
+        },
+        {
+          "config": {
+            "bm": 128,
+            "bn": 256,
+            "bk": 64,
+            "splits": 1,
+            "warps": 8,
+            "stages": 4
+          },
+          "screen_ms": 0.11026939095802678
+        },
+        {
+          "config": {
+            "bm": 128,
+            "bn": 256,
+            "bk": 128,
+            "splits": 1,
+            "warps": 4,
+            "stages": 2
+          },
+          "screen_ms": 2.359893997192383
+        },
+        {
+          "config": {
+            "bm": 128,
+            "bn": 256,
+            "bk": 128,
+            "splits": 1,
+            "warps": 4,
+            "stages": 3
+          },
+          "screen_ms": 0.22616569068696762
+        },
+        {
+          "config": {
+            "bm": 128,
+            "bn": 256,
+            "bk": 128,
+            "splits": 1,
+            "warps": 8,
+            "stages": 2
+          },
+          "screen_ms": 0.12286018094708842
+        },
+        {
+          "config": {
+            "bm": 128,
+            "bn": 256,
+            "bk": 128,
+            "splits": 1,
+            "warps": 8,
+            "stages": 3
+          },
+          "screen_ms": 0.10421571822973867
+        }
+      ],
+      "speedup": 1.165063497685862,
+      "gpu_state": "61, 1125 MHz, 6251 MHz, 150.12 W"
+    },
+    {
+      "projection": "gate_up",
+      "m": 128,
+      "k": 4096,
+      "n": 24576,
+      "best": {
+        "bm": 128,
+        "bn": 128,
+        "bk": 128,
+        "splits": 1,
+        "warps": 4,
+        "stages": 4
+      },
+      "baseline_ms": 0.37508596073497424,
+      "candidate_ms": 0.27591930682842547,
+      "baseline_samples": [
+        0.37153326174219686,
+        0.37508596073497424,
+        0.3760934658305823
+      ],
+      "candidate_samples": [
+        0.2739002632695203,
+        0.27591930682842547,
+        0.2769129824807458
+      ],
+      "screen": [
+        {
+          "config": {
+            "bm": 32,
+            "bn": 64,
+            "bk": 64,
+            "splits": 1,
+            "warps": 4,
+            "stages": 2
+          },
+          "screen_ms": 0.5093266690714975
+        },
+        {
+          "config": {
+            "bm": 32,
+            "bn": 64,
+            "bk": 64,
+            "splits": 1,
+            "warps": 4,
+            "stages": 3
+          },
+          "screen_ms": 0.5181536985698499
+        },
+        {
+          "config": {
+            "bm": 32,
+            "bn": 64,
+            "bk": 64,
+            "splits": 1,
+            "warps": 4,
+            "stages": 4
+          },
+          "screen_ms": 0.5196847260303986
+        },
+        {
+          "config": {
+            "bm": 32,
+            "bn": 64,
+            "bk": 64,
+            "splits": 1,
+            "warps": 8,
+            "stages": 2
+          },
+          "screen_ms": 0.5409928477894176
+        },
+        {
+          "config": {
+            "bm": 32,
+            "bn": 64,
+            "bk": 64,
+            "splits": 1,
+            "warps": 8,
+            "stages": 3
+          },
+          "screen_ms": 0.5594682105811867
+        },
+        {
+          "config": {
+            "bm": 32,
+            "bn": 64,
+            "bk": 64,
+            "splits": 1,
+            "warps": 8,
+            "stages": 4
+          },
+          "screen_ms": 0.5572157196376635
+        },
+        {
+          "config": {
+            "bm": 32,
+            "bn": 64,
+            "bk": 128,
+            "splits": 1,
+            "warps": 4,
+            "stages": 2
+          },
+          "screen_ms": 0.4582217630915617
+        },
+        {
+          "config": {
+            "bm": 32,
+            "bn": 64,
+            "bk": 128,
+            "splits": 1,
+            "warps": 4,
+            "stages": 3
+          },
+          "screen_ms": 0.4609503944714864
+        },
+        {
+          "config": {
+            "bm": 32,
+            "bn": 64,
+            "bk": 128,
+            "splits": 1,
+            "warps": 4,
+            "stages": 4
+          },
+          "screen_ms": 0.45869257240097755
+        },
+        {
+          "config": {
+            "bm": 32,
+            "bn": 64,
+            "bk": 128,
+            "splits": 1,
+            "warps": 8,
+            "stages": 2
+          },
+          "screen_ms": 0.47031073595480943
+        },
+        {
+          "config": {
+            "bm": 32,
+            "bn": 64,
+            "bk": 128,
+            "splits": 1,
+            "warps": 8,
+            "stages": 3
+          },
+          "screen_ms": 0.47261493603388466
+        },
+        {
+          "config": {
+            "bm": 32,
+            "bn": 64,
+            "bk": 128,
+            "splits": 1,
+            "warps": 8,
+            "stages": 4
+          },
+          "screen_ms": 0.47006157280886984
+        },
+        {
+          "config": {
+            "bm": 32,
+            "bn": 128,
+            "bk": 64,
+            "splits": 1,
+            "warps": 4,
+            "stages": 2
+          },
+          "screen_ms": 0.4764058748881022
+        },
+        {
+          "config": {
+            "bm": 32,
+            "bn": 128,
+            "bk": 64,
+            "splits": 1,
+            "warps": 4,
+            "stages": 3
+          },
+          "screen_ms": 0.46186476813422306
+        },
+        {
+          "config": {
+            "bm": 32,
+            "bn": 128,
+            "bk": 64,
+            "splits": 1,
+            "warps": 4,
+            "stages": 4
+          },
+          "screen_ms": 0.46548047697163064
+        },
+        {
+          "config": {
+            "bm": 32,
+            "bn": 128,
+            "bk": 64,
+            "splits": 1,
+            "warps": 8,
+            "stages": 2
+          },
+          "screen_ms": 0.45413576104175085
+        },
+        {
+          "config": {
+            "bm": 32,
+            "bn": 128,
+            "bk": 64,
+            "splits": 1,
+            "warps": 8,
+            "stages": 3
+          },
+          "screen_ms": 0.49017669226735683
+        },
+        {
+          "config": {
+            "bm": 32,
+            "bn": 128,
+            "bk": 64,
+            "splits": 1,
+            "warps": 8,
+            "stages": 4
+          },
+          "screen_ms": 0.4898927040819852
+        },
+        {
+          "config": {
+            "bm": 32,
+            "bn": 128,
+            "bk": 128,
+            "splits": 1,
+            "warps": 4,
+            "stages": 2
+          },
+          "screen_ms": 0.4161078767998274
+        },
+        {
+          "config": {
+            "bm": 32,
+            "bn": 128,
+            "bk": 128,
+            "splits": 1,
+            "warps": 4,
+            "stages": 3
+          },
+          "screen_ms": 0.41411521445977295
+        },
+        {
+          "config": {
+            "bm": 32,
+            "bn": 128,
+            "bk": 128,
+            "splits": 1,
+            "warps": 4,
+            "stages": 4
+          },
+          "screen_ms": 0.4156620788574219
+        },
+        {
+          "config": {
+            "bm": 32,
+            "bn": 128,
+            "bk": 128,
+            "splits": 1,
+            "warps": 8,
+            "stages": 2
+          },
+          "screen_ms": 0.42052202404669997
+        },
+        {
+          "config": {
+            "bm": 32,
+            "bn": 128,
+            "bk": 128,
+            "splits": 1,
+            "warps": 8,
+            "stages": 3
+          },
+          "screen_ms": 0.42340977986653644
+        },
+        {
+          "config": {
+            "bm": 32,
+            "bn": 128,
+            "bk": 128,
+            "splits": 1,
+            "warps": 8,
+            "stages": 4
+          },
+          "screen_ms": 0.42351225353422617
+        },
+        {
+          "config": {
+            "bm": 32,
+            "bn": 256,
+            "bk": 64,
+            "splits": 1,
+            "warps": 4,
+            "stages": 2
+          },
+          "screen_ms": 0.4155380710140689
+        },
+        {
+          "config": {
+            "bm": 32,
+            "bn": 256,
+            "bk": 64,
+            "splits": 1,
+            "warps": 4,
+            "stages": 3
+          },
+          "screen_ms": 0.4157626668612162
+        },
+        {
+          "config": {
+            "bm": 32,
+            "bn": 256,
+            "bk": 64,
+            "splits": 1,
+            "warps": 4,
+            "stages": 4
+          },
+          "screen_ms": 0.4200467832998377
+        },
+        {
+          "config": {
+            "bm": 32,
+            "bn": 256,
+            "bk": 64,
+            "splits": 1,
+            "warps": 8,
+            "stages": 2
+          },
+          "screen_ms": 0.4732848008473714
+        },
+        {
+          "config": {
+            "bm": 32,
+            "bn": 256,
+            "bk": 64,
+            "splits": 1,
+            "warps": 8,
+            "stages": 3
+          },
+          "screen_ms": 0.4520975748697917
+        },
+        {
+          "config": {
+            "bm": 32,
+            "bn": 256,
+            "bk": 64,
+            "splits": 1,
+            "warps": 8,
+            "stages": 4
+          },
+          "screen_ms": 0.4398867001087208
+        },
+        {
+          "config": {
+            "bm": 32,
+            "bn": 256,
+            "bk": 128,
+            "splits": 1,
+            "warps": 4,
+            "stages": 2
+          },
+          "screen_ms": 0.4476685199540915
+        },
+        {
+          "config": {
+            "bm": 32,
+            "bn": 256,
+            "bk": 128,
+            "splits": 1,
+            "warps": 4,
+            "stages": 3
+          },
+          "screen_ms": 0.4222848014831543
+        },
+        {
+          "config": {
+            "bm": 32,
+            "bn": 256,
+            "bk": 128,
+            "splits": 1,
+            "warps": 8,
+            "stages": 2
+          },
+          "screen_ms": 0.4308474890076288
+        },
+        {
+          "config": {
+            "bm": 32,
+            "bn": 256,
+            "bk": 128,
+            "splits": 1,
+            "warps": 8,
+            "stages": 3
+          },
+          "screen_ms": 0.4193305109061447
+        },
+        {
+          "config": {
+            "bm": 64,
+            "bn": 64,
+            "bk": 64,
+            "splits": 1,
+            "warps": 4,
+            "stages": 2
+          },
+          "screen_ms": 0.3942639330159063
+        },
+        {
+          "config": {
+            "bm": 64,
+            "bn": 64,
+            "bk": 64,
+            "splits": 1,
+            "warps": 4,
+            "stages": 3
+          },
+          "screen_ms": 0.4187346645519494
+        },
+        {
+          "config": {
+            "bm": 64,
+            "bn": 64,
+            "bk": 64,
+            "splits": 1,
+            "warps": 4,
+            "stages": 4
+          },
+          "screen_ms": 0.42526952130762163
+        },
+        {
+          "config": {
+            "bm": 64,
+            "bn": 64,
+            "bk": 64,
+            "splits": 1,
+            "warps": 8,
+            "stages": 2
+          },
+          "screen_ms": 0.41146262377157977
+        },
+        {
+          "config": {
+            "bm": 64,
+            "bn": 64,
+            "bk": 64,
+            "splits": 1,
+            "warps": 8,
+            "stages": 3
+          },
+          "screen_ms": 0.4369912471677282
+        },
+        {
+          "config": {
+            "bm": 64,
+            "bn": 64,
+            "bk": 64,
+            "splits": 1,
+            "warps": 8,
+            "stages": 4
+          },
+          "screen_ms": 0.4394907119826143
+        },
+        {
+          "config": {
+            "bm": 64,
+            "bn": 64,
+            "bk": 128,
+            "splits": 1,
+            "warps": 4,
+            "stages": 2
+          },
+          "screen_ms": 0.36071329006357084
+        },
+        {
+          "config": {
+            "bm": 64,
+            "bn": 64,
+            "bk": 128,
+            "splits": 1,
+            "warps": 4,
+            "stages": 3
+          },
+          "screen_ms": 0.36145219454800126
+        },
+        {
+          "config": {
+            "bm": 64,
+            "bn": 64,
+            "bk": 128,
+            "splits": 1,
+            "warps": 4,
+            "stages": 4
+          },
+          "screen_ms": 0.36275102169577644
+        },
+        {
+          "config": {
+            "bm": 64,
+            "bn": 64,
+            "bk": 128,
+            "splits": 1,
+            "warps": 8,
+            "stages": 2
+          },
+          "screen_ms": 0.37819188930645065
+        },
+        {
+          "config": {
+            "bm": 64,
+            "bn": 64,
+            "bk": 128,
+            "splits": 1,
+            "warps": 8,
+            "stages": 3
+          },
+          "screen_ms": 0.3771934311478226
+        },
+        {
+          "config": {
+            "bm": 64,
+            "bn": 64,
+            "bk": 128,
+            "splits": 1,
+            "warps": 8,
+            "stages": 4
+          },
+          "screen_ms": 0.3782856159640434
+        },
+        {
+          "config": {
+            "bm": 64,
+            "bn": 128,
+            "bk": 64,
+            "splits": 1,
+            "warps": 4,
+            "stages": 2
+          },
+          "screen_ms": 0.36506201596183574
+        },
+        {
+          "config": {
+            "bm": 64,
+            "bn": 128,
+            "bk": 64,
+            "splits": 1,
+            "warps": 4,
+            "stages": 3
+          },
+          "screen_ms": 0.37469330197288875
+        },
+        {
+          "config": {
+            "bm": 64,
+            "bn": 128,
+            "bk": 64,
+            "splits": 1,
+            "warps": 4,
+            "stages": 4
+          },
+          "screen_ms": 0.353546992611123
+        },
+        {
+          "config": {
+            "bm": 64,
+            "bn": 128,
+            "bk": 64,
+            "splits": 1,
+            "warps": 8,
+            "stages": 2
+          },
+          "screen_ms": 0.3578123806684445
+        },
+        {
+          "config": {
+            "bm": 64,
+            "bn": 128,
+            "bk": 64,
+            "splits": 1,
+            "warps": 8,
+            "stages": 3
+          },
+          "screen_ms": 0.3809914638179009
+        },
+        {
+          "config": {
+            "bm": 64,
+            "bn": 128,
+            "bk": 64,
+            "splits": 1,
+            "warps": 8,
+            "stages": 4
+          },
+          "screen_ms": 0.37561675990553206
+        },
+        {
+          "config": {
+            "bm": 64,
+            "bn": 128,
+            "bk": 128,
+            "splits": 1,
+            "warps": 4,
+            "stages": 2
+          },
+          "screen_ms": 0.35271622567806604
+        },
+        {
+          "config": {
+            "bm": 64,
+            "bn": 128,
+            "bk": 128,
+            "splits": 1,
+            "warps": 4,
+            "stages": 3
+          },
+          "screen_ms": 0.3401239018951733
+        },
+        {
+          "config": {
+            "bm": 64,
+            "bn": 128,
+            "bk": 128,
+            "splits": 1,
+            "warps": 4,
+            "stages": 4
+          },
+          "screen_ms": 0.3082323399296513
+        },
+        {
+          "config": {
+            "bm": 64,
+            "bn": 128,
+            "bk": 128,
+            "splits": 1,
+            "warps": 8,
+            "stages": 2
+          },
+          "screen_ms": 0.3505226515262063
+        },
+        {
+          "config": {
+            "bm": 64,
+            "bn": 128,
+            "bk": 128,
+            "splits": 1,
+            "warps": 8,
+            "stages": 3
+          },
+          "screen_ms": 0.3450957673171471
+        },
+        {
+          "config": {
+            "bm": 64,
+            "bn": 128,
+            "bk": 128,
+            "splits": 1,
+            "warps": 8,
+            "stages": 4
+          },
+          "screen_ms": 0.3188613291536824
+        },
+        {
+          "config": {
+            "bm": 64,
+            "bn": 256,
+            "bk": 64,
+            "splits": 1,
+            "warps": 4,
+            "stages": 2
+          },
+          "screen_ms": 0.3526358655703965
+        },
+        {
+          "config": {
+            "bm": 64,
+            "bn": 256,
+            "bk": 64,
+            "splits": 1,
+            "warps": 4,
+            "stages": 3
+          },
+          "screen_ms": 0.32686234287281135
+        },
+        {
+          "config": {
+            "bm": 64,
+            "bn": 256,
+            "bk": 64,
+            "splits": 1,
+            "warps": 4,
+            "stages": 4
+          },
+          "screen_ms": 0.32587308235538814
+        },
+        {
+          "config": {
+            "bm": 64,
+            "bn": 256,
+            "bk": 64,
+            "splits": 1,
+            "warps": 8,
+            "stages": 2
+          },
+          "screen_ms": 0.36174712967086625
+        },
+        {
+          "config": {
+            "bm": 64,
+            "bn": 256,
+            "bk": 64,
+            "splits": 1,
+            "warps": 8,
+            "stages": 3
+          },
+          "screen_ms": 0.345797373717313
+        },
+        {
+          "config": {
+            "bm": 64,
+            "bn": 256,
+            "bk": 64,
+            "splits": 1,
+            "warps": 8,
+            "stages": 4
+          },
+          "screen_ms": 0.3378485235837426
+        },
+        {
+          "config": {
+            "bm": 64,
+            "bn": 256,
+            "bk": 128,
+            "splits": 1,
+            "warps": 4,
+            "stages": 2
+          },
+          "screen_ms": 0.37209315829806855
+        },
+        {
+          "config": {
+            "bm": 64,
+            "bn": 256,
+            "bk": 128,
+            "splits": 1,
+            "warps": 4,
+            "stages": 3
+          },
+          "screen_ms": 0.29436097311806847
+        },
+        {
+          "config": {
+            "bm": 64,
+            "bn": 256,
+            "bk": 128,
+            "splits": 1,
+            "warps": 8,
+            "stages": 2
+          },
+          "screen_ms": 0.3801688118868096
+        },
+        {
+          "config": {
+            "bm": 64,
+            "bn": 256,
+            "bk": 128,
+            "splits": 1,
+            "warps": 8,
+            "stages": 3
+          },
+          "screen_ms": 0.3007538296883566
+        },
+        {
+          "config": {
+            "bm": 128,
+            "bn": 64,
+            "bk": 64,
+            "splits": 1,
+            "warps": 4,
+            "stages": 2
+          },
+          "screen_ms": 0.3475895666951284
+        },
+        {
+          "config": {
+            "bm": 128,
+            "bn": 64,
+            "bk": 64,
+            "splits": 1,
+            "warps": 4,
+            "stages": 3
+          },
+          "screen_ms": 0.3498934827532087
+        },
+        {
+          "config": {
+            "bm": 128,
+            "bn": 64,
+            "bk": 64,
+            "splits": 1,
+            "warps": 4,
+            "stages": 4
+          },
+          "screen_ms": 0.3472586917437716
+        },
+        {
+          "config": {
+            "bm": 128,
+            "bn": 64,
+            "bk": 64,
+            "splits": 1,
+            "warps": 8,
+            "stages": 2
+          },
+          "screen_ms": 0.35529104999660216
+        },
+        {
+          "config": {
+            "bm": 128,
+            "bn": 64,
+            "bk": 64,
+            "splits": 1,
+            "warps": 8,
+            "stages": 3
+          },
+          "screen_ms": 0.36192255774209664
+        },
+        {
+          "config": {
+            "bm": 128,
+            "bn": 64,
+            "bk": 64,
+            "splits": 1,
+            "warps": 8,
+            "stages": 4
+          },
+          "screen_ms": 0.36377693349664864
+        },
+        {
+          "config": {
+            "bm": 128,
+            "bn": 64,
+            "bk": 128,
+            "splits": 1,
+            "warps": 4,
+            "stages": 2
+          },
+          "screen_ms": 0.3425688810126726
+        },
+        {
+          "config": {
+            "bm": 128,
+            "bn": 64,
+            "bk": 128,
+            "splits": 1,
+            "warps": 4,
+            "stages": 3
+          },
+          "screen_ms": 0.32141999464768634
+        },
+        {
+          "config": {
+            "bm": 128,
+            "bn": 64,
+            "bk": 128,
+            "splits": 1,
+            "warps": 4,
+            "stages": 4
+          },
+          "screen_ms": 0.3056490969302049
+        },
+        {
+          "config": {
+            "bm": 128,
+            "bn": 64,
+            "bk": 128,
+            "splits": 1,
+            "warps": 8,
+            "stages": 2
+          },
+          "screen_ms": 0.32560705288973724
+        },
+        {
+          "config": {
+            "bm": 128,
+            "bn": 64,
+            "bk": 128,
+            "splits": 1,
+            "warps": 8,
+            "stages": 3
+          },
+          "screen_ms": 0.32574110886146285
+        },
+        {
+          "config": {
+            "bm": 128,
+            "bn": 64,
+            "bk": 128,
+            "splits": 1,
+            "warps": 8,
+            "stages": 4
+          },
+          "screen_ms": 0.3230650179313891
+        },
+        {
+          "config": {
+            "bm": 128,
+            "bn": 128,
+            "bk": 64,
+            "splits": 1,
+            "warps": 4,
+            "stages": 2
+          },
+          "screen_ms": 0.3453256807829204
+        },
+        {
+          "config": {
+            "bm": 128,
+            "bn": 128,
+            "bk": 64,
+            "splits": 1,
+            "warps": 4,
+            "stages": 3
+          },
+          "screen_ms": 0.33028602985420613
+        },
+        {
+          "config": {
+            "bm": 128,
+            "bn": 128,
+            "bk": 64,
+            "splits": 1,
+            "warps": 4,
+            "stages": 4
+          },
+          "screen_ms": 0.31387240956130535
+        },
+        {
+          "config": {
+            "bm": 128,
+            "bn": 128,
+            "bk": 64,
+            "splits": 1,
+            "warps": 8,
+            "stages": 2
+          },
+          "screen_ms": 0.3564087722612464
+        },
+        {
+          "config": {
+            "bm": 128,
+            "bn": 128,
+            "bk": 64,
+            "splits": 1,
+            "warps": 8,
+            "stages": 3
+          },
+          "screen_ms": 0.3213980752594617
+        },
+        {
+          "config": {
+            "bm": 128,
+            "bn": 128,
+            "bk": 64,
+            "splits": 1,
+            "warps": 8,
+            "stages": 4
+          },
+          "screen_ms": 0.32296010459341656
+        },
+        {
+          "config": {
+            "bm": 128,
+            "bn": 128,
+            "bk": 128,
+            "splits": 1,
+            "warps": 4,
+            "stages": 2
+          },
+          "screen_ms": 0.29280519783496856
+        },
+        {
+          "config": {
+            "bm": 128,
+            "bn": 128,
+            "bk": 128,
+            "splits": 1,
+            "warps": 4,
+            "stages": 3
+          },
+          "screen_ms": 0.2627330662048969
+        },
+        {
+          "config": {
+            "bm": 128,
+            "bn": 128,
+            "bk": 128,
+            "splits": 1,
+            "warps": 4,
+            "stages": 4
+          },
+          "screen_ms": 0.2625716110755657
+        },
+        {
+          "config": {
+            "bm": 128,
+            "bn": 128,
+            "bk": 128,
+            "splits": 1,
+            "warps": 8,
+            "stages": 2
+          },
+          "screen_ms": 0.29569778123161283
+        },
+        {
+          "config": {
+            "bm": 128,
+            "bn": 128,
+            "bk": 128,
+            "splits": 1,
+            "warps": 8,
+            "stages": 3
+          },
+          "screen_ms": 0.274622120890584
+        },
+        {
+          "config": {
+            "bm": 128,
+            "bn": 128,
+            "bk": 128,
+            "splits": 1,
+            "warps": 8,
+            "stages": 4
+          },
+          "screen_ms": 0.27677959806085056
+        },
+        {
+          "config": {
+            "bm": 128,
+            "bn": 256,
+            "bk": 64,
+            "splits": 1,
+            "warps": 4,
+            "stages": 2
+          },
+          "screen_ms": 1.566377760234632
+        },
+        {
+          "config": {
+            "bm": 128,
+            "bn": 256,
+            "bk": 64,
+            "splits": 1,
+            "warps": 4,
+            "stages": 3
+          },
+          "screen_ms": 9.695812352498372
+        },
+        {
+          "config": {
+            "bm": 128,
+            "bn": 256,
+            "bk": 64,
+            "splits": 1,
+            "warps": 4,
+            "stages": 4
+          },
+          "screen_ms": 9.705591519673666
+        },
+        {
+          "config": {
+            "bm": 128,
+            "bn": 256,
+            "bk": 64,
+            "splits": 1,
+            "warps": 8,
+            "stages": 2
+          },
+          "screen_ms": 0.35572417212314295
+        },
+        {
+          "config": {
+            "bm": 128,
+            "bn": 256,
+            "bk": 64,
+            "splits": 1,
+            "warps": 8,
+            "stages": 3
+          },
+          "screen_ms": 0.3458565308875644
+        },
+        {
+          "config": {
+            "bm": 128,
+            "bn": 256,
+            "bk": 64,
+            "splits": 1,
+            "warps": 8,
+            "stages": 4
+          },
+          "screen_ms": 0.34867777115259413
+        },
+        {
+          "config": {
+            "bm": 128,
+            "bn": 256,
+            "bk": 128,
+            "splits": 1,
+            "warps": 4,
+            "stages": 2
+          },
+          "screen_ms": 8.917026074727376
+        },
+        {
+          "config": {
+            "bm": 128,
+            "bn": 256,
+            "bk": 128,
+            "splits": 1,
+            "warps": 4,
+            "stages": 3
+          },
+          "screen_ms": 0.9651087999343873
+        },
+        {
+          "config": {
+            "bm": 128,
+            "bn": 256,
+            "bk": 128,
+            "splits": 1,
+            "warps": 8,
+            "stages": 2
+          },
+          "screen_ms": 0.31151665881671736
+        },
+        {
+          "config": {
+            "bm": 128,
+            "bn": 256,
+            "bk": 128,
+            "splits": 1,
+            "warps": 8,
+            "stages": 3
+          },
+          "screen_ms": 0.28359638644802954
+        }
+      ],
+      "speedup": 1.35940454854873,
+      "gpu_state": "61, 975 MHz, 6251 MHz, 148.57 W"
+    }
+  ],
+  "rejected_configurations": [
+    {
+      "shape": [
+        128,
+        4096,
+        12288
+      ],
+      "config": {
+        "bm": 32,
+        "bn": 256,
+        "bk": 128,
+        "splits": 1,
+        "warps": 4,
+        "stages": 4
+      },
+      "error": "out of resource: shared memory, Required: 110592, Hardware limit: 101376. Reducing block sizes or `num_stages` may help."
+    },
+    {
+      "shape": [
+        128,
+        4096,
+        12288
+      ],
+      "config": {
+        "bm": 32,
+        "bn": 256,
+        "bk": 128,
+        "splits": 1,
+        "warps": 8,
+        "stages": 4
+      },
+      "error": "out of resource: shared memory, Required: 110592, Hardware limit: 101376. Reducing block sizes or `num_stages` may help."
+    },
+    {
+      "shape": [
+        128,
+        4096,
+        12288
+      ],
+      "config": {
+        "bm": 64,
+        "bn": 256,
+        "bk": 128,
+        "splits": 1,
+        "warps": 4,
+        "stages": 4
+      },
+      "error": "out of resource: shared memory, Required: 122880, Hardware limit: 101376. Reducing block sizes or `num_stages` may help."
+    },
+    {
+      "shape": [
+        128,
+        4096,
+        12288
+      ],
+      "config": {
+        "bm": 64,
+        "bn": 256,
+        "bk": 128,
+        "splits": 1,
+        "warps": 8,
+        "stages": 4
+      },
+      "error": "out of resource: shared memory, Required: 122880, Hardware limit: 101376. Reducing block sizes or `num_stages` may help."
+    },
+    {
+      "shape": [
+        128,
+        4096,
+        12288
+      ],
+      "config": {
+        "bm": 128,
+        "bn": 256,
+        "bk": 128,
+        "splits": 1,
+        "warps": 4,
+        "stages": 4
+      },
+      "error": "out of resource: shared memory, Required: 147456, Hardware limit: 101376. Reducing block sizes or `num_stages` may help."
+    },
+    {
+      "shape": [
+        128,
+        4096,
+        12288
+      ],
+      "config": {
+        "bm": 128,
+        "bn": 256,
+        "bk": 128,
+        "splits": 1,
+        "warps": 8,
+        "stages": 4
+      },
+      "error": "out of resource: shared memory, Required: 147456, Hardware limit: 101376. Reducing block sizes or `num_stages` may help."
+    },
+    {
+      "shape": [
+        128,
+        6144,
+        4096
+      ],
+      "config": {
+        "bm": 32,
+        "bn": 256,
+        "bk": 128,
+        "splits": 1,
+        "warps": 4,
+        "stages": 4
+      },
+      "error": "out of resource: shared memory, Required: 110592, Hardware limit: 101376. Reducing block sizes or `num_stages` may help."
+    },
+    {
+      "shape": [
+        128,
+        6144,
+        4096
+      ],
+      "config": {
+        "bm": 32,
+        "bn": 256,
+        "bk": 128,
+        "splits": 1,
+        "warps": 8,
+        "stages": 4
+      },
+      "error": "out of resource: shared memory, Required: 110592, Hardware limit: 101376. Reducing block sizes or `num_stages` may help."
+    },
+    {
+      "shape": [
+        128,
+        6144,
+        4096
+      ],
+      "config": {
+        "bm": 64,
+        "bn": 256,
+        "bk": 128,
+        "splits": 1,
+        "warps": 4,
+        "stages": 4
+      },
+      "error": "out of resource: shared memory, Required: 122880, Hardware limit: 101376. Reducing block sizes or `num_stages` may help."
+    },
+    {
+      "shape": [
+        128,
+        6144,
+        4096
+      ],
+      "config": {
+        "bm": 64,
+        "bn": 256,
+        "bk": 128,
+        "splits": 1,
+        "warps": 8,
+        "stages": 4
+      },
+      "error": "out of resource: shared memory, Required: 122880, Hardware limit: 101376. Reducing block sizes or `num_stages` may help."
+    },
+    {
+      "shape": [
+        128,
+        6144,
+        4096
+      ],
+      "config": {
+        "bm": 128,
+        "bn": 256,
+        "bk": 128,
+        "splits": 1,
+        "warps": 4,
+        "stages": 4
+      },
+      "error": "out of resource: shared memory, Required: 147456, Hardware limit: 101376. Reducing block sizes or `num_stages` may help."
+    },
+    {
+      "shape": [
+        128,
+        6144,
+        4096
+      ],
+      "config": {
+        "bm": 128,
+        "bn": 256,
+        "bk": 128,
+        "splits": 1,
+        "warps": 8,
+        "stages": 4
+      },
+      "error": "out of resource: shared memory, Required: 147456, Hardware limit: 101376. Reducing block sizes or `num_stages` may help."
+    },
+    {
+      "shape": [
+        128,
+        24576,
+        4096
+      ],
+      "config": {
+        "bm": 32,
+        "bn": 256,
+        "bk": 128,
+        "splits": 1,
+        "warps": 4,
+        "stages": 4
+      },
+      "error": "out of resource: shared memory, Required: 110592, Hardware limit: 101376. Reducing block sizes or `num_stages` may help."
+    },
+    {
+      "shape": [
+        128,
+        24576,
+        4096
+      ],
+      "config": {
+        "bm": 32,
+        "bn": 256,
+        "bk": 128,
+        "splits": 1,
+        "warps": 8,
+        "stages": 4
+      },
+      "error": "out of resource: shared memory, Required: 110592, Hardware limit: 101376. Reducing block sizes or `num_stages` may help."
+    },
+    {
+      "shape": [
+        128,
+        24576,
+        4096
+      ],
+      "config": {
+        "bm": 64,
+        "bn": 256,
+        "bk": 128,
+        "splits": 1,
+        "warps": 4,
+        "stages": 4
+      },
+      "error": "out of resource: shared memory, Required: 122880, Hardware limit: 101376. Reducing block sizes or `num_stages` may help."
+    },
+    {
+      "shape": [
+        128,
+        24576,
+        4096
+      ],
+      "config": {
+        "bm": 64,
+        "bn": 256,
+        "bk": 128,
+        "splits": 1,
+        "warps": 8,
+        "stages": 4
+      },
+      "error": "out of resource: shared memory, Required: 122880, Hardware limit: 101376. Reducing block sizes or `num_stages` may help."
+    },
+    {
+      "shape": [
+        128,
+        24576,
+        4096
+      ],
+      "config": {
+        "bm": 128,
+        "bn": 256,
+        "bk": 128,
+        "splits": 1,
+        "warps": 4,
+        "stages": 4
+      },
+      "error": "out of resource: shared memory, Required: 147456, Hardware limit: 101376. Reducing block sizes or `num_stages` may help."
+    },
+    {
+      "shape": [
+        128,
+        24576,
+        4096
+      ],
+      "config": {
+        "bm": 128,
+        "bn": 256,
+        "bk": 128,
+        "splits": 1,
+        "warps": 8,
+        "stages": 4
+      },
+      "error": "out of resource: shared memory, Required: 147456, Hardware limit: 101376. Reducing block sizes or `num_stages` may help."
+    }
+  ],
+  "input_distribution": "real layer-0 weights, Gaussian activation quantization",
+  "source_sha256": {
+    "tune_w8a8_splitk.py": "970037e9f84ef902ca1ddd74b6ba4a566813f17e775c224ca0406ac4d3ca300b",
+    "w8a8_splitk_candidate.py": "fc2211c5decfebdbdbf037af56dc7c7f053bd15b864ec0b1532c54cb1982b4cd"
+  }
+}
