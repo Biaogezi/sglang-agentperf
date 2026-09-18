@@ -127,6 +127,8 @@ def test_paired_audit_requires_matching_sources_and_all_requests(tmp_path: Path)
                                         "--tokenize-prompt",
                                         "--random-input-len",
                                         "128",
+                                        "--random-output-len",
+                                        "1",
                                         "--random-range-ratio",
                                         "1",
                                     ],
@@ -152,6 +154,16 @@ def test_paired_audit_requires_matching_sources_and_all_requests(tmp_path: Path)
         )
     assert audit_paired_run(tmp_path, minimum_repetitions=1)["passed"]
     assert not audit_paired_run(tmp_path)["passed"]
+    output = tmp_path / "prefill_on/m__prefill_on__work__r1.jsonl"
+    original = output.read_text()
+    changed = json.loads(original)
+    changed["output_lens"] = [2]
+    output.write_text(json.dumps(changed))
+    audit = audit_paired_run(tmp_path, minimum_repetitions=1)
+    assert not audit["passed"]
+    assert any("fixed output" in failure for failure in audit["failures"])
+    assert any("Paired output" in failure for failure in audit["failures"])
+    output.write_text(original)
     path = tmp_path / "prefill_on/manifest.json"
     bad = json.loads(path.read_text())
     bad["launches"][0]["manifest"]["source_files_sha256"]["runtime_candidate"] = {"k": "changed"}

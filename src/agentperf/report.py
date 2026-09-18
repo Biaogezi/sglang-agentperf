@@ -292,9 +292,20 @@ def audit_paired_run(root: Path, *, minimum_repetitions: int = 3) -> dict[str, A
                     failures.append(f"{name}: incomplete requests")
                 if not isinstance(errors, list) or len(errors) != expected or any(errors):
                     failures.append(f"{name}: missing or nonempty request errors")
+                lengths = record.get("output_lens")
+                texts = record.get("generated_texts")
+                if not isinstance(lengths, list) or len(lengths) != expected:
+                    failures.append(f"{name}: missing output lengths")
+                if not isinstance(texts, list) or len(texts) != expected:
+                    failures.append(f"{name}: missing generated output records")
                 successful += int(record.get("completed", 0))
+                args = workload.get("args", [])
+                fixed_output = None
+                if workload["dataset"] == "agentic-trace" and "--sharegpt-output-len" in args:
+                    fixed_output = int(args[args.index("--sharegpt-output-len") + 1])
+                if workload["dataset"] == "generated-shared-prefix" and "--gsp-output-len" in args:
+                    fixed_output = int(args[args.index("--gsp-output-len") + 1])
                 if workload["dataset"] == "random-ids":
-                    args = workload["args"]
                     if "--tokenize-prompt" not in args:
                         failures.append(f"{name}: nominal text lengths are not native IDs")
                     ratio = args[args.index("--random-range-ratio") + 1]
@@ -302,16 +313,23 @@ def audit_paired_run(root: Path, *, minimum_repetitions: int = 3) -> dict[str, A
                         length = int(args[args.index("--random-input-len") + 1])
                         if record.get("input_lens") != [length] * expected:
                             failures.append(f"{name}: fixed token lengths differ")
+                        if "--random-output-len" in args:
+                            fixed_output = int(args[args.index("--random-output-len") + 1])
+                if fixed_output is not None and lengths != [fixed_output] * expected:
+                    failures.append(f"{name}: fixed output token lengths differ")
         if expected_files != {path.name for path in directory.glob("*.jsonl")}:
             failures.append(f"{profile}: unexpected or missing output files")
     if len(source_ids) != 1:
         failures.append("Executed source bytes differ across OFF/ON launches")
     if workloads["prefill_off"] != workloads["prefill_on"]:
         failures.append("OFF/ON workload repetitions differ")
+    equivalence = check_run_equivalence(root / "prefill_off", root / "prefill_on")
+    if any(row["field"] == "output_lens" for row in equivalence["mismatches"]):
+        failures.append("Paired output lengths differ; timing is not comparable")
     return {
         "passed": not failures,
         "failures": failures,
         "completed_requests": successful,
         "matched_repetitions": len(workloads["prefill_off"] & workloads["prefill_on"]),
-        "output_equivalence": check_run_equivalence(root / "prefill_off", root / "prefill_on"),
+        "output_equivalence": equivalence,
     }
