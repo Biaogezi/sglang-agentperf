@@ -6,8 +6,8 @@ UPSTREAM_DIR="${PROJECT_ROOT}/upstream/sglang"
 UPSTREAM_REPO="$(awk -F= '$1 == "repository" {print $2}' "${PROJECT_ROOT}/UPSTREAM.lock")"
 UPSTREAM_REF="$(awk -F= '$1 == "ref" {print $2}' "${PROJECT_ROOT}/UPSTREAM.lock")"
 UPSTREAM_COMMIT="$(awk -F= '$1 == "commit" {print $2}' "${PROJECT_ROOT}/UPSTREAM.lock")"
-UPSTREAM_PATCH="$(awk -F= '$1 == "patch" {print $2}' "${PROJECT_ROOT}/UPSTREAM.lock")"
-UPSTREAM_PATCHED_COMMIT="$(awk -F= '$1 == "patched_commit" {print $2}' "${PROJECT_ROOT}/UPSTREAM.lock")"
+UPSTREAM_PATCHES="$(awk -F= '$1 == "patches" {print $2}' "${PROJECT_ROOT}/UPSTREAM.lock")"
+UPSTREAM_PATCHED_TREE="$(awk -F= '$1 == "patched_tree" {print $2}' "${PROJECT_ROOT}/UPSTREAM.lock")"
 CONTAINER_IMAGE="$(awk -F= '$1 == "image" {print $2}' "${PROJECT_ROOT}/CONTAINER.lock")"
 CONTAINER_MIRROR_IMAGE="$(awk -F= '$1 == "mirror_image" {print $2}' "${PROJECT_ROOT}/CONTAINER.lock")"
 CONTAINER_DIGEST="$(awk -F= '$1 == "digest" {print $2}' "${PROJECT_ROOT}/CONTAINER.lock")"
@@ -19,15 +19,30 @@ python -m pip install -e "${PROJECT_ROOT}[dev]"
 
 mkdir -p "${PROJECT_ROOT}/upstream"
 if [[ ! -d "${UPSTREAM_DIR}/.git" ]]; then
-  git clone --filter=blob:none "${UPSTREAM_REPO}" "${UPSTREAM_DIR}"
+  git clone --filter=blob:none --depth 1 --branch "${UPSTREAM_REF}" \
+    "${UPSTREAM_REPO}" "${UPSTREAM_DIR}"
+  git -C "${UPSTREAM_DIR}" checkout --detach "${UPSTREAM_COMMIT}"
 fi
-git -C "${UPSTREAM_DIR}" fetch --depth 1 origin "${UPSTREAM_REF}"
-git -C "${UPSTREAM_DIR}" checkout --detach "${UPSTREAM_COMMIT}"
-if [[ -n "${UPSTREAM_PATCH}" ]]; then
-  git -C "${UPSTREAM_DIR}" am "${PROJECT_ROOT}/${UPSTREAM_PATCH}"
-  ACTUAL_PATCHED_COMMIT="$(git -C "${UPSTREAM_DIR}" rev-parse HEAD)"
-  [[ "${ACTUAL_PATCHED_COMMIT}" == "${UPSTREAM_PATCHED_COMMIT}" ]] || {
-    echo "Patched SGLang commit ${ACTUAL_PATCHED_COMMIT} does not match ${UPSTREAM_PATCHED_COMMIT}." >&2
+git -C "${UPSTREAM_DIR}" diff --quiet && git -C "${UPSTREAM_DIR}" diff --cached --quiet || {
+  echo "SGLang has local edits; refusing to switch or patch this checkout." >&2
+  exit 1
+}
+CURRENT_TREE="$(git -C "${UPSTREAM_DIR}" rev-parse 'HEAD^{tree}')"
+if [[ "${CURRENT_TREE}" != "${UPSTREAM_PATCHED_TREE}" ]]; then
+  CURRENT_COMMIT="$(git -C "${UPSTREAM_DIR}" rev-parse HEAD)"
+  if [[ "${CURRENT_COMMIT}" != "${UPSTREAM_COMMIT}" ]]; then
+    echo "Existing SGLang checkout is neither the pinned base nor patched tree; preserve it and use a fresh directory." >&2
+    exit 1
+  fi
+  # Verify content, not commit IDs: git am gives commits new committer timestamps.
+  read -r -a PATCH_FILES <<< "${UPSTREAM_PATCHES}"
+  for PATCH_FILE in "${PATCH_FILES[@]}"; do
+    git -C "${UPSTREAM_DIR}" -c user.name=AgentPerf -c user.email=agentperf@localhost \
+      am "${PROJECT_ROOT}/${PATCH_FILE}"
+  done
+  ACTUAL_PATCHED_TREE="$(git -C "${UPSTREAM_DIR}" rev-parse 'HEAD^{tree}')"
+  [[ "${ACTUAL_PATCHED_TREE}" == "${UPSTREAM_PATCHED_TREE}" ]] || {
+    echo "Patched source tree ${ACTUAL_PATCHED_TREE} does not match ${UPSTREAM_PATCHED_TREE}." >&2
     exit 1
   }
 fi

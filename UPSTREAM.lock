@@ -1,6 +1,6 @@
 repository=https://github.com/sgl-project/sglang.git
 ref=v0.5.19
 commit=0bcd822377da7b5718e674eaf9c870d349424dd1
-patch=patches/sglang-agentperf-series.patch
-patched_commit=8f8acc8df0d7e7fc6d491f5db1ce3ef366e4094a
-resolved_at=2026-09-16
+patches=patches/0001-feat-scheduler-add-SLO-aware-adaptive-prefill-chunki.patch patches/0002-feat-quant-make-Marlin-reduction-precision-configura.patch patches/0003-feat-quant-fuse-RMSNorm-with-dynamic-INT8-quantizati.patch patches/0004-feat-quant-add-opt-in-SM86-short-prefill-INT8-GEMM.patch
+patched_tree=68ffb227829efeceff3e2ecd459bdfd43ab0387f
+resolved_at=2026-09-18
