@@ -1,9 +1,9 @@
 """Published aggregates must still match their snapshot's byte-level checksums."""
 
+import gzip
 import hashlib
 import importlib.util
 import json
-import gzip
 import shutil
 from pathlib import Path
 
