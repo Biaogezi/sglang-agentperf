@@ -25,6 +25,10 @@ def main():
     parser.add_argument("--prefill-backend", choices=["disabled", "breakable", "tc_piecewise"])
     parser.add_argument("--candidate", choices=["gemm", "fusion", "combined"], default="gemm")
     parser.add_argument("--disable-overlap", action="store_true")
+    parser.add_argument(
+        "--trace-steps", type=int, help="Diagnostic only; do not accept profiled timing"
+    )
+    parser.add_argument("--trace-start-step", type=int, default=100)
     args = parser.parse_args()
     config = copy.deepcopy(load_config(args.config))
     config["defaults"]["repetitions"] = 1
@@ -83,6 +87,26 @@ def main():
         "prefill-dispatch-proof",
     ]
     config["suites"]["proof"] = ["prefill_dispatch_proof"]
+    if args.trace_steps is not None:
+        if args.trace_steps < 1 or args.trace_start_step < 0 or args.suite == "proof":
+            parser.error(
+                "Use positive trace steps, nonnegative start, and a suite other than proof"
+            )
+        for name in config["suites"][args.suite]:
+            config["workloads"][name]["args"] += [
+                "--profile",
+                "--profile-activities",
+                "CPU",
+                "GPU",
+                "--profile-start-step",
+                str(args.trace_start_step),
+                "--profile-steps",
+                str(args.trace_steps),
+                "--profile-output-dir",
+                "/workspace/agentperf/profiles/torch",
+                "--profile-prefix",
+                f"{args.suite}-dispatch-proof",
+            ]
     timestamp = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ")
     root = Path(args.output_root) / f"{timestamp}__{args.suite}"
     root.mkdir(parents=True, exist_ok=False)
