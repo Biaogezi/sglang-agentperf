@@ -44,6 +44,12 @@ constraint while retaining an INT8 tensor-core path for large matrix multiplicat
 
 ## Three-repetition serving results
 
+**Historical workload note:** these runs used `random-ids` without `--tokenize-prompt`, so
+inputs were decoded to text and re-tokenized by the server. 1K/8K labels and input tok/s are
+nominal dataset lengths, not exact server token counts. The same text sets were compared across
+paths, so measured output-throughput and latency comparisons remain workload observations.
+Do not mix their absolute input tok/s with the newer native-ID fixed-shape protocol.
+
 Every cell is the mean of three measured runs after warmup. Decode uses 160 requests at
 concurrency 16 with 1,024 input and 512 output tokens. Prefill uses 80 requests at concurrency 8
 with 8,192 input and 64 output tokens. Shared-prefix uses ten 4K-token prefix groups at 8 req/s.

@@ -166,6 +166,7 @@
       "max_concurrency": 1,
       "request_rate": "inf",
       "args": [
+        "--tokenize-prompt",
         "--random-input-len", "256",
         "--random-output-len", "32",
         "--random-range-ratio", "1"
@@ -177,6 +178,7 @@
       "max_concurrency": 16,
       "request_rate": "inf",
       "args": [
+        "--tokenize-prompt",
         "--random-input-len", "1024",
         "--random-output-len", "512",
         "--random-range-ratio", "1"
@@ -188,6 +190,7 @@
       "max_concurrency": 8,
       "request_rate": "inf",
       "args": [
+        "--tokenize-prompt",
         "--random-input-len", "8192",
         "--random-output-len", "64",
         "--random-range-ratio", "1"
@@ -199,6 +202,7 @@
       "max_concurrency": 8,
       "request_rate": "inf",
       "args": [
+        "--tokenize-prompt",
         "--random-input-len", "8192",
         "--random-output-len", "64",
         "--random-range-ratio", "0.25"
@@ -211,6 +215,7 @@
       "request_rate": "inf",
       "repetitions": 1,
       "args": [
+        "--tokenize-prompt",
         "--random-input-len", "8192",
         "--random-output-len", "64",
         "--random-range-ratio", "0.25",
@@ -229,6 +234,7 @@
       "request_rate": "inf",
       "repetitions": 1,
       "args": [
+        "--tokenize-prompt",
         "--random-input-len", "1024",
         "--random-output-len", "512",
         "--random-range-ratio", "1.0",

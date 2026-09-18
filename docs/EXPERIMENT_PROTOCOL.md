@@ -26,6 +26,9 @@ This prevents attributing an existing command-line tuning opportunity to a code 
 
 - `num_prompts >= 5 * max_concurrency` for steady-state serving runs.
 - Random length ratio is fixed to 1 for shape-controlled comparisons.
+- For `random-ids`, pass `--tokenize-prompt` to send native IDs. Without it, the benchmark
+  decodes IDs to text and the server re-tokenizes; reported nominal lengths can differ from the
+  actual GEMM row count. Check server-side rows, not just the CLI's dataset name.
 - Shared-prefix tests report both cold-cache and warm-cache behavior.
 - Agent traces retain request order and timestamps when replayed.
 - Do not mix synthetic, ShareGPT and agent-trace results in one speedup number.
@@ -38,4 +41,3 @@ This prevents attributing an existing command-line tuning opportunity to a code 
 - Report failed requests and output-token counts.
 - A result with different output lengths is invalid unless normalized and explained.
 - Preserve raw JSONL, logs, traces, environment manifests and Git diffs.
-

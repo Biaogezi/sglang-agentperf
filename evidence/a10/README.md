@@ -34,6 +34,12 @@ invalidated and is not published here.
 
 ## Accepted observations
 
+Historical `random-ids` runs below used text decode/re-encode. Their 1K/8K input lengths and
+input tok/s are nominal; the same generated text sets were used across configurations. New
+fixed-shape experiments explicitly send native token IDs. See the protocol correction in
+`docs/OPTIMIZATION_004_SM86_INT8_PREFILL.md`; never compare these absolute input rates directly
+with native-ID runs.
+
 | Workload / configuration | Input tok/s | Output tok/s | p99 TTFT | p99 TPOT | p99 ITL |
 |---|---:|---:|---:|---:|---:|
 | FP16, decode 1K/512 | 510.40 | 255.20 | 26.06 s | 60.44 ms | 48.12 ms |

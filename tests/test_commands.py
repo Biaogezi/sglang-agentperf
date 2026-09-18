@@ -21,6 +21,14 @@ def test_commands_include_pinned_experiment_parameters(monkeypatch) -> None:
     assert benchmark[benchmark.index("--num-prompts") + 1] == "8"
     assert "--output-details" in benchmark
     assert "--flush-cache" in benchmark
+    assert "--tokenize-prompt" in benchmark
 
     fp16_reduce = config["server_profiles"]["slo_chunk1024_i4_fp16_reduce"]
     assert fp16_reduce["env"]["SGLANG_MARLIN_USE_FP32_REDUCE"] == "false"
+
+
+def test_shape_controlled_workloads_send_native_ids():
+    config = load_config(CONFIG)
+    for workload in config["workloads"].values():
+        if workload["dataset"] == "random-ids":
+            assert "--tokenize-prompt" in workload["args"]
