@@ -25,8 +25,8 @@ def main():
     layer.quant_method = method
     method.process_weights_after_loading(layer)
     assert method._a10_prefill
-    # Audit the previous norm-fusion experiment: this config does NOT select it.
-    assert not _is_dynamic_per_token_int8_linear(layer)
+    # Patch 0006 connects the native method; patch 0003 alone did NOT select it.
+    assert _is_dynamic_per_token_int8_linear(layer)
     results = []
     for m in (1, 64, 79, 80, 96, 128, 129, 160):
         x = torch.randn((m, 4096), device="cuda", dtype=torch.float16)
@@ -43,7 +43,7 @@ def main():
         json.dumps(
             {
                 "method": type(method).__name__,
-                "previous_norm_fusion_eligible": False,
+                "native_norm_fusion_eligible": True,
                 "cases": results,
             },
             indent=2,

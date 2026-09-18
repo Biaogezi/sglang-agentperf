@@ -25,6 +25,10 @@ def source_fingerprints() -> dict[str, dict[str, str]]:
         upstream = root / "upstream/sglang"
     harness = [*root.glob("src/agentperf/*.py"), *root.glob("scripts/*.py")]
     runtime = [
+        upstream / "python/sglang/kernels/ops/quantization/int8_kernel.py",
+        upstream / "python/sglang/srt/layers/layernorm.py",
+        upstream / "python/sglang/srt/layers/communicator.py",
+        upstream / "python/sglang/srt/models/qwen3.py",
         upstream / "python/sglang/kernels/ops/quantization/int8_prefill_gemm.py",
         upstream / "python/sglang/srt/layers/quantization/w8a8_int8.py",
         upstream

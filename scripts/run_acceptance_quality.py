@@ -31,6 +31,7 @@ def main():
     parser.add_argument("--output-root", default="quality/acceptance")
     parser.add_argument("--model", default="qwen3_8b_w8a8")
     parser.add_argument("--profiles", nargs="+", default=["off", "on"])
+    parser.add_argument("--candidate", choices=["gemm", "fusion", "combined"], default="gemm")
     args = parser.parse_args()
     config = copy.deepcopy(load_config(args.config))
     validate_model_artifact(config, args.model)
@@ -46,8 +47,10 @@ def main():
         profile = copy.deepcopy(config["server_profiles"]["baseline"])
         profile["args"] += ["--disable-radix-cache"]
         profile["env"] = {
-            "SGLANG_A10_INT8_PREFILL": str(name == "on").lower(),
-            "SGLANG_W8A8_FUSED_RMSNORM_QUANT": "false",
+            "SGLANG_A10_INT8_PREFILL": str(name == "on" and args.candidate != "fusion").lower(),
+            "SGLANG_W8A8_FUSED_RMSNORM_QUANT": str(
+                name == "on" and args.candidate != "gemm"
+            ).lower(),
         }
         config["server_profiles"][name] = profile
         argv = server_command(config, args.model, name)

@@ -19,14 +19,15 @@ def main():
     parser.add_argument("--repetitions", type=int, default=3)
     parser.add_argument("--output-root", default="results/paired")
     parser.add_argument("--prefill-backend", choices=["disabled", "breakable", "tc_piecewise"])
+    parser.add_argument("--candidate", choices=["gemm", "fusion", "combined"], default="gemm")
     args = parser.parse_args()
     config = copy.deepcopy(load_config(args.config))
     config["defaults"]["repetitions"] = 1
     for profile, enabled in [("prefill_off", "false"), ("prefill_on", "true")]:
         config["server_profiles"][profile] = copy.deepcopy(config["server_profiles"]["baseline"])
         config["server_profiles"][profile]["env"] = {
-            "SGLANG_A10_INT8_PREFILL": enabled,
-            "SGLANG_W8A8_FUSED_RMSNORM_QUANT": "false",
+            "SGLANG_A10_INT8_PREFILL": enabled if args.candidate != "fusion" else "false",
+            "SGLANG_W8A8_FUSED_RMSNORM_QUANT": enabled if args.candidate != "gemm" else "false",
         }
         if args.prefill_backend:
             config["server_profiles"][profile]["args"] += [

@@ -1,0 +1,86 @@
+From 6027f8f66b9b0a16844ee0add8ef73a0376712c4 Mon Sep 17 00:00:00 2001
+From: biaogezi <scwang@bupt.edu.cn>
+Date: Fri, 18 Sep 2026 11:55:03 +0800
+Subject: [PATCH] fix(quant): connect native W8A8 to fused norm input contract
+
+---
+ python/sglang/srt/layers/layernorm.py             |  6 +++++-
+ .../sglang/srt/layers/quantization/w8a8_int8.py   | 15 ++++++++++-----
+ 2 files changed, 15 insertions(+), 6 deletions(-)
+
+diff --git a/python/sglang/srt/layers/layernorm.py b/python/sglang/srt/layers/layernorm.py
+index 0e65290..be53d2a 100644
+--- a/python/sglang/srt/layers/layernorm.py
++++ b/python/sglang/srt/layers/layernorm.py
+@@ -443,6 +443,11 @@ def _is_dynamic_per_token_int8_linear(linear) -> bool:
+     """Return whether ``linear`` accepts pre-quantized dynamic W8A8 input."""
+     if linear is None:
+         return False
++    from sglang.srt.layers.quantization.w8a8_int8 import W8A8Int8LinearMethod
++
++    quant_method = getattr(linear, "quant_method", None)
++    if isinstance(quant_method, W8A8Int8LinearMethod):
++        return True
+     try:
+         from sglang.srt.layers.quantization.compressed_tensors.compressed_tensors import (
+             CompressedTensorsLinearMethod,
+@@ -453,7 +458,6 @@ def _is_dynamic_per_token_int8_linear(linear) -> bool:
+     except ImportError:
+         return False
+ 
+-    quant_method = getattr(linear, "quant_method", None)
+     scheme = getattr(linear, "scheme", None)
+     return (
+         isinstance(quant_method, CompressedTensorsLinearMethod)
+diff --git a/python/sglang/srt/layers/quantization/w8a8_int8.py b/python/sglang/srt/layers/quantization/w8a8_int8.py
+index a5eb492..f3b0494 100644
+--- a/python/sglang/srt/layers/quantization/w8a8_int8.py
++++ b/python/sglang/srt/layers/quantization/w8a8_int8.py
+@@ -213,7 +213,7 @@ class W8A8Int8LinearMethod(LinearMethodBase):
+     def apply(
+         self,
+         layer: torch.nn.Module,
+-        x: torch.Tensor,
++        x: torch.Tensor | tuple[torch.Tensor, torch.Tensor, torch.dtype],
+         bias: Optional[torch.Tensor] = None,
+     ):
+         if use_intel_amx_backend(layer) or _is_cpu_arm64:
+@@ -225,7 +225,12 @@ class W8A8Int8LinearMethod(LinearMethodBase):
+                 x.dtype,
+                 True,  # is_vnni
+             )
+-        x_q, x_scale = per_token_quant_int8(x)
++        if isinstance(x, tuple):
++            x_q, x_scale, output_dtype = x
++            assert x_q.dtype == torch.int8 and x_scale.dtype == torch.float32
++        else:
++            output_dtype = x.dtype
++            x_q, x_scale = per_token_quant_int8(x)
+ 
+         x_q_2d = x_q.view(-1, x_q.shape[-1])
+         x_scale_2d = x_scale.view(-1, x_scale.shape[-1])
+@@ -238,10 +243,10 @@ class W8A8Int8LinearMethod(LinearMethodBase):
+             )
+ 
+             if supports_a10_prefill(
+-                x_q_2d, layer.weight, x_scale_2d, layer.weight_scale, x.dtype, bias
++                x_q_2d, layer.weight, x_scale_2d, layer.weight_scale, output_dtype, bias
+             ):
+                 return a10_int8_prefill_mm(
+-                    x_q_2d, layer.weight, x_scale_2d, layer.weight_scale, x.dtype, bias
++                    x_q_2d, layer.weight, x_scale_2d, layer.weight_scale, output_dtype, bias
+                 ).view(output_shape)
+ 
+         output = int8_scaled_mm(
+@@ -249,7 +254,7 @@ class W8A8Int8LinearMethod(LinearMethodBase):
+             layer.weight,
+             x_scale_2d,
+             layer.weight_scale,
+-            out_dtype=x.dtype,
++            out_dtype=output_dtype,
+             bias=bias,
+         )
+ 
+-- 
+2.47.1.windows.2
+
