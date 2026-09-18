@@ -1,9 +1,10 @@
+import gzip
 import json
 from pathlib import Path
 
 import pytest
 
-from agentperf.evidence import snapshot_evidence, snapshot_trace_evidence
+from agentperf.evidence import snapshot_evidence, snapshot_request_metrics, snapshot_trace_evidence
 
 
 def test_snapshot_evidence_copies_aggregates_and_hashes_raw_files(tmp_path: Path) -> None:
@@ -82,3 +83,47 @@ def test_task_output_publication_is_explicit(tmp_path: Path) -> None:
     assert not (tmp_path / "default/task_outputs.json").exists()
     snapshot_evidence(raw, tmp_path / "explicit", include_task_outputs=True)
     assert (tmp_path / "explicit/task_outputs.json").is_file()
+
+
+def test_request_metrics_publish_hashes_not_content(tmp_path):
+    raw = tmp_path / "raw"
+    raw.mkdir()
+    record = {
+        "completed": 1,
+        "duration": 1.0,
+        "total_input_tokens": 128,
+        "total_output_tokens": 1,
+        "input_lens": [128],
+        "output_lens": [1],
+        "ttfts": [0.02],
+        "itls": [[]],
+        "generated_texts": ["private response"],
+        "errors": [""],
+        "server_info": {"secret": "do not publish"},
+        "dataset_name": "agentic-trace",
+    }
+    (raw / "run.jsonl").write_text(json.dumps(record) + "\n")
+    snapshot_request_metrics(raw, tmp_path / "public")
+    payload = gzip.decompress((tmp_path / "public/request_metrics.json.gz").read_bytes())
+    assert b"private response" not in payload
+    assert b"do not publish" not in payload
+    row = json.loads(payload)["runs"][0]
+    assert not row["input_lengths_valid"]
+    assert len(row["output_text_sha256"][0]) == 64
+    record["dataset_name"] = "random-ids"
+    (raw / "run.jsonl").write_text(json.dumps(record) + "\n")
+    snapshot_request_metrics(raw, tmp_path / "nominal")
+    nominal = json.loads(
+        gzip.decompress((tmp_path / "nominal/request_metrics.json.gz").read_bytes())
+    )
+    assert not nominal["runs"][0]["input_lengths_valid"]
+    (raw / "manifest.json").write_text(
+        json.dumps({"config": {"workloads": {"run": {"args": ["--tokenize-prompt"]}}}})
+    )
+    snapshot_request_metrics(raw, tmp_path / "native")
+    native = json.loads(gzip.decompress((tmp_path / "native/request_metrics.json.gz").read_bytes()))
+    assert native["runs"][0]["input_lengths_valid"]
+    record["output_lens"] = []
+    (raw / "run.jsonl").write_text(json.dumps(record) + "\n")
+    with pytest.raises(ValueError, match="Incomplete"):
+        snapshot_request_metrics(raw, tmp_path / "bad")
