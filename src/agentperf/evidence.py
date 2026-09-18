@@ -16,7 +16,9 @@ def _sha256(path: Path) -> str:
     return digest.hexdigest()
 
 
-def snapshot_evidence(run_dir: Path, output_dir: Path) -> dict[str, Any]:
+def snapshot_evidence(
+    run_dir: Path, output_dir: Path, *, include_task_outputs: bool = False
+) -> dict[str, Any]:
     """Publish small aggregates plus checksums that identify ignored raw artifacts."""
     aggregate_names = [
         name for name in ("summary.csv", "quality.json") if (run_dir / name).is_file()
@@ -26,6 +28,11 @@ def snapshot_evidence(run_dir: Path, output_dir: Path) -> dict[str, Any]:
             f"Run is missing required aggregate: {run_dir / 'summary.csv'} or "
             f"{run_dir / 'quality.json'}"
         )
+    if "quality.json" in aggregate_names:
+        optional = ["tasks_summary.json"]
+        if include_task_outputs:
+            optional.append("task_outputs.json")
+        aggregate_names += [name for name in optional if (run_dir / name).is_file()]
 
     required = [run_dir / "manifest.json", *(run_dir / name for name in aggregate_names)]
     missing = [str(path) for path in required if not path.is_file()]

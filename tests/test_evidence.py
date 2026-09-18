@@ -70,3 +70,15 @@ def test_snapshot_trace_evidence_copies_analysis_and_hashes_trace(tmp_path: Path
     assert result["files"][0]["published"] is False
     assert len(result["files"][0]["sha256"]) == 64
     assert (output_dir / "summary.json").read_text(encoding="utf-8") == "summary.json"
+
+
+def test_task_output_publication_is_explicit(tmp_path: Path) -> None:
+    raw = tmp_path / "raw"
+    raw.mkdir()
+    for name in ("manifest.json", "quality.json", "tasks_summary.json", "task_outputs.json"):
+        (raw / name).write_text("{}\n")
+    snapshot_evidence(raw, tmp_path / "default")
+    assert (tmp_path / "default/tasks_summary.json").is_file()
+    assert not (tmp_path / "default/task_outputs.json").exists()
+    snapshot_evidence(raw, tmp_path / "explicit", include_task_outputs=True)
+    assert (tmp_path / "explicit/task_outputs.json").is_file()
