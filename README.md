@@ -7,7 +7,7 @@ Profiling-driven optimization of quantized agentic LLM serving on the real SGLan
 
 This repository is the experiment and evidence layer for an upstream SGLang optimization
 project. It deliberately does **not** reimplement paging, radix caching, scheduling, or an LLM
-runtime. Runtime changes live as reviewable commits on a pinned SGLang fork; this repository
+runtime. Runtime changes live as reviewable patches against a pinned SGLang checkout; this repository
 owns workload definitions, launch configurations, profiling automation, result validation, and
 performance reports.
 
@@ -55,7 +55,7 @@ results/ and profiles/   ignored generated evidence
 ```mermaid
 flowchart LR
     C[Versioned model/profile/workload matrix] --> R[AgentPerf runner]
-    P[Pinned SGLang fork + patch series] --> R
+    P[Pinned SGLang checkout + patch series] --> R
     R --> S[SGLang server on GPU]
     S --> B[Serving benchmark]
     S --> Q[Prompt-NLL quality gate]
@@ -157,3 +157,12 @@ experiments require positive GPU-trace proof of execution. See
 The resulting FP16-reduction experiment did not improve the trace-relevant 8K workload and changed
 long-sequence outputs, so it was rejected. See
 [Optimization 002](docs/OPTIMIZATION_002_MARLIN_REDUCTION.md).
+
+The SM86 short-prefill INT8 GEMM candidate now has exact GPU correctness, quant-method fallback
+tests and positive serving-trace dispatch proof. Its first same-runtime three-round serving test
+improves 96-token input throughput by 5.02%, but only 0.73% at 128 tokens; it has **not** cleared
+the 10% serving gate. This distinction is preserved in
+[Optimization 004](docs/OPTIMIZATION_004_SM86_INT8_PREFILL.md).
+
+For a Chinese walkthrough of architecture, implementation ownership and interview questions, read
+[项目讲解与面试准备](docs/PROJECT_GUIDE.zh-CN.md).

@@ -1,0 +1,33 @@
+{
+  "command": [
+    "/opt/sglang/bin/python",
+    "-m",
+    "sglang.launch_server",
+    "--model-path",
+    "/data/models/Qwen3-8B-W8A8",
+    "--host",
+    "127.0.0.1",
+    "--port",
+    "30000",
+    "--dtype",
+    "float16",
+    "--mem-fraction-static",
+    "0.82",
+    "--quantization",
+    "w8a8_int8",
+    "--attention-backend",
+    "flashinfer",
+    "--enable-metrics",
+    "--enable-cache-report",
+    "--disable-radix-cache"
+  ],
+  "environment": {
+    "SGLANG_A10_INT8_PREFILL": "true",
+    "SGLANG_W8A8_FUSED_RMSNORM_QUANT": "false"
+  },
+  "harness_commit": "08b65e430d40dde84527fe9f1b6405a7fb52d513",
+  "upstream_worktree_commit": "997819a602cbd3fc251513023b20a0d9a460a285",
+  "script_sha256": "e7edf2b438331a62aa2ecd8d7105a0d35ef0285fe3abfa27a5e4dc6c1b58dbee",
+  "taskset_sha256": "827d56f048002e2b093e37947af3ce71b9b1bacd1f55301b8fc3ac632993d809",
+  "model": "qwen3_8b_w8a8"
+}

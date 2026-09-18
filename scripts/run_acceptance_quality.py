@@ -83,12 +83,13 @@ def main():
                 )
                 results = []
                 for task in tasks:
-                    ids = tokenizer.apply_chat_template(
+                    prompt = tokenizer.apply_chat_template(
                         [{"role": "user", "content": task["prompt"]}],
-                        tokenize=True,
+                        tokenize=False,
                         add_generation_prompt=True,
                         enable_thinking=False,
                     )
+                    ids = tokenizer.encode(prompt, add_special_tokens=False)
                     response = _post_json(
                         endpoint + "/generate",
                         {

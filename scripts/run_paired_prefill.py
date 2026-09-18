@@ -18,6 +18,7 @@ def main():
     parser.add_argument("--suite", choices=["short", "core", "proof"], default="short")
     parser.add_argument("--repetitions", type=int, default=3)
     parser.add_argument("--output-root", default="results/paired")
+    parser.add_argument("--prefill-backend", choices=["disabled", "breakable", "tc_piecewise"])
     args = parser.parse_args()
     config = copy.deepcopy(load_config(args.config))
     config["defaults"]["repetitions"] = 1
@@ -27,6 +28,11 @@ def main():
             "SGLANG_A10_INT8_PREFILL": enabled,
             "SGLANG_W8A8_FUSED_RMSNORM_QUANT": "false",
         }
+        if args.prefill_backend:
+            config["server_profiles"][profile]["args"] += [
+                "--cuda-graph-backend-prefill",
+                args.prefill_backend,
+            ]
     for length in (96, 128, 160):
         config["workloads"][f"short_prefill_{length}"] = {
             "dataset": "random-ids",

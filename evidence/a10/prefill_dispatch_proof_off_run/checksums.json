@@ -1,0 +1,37 @@
+{
+  "schema_version": 1,
+  "created_at": "2026-09-18T03:07:42.908333+00:00",
+  "source_run": "prefill_off",
+  "files": [
+    {
+      "name": "manifest.json",
+      "size_bytes": 16995,
+      "sha256": "05bee3c43a2186c36f52a1cbb04048e5fea3ab9c82f9acb2b0d7074e69ffca9b",
+      "published": true
+    },
+    {
+      "name": "qwen3_8b_w8a8__prefill_off__prefill_dispatch_proof__r1.jsonl",
+      "size_bytes": 38241,
+      "sha256": "cce1e16cebfc80521b647783654bcd4e9422b84c98df4e6e489bad5c6bcc46c2",
+      "published": false
+    },
+    {
+      "name": "qwen3_8b_w8a8__prefill_off__prefill_dispatch_proof__r1.log",
+      "size_bytes": 8103,
+      "sha256": "88e7662d8d88d411974332f9c823361d51ca102c504e7b7b57115910925e7850",
+      "published": false
+    },
+    {
+      "name": "server.log",
+      "size_bytes": 45475,
+      "sha256": "3b81690679948f00dfb6dbf89d5cef8fdf1d478b13fd0cb6da1369e2d97c7a8d",
+      "published": false
+    },
+    {
+      "name": "summary.csv",
+      "size_bytes": 817,
+      "sha256": "db1fa8932bfc4ff68b0ae3203c651f45e971fea1724b700cfecdffb92fc33236",
+      "published": true
+    }
+  ]
+}

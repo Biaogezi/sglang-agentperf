@@ -1,0 +1,302 @@
+[
+  {
+    "m": 96,
+    "n": 6144,
+    "k": 4096,
+    "exact_equal": true,
+    "samples_ms": {
+      "baseline": [
+        0.08217579385901594,
+        0.08337542490149667,
+        0.08328225180066587
+      ],
+      "prototype": [
+        0.07135931360081697,
+        0.07173425050444951,
+        0.07184867819191638
+      ],
+      "production": [
+        0.0697733474168239,
+        0.07030038296696967,
+        0.07013144647643957
+      ]
+    },
+    "medians_ms": {
+      "baseline": 0.08328225180066587,
+      "prototype": 0.07173425050444951,
+      "production": 0.07013144647643957
+    },
+    "states": [
+      {
+        "variant": "baseline",
+        "round": 0,
+        "gpu": "43, 1050 MHz, 144.68 W"
+      },
+      {
+        "variant": "prototype",
+        "round": 0,
+        "gpu": "45, 1275 MHz, 147.64 W"
+      },
+      {
+        "variant": "production",
+        "round": 0,
+        "gpu": "46, 1245 MHz, 149.36 W"
+      },
+      {
+        "variant": "prototype",
+        "round": 1,
+        "gpu": "48, 1335 MHz, 149.45 W"
+      },
+      {
+        "variant": "production",
+        "round": 1,
+        "gpu": "49, 1125 MHz, 148.91 W"
+      },
+      {
+        "variant": "baseline",
+        "round": 1,
+        "gpu": "50, 1035 MHz, 150.16 W"
+      },
+      {
+        "variant": "production",
+        "round": 2,
+        "gpu": "52, 1125 MHz, 143.21 W"
+      },
+      {
+        "variant": "baseline",
+        "round": 2,
+        "gpu": "52, 1245 MHz, 149.55 W"
+      },
+      {
+        "variant": "prototype",
+        "round": 2,
+        "gpu": "54, 1125 MHz, 148.90 W"
+      }
+    ]
+  },
+  {
+    "m": 96,
+    "n": 24576,
+    "k": 4096,
+    "exact_equal": true,
+    "samples_ms": {
+      "baseline": [
+        0.34681524743236625,
+        0.34933037552179075,
+        0.35395904089739055
+      ],
+      "prototype": [
+        0.2585914611816406,
+        0.2586823518836573,
+        0.2620835563866639
+      ],
+      "production": [
+        0.2562252207888132,
+        0.2567710789993938,
+        0.25800804708036845
+      ]
+    },
+    "medians_ms": {
+      "baseline": 0.34933037552179075,
+      "prototype": 0.2586823518836573,
+      "production": 0.2567710789993938
+    },
+    "states": [
+      {
+        "variant": "baseline",
+        "round": 0,
+        "gpu": "55, 990 MHz, 150.33 W"
+      },
+      {
+        "variant": "prototype",
+        "round": 0,
+        "gpu": "55, 1185 MHz, 146.10 W"
+      },
+      {
+        "variant": "production",
+        "round": 0,
+        "gpu": "56, 930 MHz, 142.92 W"
+      },
+      {
+        "variant": "prototype",
+        "round": 1,
+        "gpu": "57, 915 MHz, 149.78 W"
+      },
+      {
+        "variant": "production",
+        "round": 1,
+        "gpu": "57, 900 MHz, 150.01 W"
+      },
+      {
+        "variant": "baseline",
+        "round": 1,
+        "gpu": "58, 825 MHz, 149.99 W"
+      },
+      {
+        "variant": "production",
+        "round": 2,
+        "gpu": "59, 930 MHz, 149.86 W"
+      },
+      {
+        "variant": "baseline",
+        "round": 2,
+        "gpu": "59, 885 MHz, 149.81 W"
+      },
+      {
+        "variant": "prototype",
+        "round": 2,
+        "gpu": "59, 1020 MHz, 148.96 W"
+      }
+    ]
+  },
+  {
+    "m": 128,
+    "n": 6144,
+    "k": 4096,
+    "exact_equal": true,
+    "samples_ms": {
+      "baseline": [
+        0.08926276354344029,
+        0.08967136338932907,
+        0.08848133713893717
+      ],
+      "prototype": [
+        0.0770653602246199,
+        0.07717005320581896,
+        0.07657883513207529
+      ],
+      "production": [
+        0.07719670499856479,
+        0.07737451623987268,
+        0.07639963979306429
+      ]
+    },
+    "medians_ms": {
+      "baseline": 0.08926276354344029,
+      "prototype": 0.0770653602246199,
+      "production": 0.07719670499856479
+    },
+    "states": [
+      {
+        "variant": "baseline",
+        "round": 0,
+        "gpu": "59, 1200 MHz, 149.25 W"
+      },
+      {
+        "variant": "prototype",
+        "round": 0,
+        "gpu": "60, 1140 MHz, 148.47 W"
+      },
+      {
+        "variant": "production",
+        "round": 0,
+        "gpu": "60, 1110 MHz, 149.44 W"
+      },
+      {
+        "variant": "prototype",
+        "round": 1,
+        "gpu": "61, 1020 MHz, 148.79 W"
+      },
+      {
+        "variant": "production",
+        "round": 1,
+        "gpu": "60, 1245 MHz, 150.04 W"
+      },
+      {
+        "variant": "baseline",
+        "round": 1,
+        "gpu": "61, 1110 MHz, 149.58 W"
+      },
+      {
+        "variant": "production",
+        "round": 2,
+        "gpu": "61, 1050 MHz, 148.70 W"
+      },
+      {
+        "variant": "baseline",
+        "round": 2,
+        "gpu": "61, 1005 MHz, 150.04 W"
+      },
+      {
+        "variant": "prototype",
+        "round": 2,
+        "gpu": "61, 1095 MHz, 144.46 W"
+      }
+    ]
+  },
+  {
+    "m": 128,
+    "n": 24576,
+    "k": 4096,
+    "exact_equal": true,
+    "samples_ms": {
+      "baseline": [
+        0.3817162014627994,
+        0.3848311131543452,
+        0.384876693281818
+      ],
+      "prototype": [
+        0.2806267733250203,
+        0.2808167482186706,
+        0.2810830999979752
+      ],
+      "production": [
+        0.28007317626953127,
+        0.28068728964098727,
+        0.280185826907803
+      ]
+    },
+    "medians_ms": {
+      "baseline": 0.3848311131543452,
+      "prototype": 0.2808167482186706,
+      "production": 0.280185826907803
+    },
+    "states": [
+      {
+        "variant": "baseline",
+        "round": 0,
+        "gpu": "61, 1125 MHz, 149.46 W"
+      },
+      {
+        "variant": "prototype",
+        "round": 0,
+        "gpu": "62, 1050 MHz, 149.58 W"
+      },
+      {
+        "variant": "production",
+        "round": 0,
+        "gpu": "61, 1080 MHz, 150.21 W"
+      },
+      {
+        "variant": "prototype",
+        "round": 1,
+        "gpu": "62, 840 MHz, 149.94 W"
+      },
+      {
+        "variant": "production",
+        "round": 1,
+        "gpu": "62, 900 MHz, 142.74 W"
+      },
+      {
+        "variant": "baseline",
+        "round": 1,
+        "gpu": "62, 855 MHz, 149.76 W"
+      },
+      {
+        "variant": "production",
+        "round": 2,
+        "gpu": "62, 1020 MHz, 148.17 W"
+      },
+      {
+        "variant": "baseline",
+        "round": 2,
+        "gpu": "62, 1050 MHz, 150.05 W"
+      },
+      {
+        "variant": "prototype",
+        "round": 2,
+        "gpu": "62, 855 MHz, 149.95 W"
+      }
+    ]
+  }
+]
