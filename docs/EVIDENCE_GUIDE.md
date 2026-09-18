@@ -62,3 +62,20 @@ The seven-patch source tree is verified separately with `scripts/check_patch_ser
 Performance and quality launches retain executed-source fingerprints even when the GPU host's
 Git commit ID differs from the public documentation commit. Later offline audit/publishing edits
 do not change the runtime that produced the retained measurements.
+
+`audit_paired_run.py` checks executed source hashes, matching server and benchmark commands
+(ignoring only the output filename), dataset hashes, workload definitions, and all environment
+settings except the explicitly checked OFF/ON candidate switches. It also requires all expected
+requests, fixed token lengths and matching repetitions. This is a comparability/completion audit,
+not a performance or model-quality acceptance gate; generated-text differences remain visible.
+
+For shared-prefix runs, `scripts/summarize_cache_states.py RUN_DIR` writes per-run descriptive
+TTFT for requests with zero versus positive reported cached tokens. These groups are observed
+inside a queueing workload, not randomized cold/warm controls. In particular, a small zero-cache
+group does not establish a reliable population p99, and positive cache counts need not represent
+a fully cached prompt. When present, `cache_states.json` is included in evidence snapshots.
+
+The trace interval-union calculation uses the latest GPU event **end**, not merely the end of
+the last-starting event. A nested multi-stream regression test covers this boundary. The twelve
+raw traces retained when this edge-case fix was added had identical endpoints under both methods;
+previously published trace numbers therefore did not change.

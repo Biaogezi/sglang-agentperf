@@ -60,7 +60,8 @@ def _gpu_activity(events: list[dict[str, Any]]) -> dict[str, float | int]:
         else:
             merged[-1][1] = max(merged[-1][1], end)
     active_us = sum(end - start for start, end in merged)
-    span_us = intervals[-1][1] - intervals[0][0]
+    # The last-starting event need not be the last-ending event (multiple streams).
+    span_us = merged[-1][1] - merged[0][0]
     return {
         "events": len(intervals),
         "span_ms": span_us / 1000,

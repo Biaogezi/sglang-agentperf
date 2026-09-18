@@ -6,6 +6,30 @@ import pytest
 from agentperf.report import check_run_equivalence, compare_summaries, summarize_run
 
 
+def test_cache_stratification_is_per_observed_state() -> None:
+    from agentperf.report import stratify_cache_states
+
+    record = {
+        "completed": 3,
+        "cached_tokens": [0, 1, 4096],
+        "ttfts": [1, 0.1, 0.2],
+        "errors": ["", "", ""],
+    }
+    groups = stratify_cache_states(record)
+    assert groups["zero_cached_tokens"]["requests"] == 1
+    assert groups["positive_cached_tokens"]["requests"] == 2
+    assert groups["positive_cached_tokens"]["ttft_p50_ms"] == 150
+    assert groups["positive_cached_tokens"]["ttft_p99_ms"] == pytest.approx(199)
+    record["cached_tokens"] = [0, 0, 0]
+    assert stratify_cache_states(record)["positive_cached_tokens"]["ttft_p99_ms"] is None
+    record["ttfts"][0] = float("nan")
+    with pytest.raises(ValueError):
+        stratify_cache_states(record)
+    record["ttfts"] = []
+    with pytest.raises(ValueError):
+        stratify_cache_states(record)
+
+
 def test_summarize_repetitions(tmp_path: Path) -> None:
     for repetition, throughput in enumerate((100.0, 110.0, 120.0), start=1):
         record = {
@@ -116,6 +140,15 @@ def test_paired_audit_requires_matching_sources_and_all_requests(tmp_path: Path)
                 {
                     "repetition": 1,
                     "manifest": {
+                        "model": "m",
+                        "suite": "short",
+                        "server_command": ["python", "server", "--model", "m"],
+                        "server_environment": {
+                            "SGLANG_A10_INT8_PREFILL": "true" if arm == "prefill_on" else "false",
+                            "SGLANG_W8A8_FUSED_RMSNORM_QUANT": "false",
+                        },
+                        "benchmark_commands": [["bench", "--output-file", f"{arm}/output.jsonl"]],
+                        "dataset_files_sha256": {},
                         "source_files_sha256": {"runtime_candidate": {"kernel.py": "same"}},
                         "cases": [{"case_id": f"m__{arm}__work__r1", "workload": "work"}],
                         "config": {
@@ -165,6 +198,29 @@ def test_paired_audit_requires_matching_sources_and_all_requests(tmp_path: Path)
     assert any("Paired output" in failure for failure in audit["failures"])
     output.write_text(original)
     path = tmp_path / "prefill_on/manifest.json"
+    original_manifest = path.read_text()
+    for field, changed in (
+        ("server_command", ["python", "server", "--different-graph-config"]),
+        ("benchmark_commands", [["bench", "--different-seed", "123"]]),
+        ("dataset_files_sha256", {"trace.json": "changed"}),
+        (
+            "server_environment",
+            {
+                "SGLANG_A10_INT8_PREFILL": "true",
+                "SGLANG_W8A8_FUSED_RMSNORM_QUANT": "false",
+                "UNRELATED_SWITCH": "true",
+            },
+        ),
+    ):
+        bad = json.loads(original_manifest)
+        bad["launches"][0]["manifest"][field] = changed
+        path.write_text(json.dumps(bad))
+        result = audit_paired_run(tmp_path, minimum_repetitions=1)
+        assert not result["passed"]
+        assert (
+            "Controlled commands, workloads, datasets or environment differ" in result["failures"]
+        )
+    path.write_text(original_manifest)
     bad = json.loads(path.read_text())
     bad["launches"][0]["manifest"]["source_files_sha256"]["runtime_candidate"] = {"k": "changed"}
     path.write_text(json.dumps(bad))

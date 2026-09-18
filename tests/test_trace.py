@@ -4,7 +4,7 @@ from pathlib import Path
 
 import pytest
 
-from agentperf.trace import analyze_trace
+from agentperf.trace import _gpu_activity, analyze_trace
 
 
 def test_analyze_trace_aggregates_kernels_and_gpu_idle(tmp_path: Path) -> None:
@@ -32,3 +32,11 @@ def test_analyze_trace_aggregates_kernels_and_gpu_idle(tmp_path: Path) -> None:
     assert summary["gpu_activity"]["active_ms"] == pytest.approx(0.2)
     assert summary["gpu_activity"]["idle_pct"] == pytest.approx(100 / 3)
     assert (tmp_path / "out" / "kernels.csv").exists()
+
+
+def test_gpu_span_uses_latest_end_not_latest_start() -> None:
+    events = [
+        {"ph": "X", "cat": "kernel", "ts": 0, "dur": 1000},
+        {"ph": "X", "cat": "gpu_memcpy", "ts": 500, "dur": 100},
+    ]
+    assert _gpu_activity(events) == {"events": 2, "span_ms": 1.0, "active_ms": 1.0, "idle_pct": 0.0}

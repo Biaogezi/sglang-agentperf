@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import csv
 import json
+import math
 import re
 import statistics
 from collections import defaultdict
@@ -93,6 +94,39 @@ def read_cache_hit_rate(path: Path) -> float | None:
         return None
     matches = CACHE_HIT_RATE.findall(path.read_text(encoding="utf-8", errors="replace"))
     return float(matches[-1]) / 100 if matches else None
+
+
+def stratify_cache_states(record: dict[str, Any]) -> dict[str, Any]:
+    """Per-run descriptive TTFT; do not infer a causal cache benefit from this split."""
+    count = record.get("completed", 0)
+    fields = [record.get(key, []) for key in ("cached_tokens", "ttfts", "errors")]
+    if count < 1 or any(len(values) != count for values in fields) or any(fields[2]):
+        raise ValueError("Cache analysis requires complete successful request arrays")
+    cached, ttfts, _ = fields
+    if any(not isinstance(n, int) or n < 0 for n in cached) or any(
+        not isinstance(t, (int, float)) or not math.isfinite(t) or t < 0 for t in ttfts
+    ):
+        raise ValueError("Invalid cache counts or TTFT")
+
+    def percentile(values: list[float], fraction: float) -> float | None:
+        if not values:
+            return None
+        ordered = sorted(values)
+        position = (len(ordered) - 1) * fraction
+        lower = int(position)
+        upper = min(lower + 1, len(ordered) - 1)
+        return ordered[lower] + (position - lower) * (ordered[upper] - ordered[lower])
+
+    result = {}
+    for name, positive in (("zero_cached_tokens", False), ("positive_cached_tokens", True)):
+        times = [1000 * t for n, t in zip(cached, ttfts, strict=True) if (n > 0) == positive]
+        result[name] = {
+            "requests": len(times),
+            "ttft_mean_ms": statistics.fmean(times) if times else None,
+            "ttft_p50_ms": percentile(times, 0.5),
+            "ttft_p99_ms": percentile(times, 0.99),
+        }
+    return result
 
 
 def summarize_run(run_dir: Path, output_csv: Path) -> list[dict[str, Any]]:
@@ -260,6 +294,8 @@ def audit_paired_run(root: Path, *, minimum_repetitions: int = 3) -> dict[str, A
     """Reject incomplete, mixed-source or failed-request paired experiments."""
     failures = []
     source_ids = set()
+    control_ids = set()
+    switch_names = {"SGLANG_A10_INT8_PREFILL", "SGLANG_W8A8_FUSED_RMSNORM_QUANT"}
     successful = 0
     workloads: dict[str, set[tuple[str, int]]] = {}
     for profile in ("prefill_off", "prefill_on"):
@@ -269,9 +305,53 @@ def audit_paired_run(root: Path, *, minimum_repetitions: int = 3) -> dict[str, A
         if len(repetitions) < minimum_repetitions or len(set(repetitions)) != len(repetitions):
             failures.append(f"{profile}: insufficient or duplicate repetitions")
         expected_files = set()
+        arm_switches = set()
         workloads[profile] = set()
         for launch in launches:
             manifest = launch["manifest"]
+            required_controls = (
+                "model",
+                "suite",
+                "server_command",
+                "server_environment",
+                "benchmark_commands",
+                "dataset_files_sha256",
+            )
+            if any(key not in manifest for key in required_controls):
+                failures.append(f"{profile}: missing command/environment/dataset controls")
+            benchmark_commands = []
+            for command in manifest.get("benchmark_commands", []):
+                command = list(command)
+                if "--output-file" in command:
+                    command[command.index("--output-file") + 1] = "<run-output>"
+                benchmark_commands.append(command)
+            environment = manifest.get("server_environment", {})
+            switches = {key: environment.get(key) for key in sorted(switch_names)}
+            arm_switches.add(json.dumps(switches, sort_keys=True))
+            if (
+                any(value not in ("true", "false") for value in switches.values())
+                or (
+                    profile == "prefill_off"
+                    and any(value != "false" for value in switches.values())
+                )
+                or (profile == "prefill_on" and all(value != "true" for value in switches.values()))
+            ):
+                failures.append(f"{profile}: invalid OFF/ON candidate switches")
+            controls = {
+                "model": manifest.get("model"),
+                "suite": manifest.get("suite"),
+                "server_command": manifest.get("server_command"),
+                "server_environment": {
+                    key: value for key, value in environment.items() if key not in switch_names
+                },
+                "benchmark_commands": benchmark_commands,
+                "dataset_files_sha256": manifest.get("dataset_files_sha256"),
+                "workloads": {
+                    case["workload"]: manifest["config"]["workloads"][case["workload"]]
+                    for case in manifest["cases"]
+                },
+            }
+            control_ids.add(json.dumps(controls, sort_keys=True))
             fingerprint = manifest.get("source_files_sha256")
             if not fingerprint or not fingerprint.get("runtime_candidate"):
                 failures.append(f"{profile}: missing executed-source fingerprints")
@@ -319,8 +399,12 @@ def audit_paired_run(root: Path, *, minimum_repetitions: int = 3) -> dict[str, A
                     failures.append(f"{name}: fixed output token lengths differ")
         if expected_files != {path.name for path in directory.glob("*.jsonl")}:
             failures.append(f"{profile}: unexpected or missing output files")
+        if len(arm_switches) != 1:
+            failures.append(f"{profile}: candidate switches change across repetitions")
     if len(source_ids) != 1:
         failures.append("Executed source bytes differ across OFF/ON launches")
+    if len(control_ids) != 1:
+        failures.append("Controlled commands, workloads, datasets or environment differ")
     if workloads["prefill_off"] != workloads["prefill_on"]:
         failures.append("OFF/ON workload repetitions differ")
     equivalence = check_run_equivalence(root / "prefill_off", root / "prefill_on")

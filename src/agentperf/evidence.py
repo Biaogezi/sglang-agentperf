@@ -34,6 +34,8 @@ def snapshot_evidence(
         if include_task_outputs:
             optional.append("task_outputs.json")
         aggregate_names += [name for name in optional if (run_dir / name).is_file()]
+    if "summary.csv" in aggregate_names and (run_dir / "cache_states.json").is_file():
+        aggregate_names.append("cache_states.json")
 
     required = [run_dir / "manifest.json", *(run_dir / name for name in aggregate_names)]
     missing = [str(path) for path in required if not path.is_file()]
