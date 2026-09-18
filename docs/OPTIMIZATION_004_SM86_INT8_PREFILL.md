@@ -64,9 +64,16 @@ python scripts/run_paired_prefill.py --suite short --repetitions 3
 ```
 
 Profiling and quality are separate from performance runs; never combine their timing data.
-### First three-round serving result (default breakable prefill graph)
+### First three-round serving result (text round-trip, not fixed token shapes)
 
-| Input tokens | OFF input tok/s, mean ± sample SD | ON input tok/s, mean ± sample SD | Throughput change | p99 TTFT OFF → ON |
+**Protocol correction:** `random-ids` returns decoded text unless `--tokenize-prompt` is passed.
+Server re-tokenization changed the actual lengths (for example, nominal 160-token inputs reached
+208 tokens). Therefore the rows below label **nominal dataset lengths**, and input tok/s counts
+are nominal. Relative request-throughput comparisons remain observations of the same text set,
+but these are not fixed-M tests and cannot establish the target kernel's shape-specific efficacy.
+The corrected protocol sends native token IDs and repeats the measurements separately.
+
+| Nominal input tokens | OFF nominal input tok/s, mean ± sample SD | ON nominal input tok/s, mean ± sample SD | Throughput change | p99 TTFT OFF → ON |
 |---|---:|---:|---:|---:|
 | 96 | 2215.95 ± 9.57 | 2327.29 ± 2.08 | +5.02% | 48.277 → 48.246 ms |
 | 128 | 2440.59 ± 8.87 | 2458.40 ± 2.06 | +0.73% | 55.268 → 55.523 ms |
@@ -74,7 +81,7 @@ Profiling and quality are separate from performance runs; never combine their ti
 
 All 2,880 measured requests completed (3 shapes × 160 requests × 3 repetitions × 2 modes),
 and all nine paired generated-output records matched exactly. The candidate **does not clear
-the 10% serving-throughput gate on this configuration**. Keep it default-off while investigating
+the 10% serving-throughput gate on this text-round-trip configuration**. Keep it default-off while investigating
 the microbenchmark/serving gap; these are not 38% end-to-end gains.
 
 Both modes use upstream worktree commit `997819a602` on the GPU machine. Harness commit IDs

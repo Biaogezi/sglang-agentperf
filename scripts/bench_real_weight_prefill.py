@@ -33,7 +33,8 @@ def main():
         "gate_up": ["mlp.gate_proj", "mlp.up_proj"],
     }.items():
         b = torch.cat([load(f"model.layers.0.{name}.weight") for name in names]).t()
-        sb = torch.cat([load(f"model.layers.0.{name}.weight_scale") for name in names])
+        # The loader stores channel scales in FP32 even when the checkpoint uses BF16.
+        sb = torch.cat([load(f"model.layers.0.{name}.weight_scale") for name in names]).float()
         for m in (96, 128):
             a, sa = per_token_quant_int8(torch.randn((m, 4096), dtype=torch.float16, device="cuda"))
             baseline = partial(int8_scaled_mm, a, b, sa, sb, torch.float16)

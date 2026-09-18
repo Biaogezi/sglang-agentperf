@@ -160,7 +160,8 @@ long-sequence outputs, so it was rejected. See
 
 The SM86 short-prefill INT8 GEMM candidate now has exact GPU correctness, quant-method fallback
 tests and positive serving-trace dispatch proof. Its first same-runtime three-round serving test
-improves 96-token input throughput by 5.02%, but only 0.73% at 128 tokens; it has **not** cleared
+improves nominal 96-token text-workload throughput by 5.02%, but only 0.73% at nominal 128;
+that dataset decoded/re-tokenized inputs and was not fixed-shape. It has **not** cleared
 the 10% serving gate. This distinction is preserved in
 [Optimization 004](docs/OPTIMIZATION_004_SM86_INT8_PREFILL.md).
 

@@ -40,6 +40,7 @@ def main():
             "max_concurrency": 1,
             "request_rate": "inf",
             "args": [
+                "--tokenize-prompt",
                 "--random-input-len",
                 str(length),
                 "--random-output-len",
