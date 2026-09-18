@@ -1,0 +1,61 @@
+{
+  "schema_version": 1,
+  "created_at": "2026-09-18T07:50:45.297807+00:00",
+  "source_run": "prefill_on",
+  "files": [
+    {
+      "name": "manifest.json",
+      "size_bytes": 74217,
+      "sha256": "c12aa991157e82b7a2fb0a3c9531ca9c2326b4002df3a60720cc6854f2b0b2dd",
+      "published": true
+    },
+    {
+      "name": "qwen3_8b_w8a8__prefill_on__decode_128_128_c128__r1.jsonl",
+      "size_bytes": 2231307,
+      "sha256": "258cbffb265d15f72c63805b54b637606eae9e2b7c6ffd96a8b85e1173744f67",
+      "published": false
+    },
+    {
+      "name": "qwen3_8b_w8a8__prefill_on__decode_128_128_c128__r1.log",
+      "size_bytes": 7510,
+      "sha256": "96654a86d3549fff6cc8c3289eb344072cf47524babdf561ca020f3c27766ed6",
+      "published": false
+    },
+    {
+      "name": "qwen3_8b_w8a8__prefill_on__decode_128_128_c128__r2.jsonl",
+      "size_bytes": 2230953,
+      "sha256": "f4c48e3296cd44a71b00fd1bfdd7fb7989ea5a7d037ec86e2ef9ebc1cc6265f8",
+      "published": false
+    },
+    {
+      "name": "qwen3_8b_w8a8__prefill_on__decode_128_128_c128__r2.log",
+      "size_bytes": 7382,
+      "sha256": "a22e086618ae858bf59d8ba83baeb4793410d2e780daabb3e1cefdab2a4e5c2e",
+      "published": false
+    },
+    {
+      "name": "qwen3_8b_w8a8__prefill_on__decode_128_128_c128__r3.jsonl",
+      "size_bytes": 2230637,
+      "sha256": "27cf12787dd41194aece98f952753846ed20000d6fe14a935cebaebfedc203f5",
+      "published": false
+    },
+    {
+      "name": "qwen3_8b_w8a8__prefill_on__decode_128_128_c128__r3.log",
+      "size_bytes": 7434,
+      "sha256": "c95952ccf057b61c4b026c06c8683b368e10b135dc5cbe4c9da0fb9b9d3cff9d",
+      "published": false
+    },
+    {
+      "name": "server.log",
+      "size_bytes": 313901,
+      "sha256": "6088be670d427cead7bf9e613669c5c362d7d4de30188772f3747eaf81d6dcda",
+      "published": false
+    },
+    {
+      "name": "summary.csv",
+      "size_bytes": 989,
+      "sha256": "1ce9f8c021d03a6c099b4bdd946c9d175ec9bf9b5378a3fbb397e33f0a503416",
+      "published": true
+    }
+  ]
+}

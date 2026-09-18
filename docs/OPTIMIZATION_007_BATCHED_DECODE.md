@@ -1,7 +1,8 @@
 # Optimization 007 — test the shape guard under saturated short-context decode
 
-Status: default-coverage screen has no gain; graph128 screen shows +6.96%, below the 10% gate.
-Independent three-repeat graph128 validation and diagnostic traces are in progress.
+Status: three-repeat graph128 validation shows +7.40% throughput, below the unchanged 10% gate.
+This is a reproducible secondary result, not an accepted broad decode speedup. Diagnostic traces
+are collected separately from performance measurements.
 
 The candidate is named short-prefill GEMM, but dispatch is based on matrix rows, not forward
 mode. A decode step with 80..128 token rows has the same supported QKV/gate-up dimensions.
@@ -82,3 +83,22 @@ configuration-performance result. Public snapshots: `batch_graph128_screen_off/o
 
 Three independent alternating graph128 pairs are run next, **without mixing in the screening
 pair or changing the gate**. Separate default-coverage and graph128 traces are diagnostic only.
+
+## Independent three-repeat graph128 result
+
+Run `20260918T073808Z__batch_decode`, AB/BA/AB server restarts, same runtime and 640 requests
+per arm/repetition. All 3,840 requests complete with 128 output tokens and no recorded KV
+retractions; source/command/workload comparability audit passes.
+
+| Metric | OFF, mean ± sample SD | ON, mean ± sample SD | Change |
+|---|---:|---:|---:|
+| Output tok/s | 2454.395 ± 19.666 | 2636.012 ± 4.273 | +7.400% |
+| Per-run p99 TTFT (ms) | 2287.693 ± 17.248 | 2279.409 ± 9.137 | -0.362% |
+| Per-run p99 TPOT (ms) | 50.866 ± 0.713 | 47.313 ± 0.072 | -6.985% |
+
+Paired text matches are 629/640, 631/640 and 629/640 (1,889/1,920 total), not universal
+bitwise/text equivalence. No throughput or tail-latency threshold is lowered after this result.
+The short-prefill acceptance remains separate. The original default-coverage result has only
+one pair, so this is not a three-repeat difference-in-differences study of graph configuration.
+Public summaries and per-request arrays: `final_batch_graph128_off/on` and
+`final_batch_graph128_requests_off/on`. Screening data is retained, not mixed into the table.

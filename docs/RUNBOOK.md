@@ -168,3 +168,24 @@ The GEMM-only ON trace should contain `_int8_prefill` but not the custom norm-fu
 Do not use its profiled latency as a performance result. Raw files live in `results/`, `quality/`
 and `profiles/`; copy them to durable storage before releasing a rented instance. `evidence/`
 contains compact public results and hashes, not all raw traces or model weights.
+
+## 9. Decode graph coverage control
+
+The default A10 decode capture list stops at batch 24 in these launches. For the saturated
+128-input/128-output/concurrency-128 workload, measure the custom switch under the **same**
+expanded graph coverage on both arms:
+
+```bash
+bash scripts/container_shell.sh python scripts/run_paired_prefill.py --suite batch_decode --candidate gemm --decode-graph-max-bs 128 --repetitions 3
+```
+
+Keep the 640-request workload, memory fraction and KV capacity. Inspect actual `Decode batch`
+logs for graph use instead of trusting the launch flag. The final three-pair gain is 7.40%, below
+the pre-registered 10% throughput gate; this is a secondary result, not the primary acceptance.
+
+Collect separate diagnostics, never include these timings in the performance mean:
+
+```bash
+bash scripts/container_shell.sh python scripts/run_paired_prefill.py --suite batch_decode --candidate gemm --repetitions 1 --trace-start-step 100 --trace-steps 20
+bash scripts/container_shell.sh python scripts/run_paired_prefill.py --suite batch_decode --candidate gemm --decode-graph-max-bs 128 --repetitions 1 --trace-start-step 100 --trace-steps 20
+```
