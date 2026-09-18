@@ -1,6 +1,9 @@
 # Optimization 004 — SM86 shape-gated INT8 prefill GEMM
 
-Status: runtime integration and correctness passed; serving acceptance in progress.
+Status: accepted for the final latency-controlled 128-input/1-output/concurrency-one regime
+(+13.15% throughput); see [Optimization 006](OPTIMIZATION_006_LATENCY_CONTROL.md) and the
+[final report](FINAL_REPORT.zh-CN.md). The entries below preserve the earlier tuning history,
+including invalid protocols and below-gate results; they are not one combined experiment.
 
 ## Hypothesis and scope
 

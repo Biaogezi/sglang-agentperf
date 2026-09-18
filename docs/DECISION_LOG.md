@@ -96,3 +96,21 @@ criterion. Add the trace evidence and decision here before coding the patch.
   throughput measurements as a quality/performance trade-off, not accepted lossless acceleration.
 - Preserve original synthetic task answers and score arithmetic, JSON and retrieval separately.
 - Keep final source acceptance separate from checkpoint-format selection.
+
+## 2026-09-18 — Accept the narrow final GEMM operating point
+
+- Freeze runtime tree `bb70ae7f8fb7cede92b8655fbc503aeb5c42bcbd`; keep norm fusion OFF.
+- Both arms use the existing no-overlap setting, native 128-input IDs, one generated token and
+  concurrency one. Three alternating pairs give 4143.97→4688.91 input tok/s (+13.15%).
+- All 2,880 short-suite requests complete with exact paired text agreement. The separate final
+  trace proves 360 custom GEMMs over five EXTEND steps, versus zero in the OFF arm.
+- Same-weight 8,128-token NLL delta is +8.466e-7; all 40 task texts match with no lost correct
+  tasks. Final-tree FP16 reference remains 2.94421470038021.
+- The 32-output case gains only 0.27% at 128 input tokens. Core throughput changes are within
+  ±0.3%; shared-prefix texts are not all equal, and OFF/OFF repetitions also vary.
+- All 576 multi-turn requests complete, but some replies and therefore later histories differ.
+  There is no meaningful agent replay speedup. Exclude invalid upstream multi-turn input metrics.
+- Decision: accept **only** the measured short-prefill scope under the original 10% throughput
+  gate. Keep the feature default-off and explicitly disclose the deployment/data limitations.
+- High-batch graph-coverage investigation is separate and cannot expand this claim without
+  its own repeated evidence. See Optimization 007 for its screening and validation record.

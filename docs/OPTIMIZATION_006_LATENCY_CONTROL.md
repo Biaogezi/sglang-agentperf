@@ -1,6 +1,7 @@
 # Optimization 006 — account for scheduler overlap in low-concurrency latency
 
-Status: latency-tuned GEMM candidate clears the throughput gate; final-release regression pending.
+Status: final-source short-prefill acceptance passed; 32-output/core/multi-turn regressions complete.
+The accepted claim remains the scoped short-prefill result, not arbitrary decode/agent acceleration.
 
 The combined-kernel execution-proof trace contains three `EXTEND bs=1 toks=128` and
 two `DECODE bs=1` steps even though that workload requests only one output token.
@@ -54,7 +55,8 @@ The 128-token case clears the **unchanged 10% throughput gate**. This is not a 1
 for arbitrary prompts, concurrency or long generation, and the latency reduction itself is below
 the separate 15% tail-latency gate. The original default-overlap 128-token GEMM result was ~7.9%.
 Do not add the upstream configuration benefit to the custom-kernel gain. Final source hardening,
-32-output-token, mixed/core, and multi-turn checks remain separate acceptance work.
+32-output-token, core, and multi-turn checks were performed separately, as recorded below and
+in the final report; the first result alone was not the final release decision.
 
 ## Final source retest
 
