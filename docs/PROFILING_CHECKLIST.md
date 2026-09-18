@@ -18,7 +18,15 @@
 - Hot-kernel or CPU-region table.
 - Unit tests and one-batch correctness test.
 - Online serving metrics with three repetitions.
-- Peak HBM comparison.
+- HBM comparison with measurement method: the current runner retains one-second NVML samples,
+  so report sampled maximum whole-device memory, not an exact allocator/instantaneous peak.
 - Quality regression result when numerics changed.
 - Explanation of losing shapes or workloads, not only winning cases.
 
+## What this release actually collected
+
+The release contains PyTorch CPU/GPU traces, SGLang step annotations, kernel aggregates,
+serving JSONL/logs, compiled PTX metadata and one-second NVML telemetry. Nsight Systems and
+Nsight Compute remain available follow-up tools, not completed measurements. Do not describe
+kernel-duration percentages as roofline utilization or measured memory-bandwidth saturation.
+The Nsight triage items above are a checklist, not proof that every item was executed.

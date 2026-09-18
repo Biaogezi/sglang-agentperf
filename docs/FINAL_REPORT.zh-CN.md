@@ -51,6 +51,8 @@ kernel 使用 128×128×128 tile、4 warps、3 stages、INT32 MMA 累加，在 e
 运行 `20260918T044732Z__short`，三轮 AB/BA/AB 服务重启、每轮预热；每个输入长度 160 请求、
 并发 1、输出 1 token；使用 native token IDs，不做 text roundtrip。两边同样关闭上游 overlap
 scheduler，CUDA Graph 保持启用，Norm 融合关闭。这个已有调度开关不是本项目发明的优化。
+这条服务路径包含 HTTP、调度、模型执行及返回，但绕过文本 tokenizer，不代表完整聊天文本链路
+各环节都获得同样加速。
 
 | 输入 tokens | OFF input tok/s，均值 ± 样本 SD | ON input tok/s，均值 ± 样本 SD | 吞吐变化 | 各轮 p99 TTFT 均值，OFF → ON |
 |---|---:|---:|---:|---:|
@@ -96,6 +98,8 @@ greedy 输出相等只证明这个小测试集上的表现，不代表广泛推�
 没有丢失原来正确的题。两边均为 JSON 16/16、检索 8/8、严格算术格式 0/16。ON 对 FP16
 参考的 NLL delta 为 +0.00487721，指数化 NLL 相对增加约 0.489%，通过 checkpoint 质量门槛。
 公开数据与原始合成任务回答在 `evidence/a10/final_quality_off/`、`final_quality_on/`。
+其中固定 128-token NLL 窗口覆盖候选形状；短 JSON/算术及长检索主要验证回退/全模型集成。
+不能把 40 条任务输出一致单独当作新 kernel 被测到的证明，实际执行另由 GPU trace 确认。
 
 ## 6. 回归矩阵
 
