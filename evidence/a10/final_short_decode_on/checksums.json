@@ -1,0 +1,133 @@
+{
+  "schema_version": 1,
+  "created_at": "2026-09-18T06:36:26.701901+00:00",
+  "source_run": "prefill_on",
+  "files": [
+    {
+      "name": "manifest.json",
+      "size_bytes": 79416,
+      "sha256": "b188ee06acf4516a6722c49f3413001b5ff238b71abfadef3dafa1f8babd8c0e",
+      "published": true
+    },
+    {
+      "name": "qwen3_8b_w8a8__prefill_on__short_decode_128__r1.jsonl",
+      "size_bytes": 107216,
+      "sha256": "3954ade9cf770d52ec92dd78cee69145fc5b9d38651c5dff65a79ecb83d18954",
+      "published": false
+    },
+    {
+      "name": "qwen3_8b_w8a8__prefill_on__short_decode_128__r1.log",
+      "size_bytes": 11587,
+      "sha256": "327deeaa1a3f3e1ac4ad3e36b1251ac11d77e440dba382761b439cc0746e9dc2",
+      "published": false
+    },
+    {
+      "name": "qwen3_8b_w8a8__prefill_on__short_decode_128__r2.jsonl",
+      "size_bytes": 107184,
+      "sha256": "c97b212537ddf9b684d5958a7e45f6d1f57636703de0367e5c05387a0c2feed6",
+      "published": false
+    },
+    {
+      "name": "qwen3_8b_w8a8__prefill_on__short_decode_128__r2.log",
+      "size_bytes": 11587,
+      "sha256": "f0cc264bfeed61011c24063b8f453f51eaab7280c71538e30544593addc1e17c",
+      "published": false
+    },
+    {
+      "name": "qwen3_8b_w8a8__prefill_on__short_decode_128__r3.jsonl",
+      "size_bytes": 107214,
+      "sha256": "0a9122e334a1ad0312b013a2ca4e99f9a2abe675e56050644601a8870412a2bb",
+      "published": false
+    },
+    {
+      "name": "qwen3_8b_w8a8__prefill_on__short_decode_128__r3.log",
+      "size_bytes": 11587,
+      "sha256": "6c522276a644f696214726480ba19250b9a21a747657570e9dfec7d7860dccad",
+      "published": false
+    },
+    {
+      "name": "qwen3_8b_w8a8__prefill_on__short_decode_160__r1.jsonl",
+      "size_bytes": 105279,
+      "sha256": "f2387087ec881389898b4fa8aab845b30583fbc2a1fc1f1db73f5cf4f9f9a2f4",
+      "published": false
+    },
+    {
+      "name": "qwen3_8b_w8a8__prefill_on__short_decode_160__r1.log",
+      "size_bytes": 11587,
+      "sha256": "af4a6508a2c7761d8f1945f46973c0a28bc0700b089f6412d499fe3732a68b41",
+      "published": false
+    },
+    {
+      "name": "qwen3_8b_w8a8__prefill_on__short_decode_160__r2.jsonl",
+      "size_bytes": 105276,
+      "sha256": "eaa9da21fe8c2b2aa059c74cff8cb60ad7261a69f39ecf1e188b02dd0c0996ff",
+      "published": false
+    },
+    {
+      "name": "qwen3_8b_w8a8__prefill_on__short_decode_160__r2.log",
+      "size_bytes": 11587,
+      "sha256": "319b866935c15fdabcb2e3b0a80ab57ad41e820acc38dbd4fbede4ecec31baac",
+      "published": false
+    },
+    {
+      "name": "qwen3_8b_w8a8__prefill_on__short_decode_160__r3.jsonl",
+      "size_bytes": 105275,
+      "sha256": "573f667cffaccb37c4ff8912da57e017477aa8e864c4c31b08071263fd56dbbc",
+      "published": false
+    },
+    {
+      "name": "qwen3_8b_w8a8__prefill_on__short_decode_160__r3.log",
+      "size_bytes": 11587,
+      "sha256": "5a2582401882e0a296a81bb1153877670281ba7daef5cc07e3e256ed595b995b",
+      "published": false
+    },
+    {
+      "name": "qwen3_8b_w8a8__prefill_on__short_decode_96__r1.jsonl",
+      "size_bytes": 106028,
+      "sha256": "a36c0ce1d11784eeb2cb47851f92b80f83027bb8308e9a230c0ff15f069d6fa8",
+      "published": false
+    },
+    {
+      "name": "qwen3_8b_w8a8__prefill_on__short_decode_96__r1.log",
+      "size_bytes": 11582,
+      "sha256": "957046410c5dbeda2c6fff1e380554833ecdaf60c53bd10c5d4c0e46d240565b",
+      "published": false
+    },
+    {
+      "name": "qwen3_8b_w8a8__prefill_on__short_decode_96__r2.jsonl",
+      "size_bytes": 106063,
+      "sha256": "69c1f782f016b84251961768ea203cc2e154df7314930361de82f0557e9b3c66",
+      "published": false
+    },
+    {
+      "name": "qwen3_8b_w8a8__prefill_on__short_decode_96__r2.log",
+      "size_bytes": 11582,
+      "sha256": "ef13e36d6c1fcae964c7a8667e9bf53a52122a5cf7803f205d1a8fb1da373389",
+      "published": false
+    },
+    {
+      "name": "qwen3_8b_w8a8__prefill_on__short_decode_96__r3.jsonl",
+      "size_bytes": 106037,
+      "sha256": "22bb8a37ca1dfe570bedfba19e35024ffa70daa81daf5a54741acde1af4f0779",
+      "published": false
+    },
+    {
+      "name": "qwen3_8b_w8a8__prefill_on__short_decode_96__r3.log",
+      "size_bytes": 11582,
+      "sha256": "a0d09cee591924b1eae55e5828d30be4b55e512aafbdd5b68f955396a9909cda",
+      "published": false
+    },
+    {
+      "name": "server.log",
+      "size_bytes": 407265,
+      "sha256": "d568583b169e68523bede27daf1a694ca242f382da3124444aa2853101a03a34",
+      "published": false
+    },
+    {
+      "name": "summary.csv",
+      "size_bytes": 1749,
+      "sha256": "853aa3ff5fc40f4b04bd0b7ab42db7dbd5a853966344991248f9bd4e6f303b1f",
+      "published": true
+    }
+  ]
+}

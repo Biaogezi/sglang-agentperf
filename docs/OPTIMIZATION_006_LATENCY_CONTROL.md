@@ -77,3 +77,10 @@ The final no-overlap proof trace (`20260918T050103Z__proof`) contains five EXTEN
 and zero DECODE steps in each arm. ON executes `_int8_prefill` 360 times; OFF never does.
 Neither arm executes the custom norm-fusion kernel. This supports the extra-decode diagnosis
 without treating profiled duration as performance evidence. See `final_proof_off/on` snapshots.
+
+The final 32-output-token regression (`20260918T050316Z__short_decode`) completes all 1,440
+requests with exact paired generated-text agreement. Throughput changes at 96/128/160 input
+tokens are only +0.12% / +0.27% / +0.03%. At 128, p99 TTFT changes 46.664→44.113 ms while
+p99 TPOT is essentially unchanged, 17.826→17.849 ms. The small prefill saving is amortized by
+31 batch-one decode steps outside the guard. Do not claim the one-output-token gain for long
+generation. Full absolute metrics and per-request snapshots are linked in the final report.
