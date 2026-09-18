@@ -14,6 +14,8 @@ Protocol:
 
 - 24 conversations × 4 turns = 96 requests per repetition; 4 concurrent conversations.
 - Fixed 32 generated tokens per turn using the upstream ignore-EOS benchmark behavior.
+- Explicit `stream_options.include_usage=true` requests server completion-token usage; the chat
+  benchmark updates its output length from that usage rather than only the requested limit.
 - Thinking disabled through `chat_template_kwargs`, temperature zero.
 - Flush prefix cache before each measured run; retain cache reuse **within** a conversation.
 - Record dataset SHA-256, source fingerprints, output token counts, output texts and errors.

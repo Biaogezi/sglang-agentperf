@@ -1,3 +1,4 @@
+import json
 from pathlib import Path
 
 from agentperf.commands import benchmark_command
@@ -27,3 +28,5 @@ def test_agent_trace_uses_chat_backend(monkeypatch):
     assert command[command.index("--backend") + 1] == "sglang-oai-chat"
     assert "--dataset-path" in command
     assert "--tokenize-prompt" not in command
+    body = json.loads(command[command.index("--extra-request-body") + 1])
+    assert body["stream_options"]["include_usage"] is True
