@@ -1,0 +1,2009 @@
+{
+  "protocol": "alternating OFF/ON server restarts; each launch has warmup",
+  "launches": [
+    {
+      "repetition": 1,
+      "run": "results/paired/20260918T035158Z__short/launches/20260918T035357Z__qwen3_8b_w8a8__prefill_on__short",
+      "manifest": {
+        "created_at": "20260918T035357Z",
+        "harness_commit": "45e4e4d729b0fdd50c5b2f96d858345405bcc27d",
+        "source_files_sha256": {
+          "harness": {
+            "scripts/bench_production_prefill.py": "b8710f405cedd0ba5a0ab33e16ab1608fcaad89a11b9f43a3727eee1fabbd6da",
+            "scripts/bench_real_weight_prefill.py": "c505fb55dc12a07d76b3e9cf9e1b90d88bbd155ce80576065c3e0bfc1dfab524",
+            "scripts/bench_w8a8_gemm.py": "8ba065ee95b9f5121529399b94389c91196c911c5fa59d0465fa2b62778fc93f",
+            "scripts/bench_w8a8_norm_quant.py": "fca6287e41de231af09368df2f091e355be6be45bdc7a7c8db3da71847d5d306",
+            "scripts/prepare_wikitext_quality.py": "48351f79dfd8162c42a5be08ade9c5c62a037f02af395397a2f96d36775c8189",
+            "scripts/run_acceptance_quality.py": "c166981edc9d440afaee28f52e9aeb99e589dfc9750e8d1d005f4c7e5afe1e20",
+            "scripts/run_paired_prefill.py": "4069570266531f4ddcb5b30ecd9572280f3f97345574055909316a18a7059cdd",
+            "scripts/test_prefill_jit_variants.py": "c8159c25fa53cbb679e78a84b45a6ea3a24395eb98bb38c3511fbdd6ae899487",
+            "scripts/test_w8a8_dispatch_gpu.py": "1f09df9d79edba2c136ea50bd630df1d955af5598cdb0d66086deaef67ab6446",
+            "scripts/test_w8a8_splitk_gpu.py": "d6afffe617856ccf10679c0cf1aea226fe95740f5215aeb4fae1614f16db3b40",
+            "scripts/tune_w8a8_splitk.py": "970037e9f84ef902ca1ddd74b6ba4a566813f17e775c224ca0406ac4d3ca300b",
+            "scripts/verify_prefill_dispatch.py": "bdaa5aacceb0e032dca1b551a3c3f29c63172eec328d6e01a178080365f25ed9",
+            "scripts/w8a8_splitk_candidate.py": "fc2211c5decfebdbdbf037af56dc7c7f053bd15b864ec0b1532c54cb1982b4cd",
+            "src/agentperf/__init__.py": "62094910ad2c174fdc8f6f8af3cedac1ff8c46053ca2dca41b122520069c93fe",
+            "src/agentperf/cli.py": "47c984ca77adae93a414e2a5bb5ab9dd0b1570b6f9fb1a2a3b1a500276fd28e6",
+            "src/agentperf/commands.py": "eab080bdb4d2ee233146cdc867f87930f59de982581f3b61ea40ad2b6f2b7dcd",
+            "src/agentperf/config.py": "199c7eee1d6cf1f76a89ab57e31c2b323ce2a8bd928973a36743306107643810",
+            "src/agentperf/evidence.py": "01d5746557fb4f5c76170f1dbd212bbd3fab774729364ffedd157495acccba58",
+            "src/agentperf/models.py": "dad3cc78a4b111cfa76d4df2b65bd6606b0a90b8f7088e5c28355fbe8192389f",
+            "src/agentperf/quality.py": "100509255434e56de5364dce43422a2f2857ab8c5587ec5cf254656b7763caa7",
+            "src/agentperf/report.py": "15988014584385d0425544e3a05132f26912bcd8483d5c4c32003ade7cdb9fc6",
+            "src/agentperf/runner.py": "643124a1b9fdab6c2aff2ae24e0146f72f7387a86bd030e4b49fbff23236a319",
+            "src/agentperf/task_quality.py": "93319096802f21d77c9b44d87e9be0424f4e65a1d61a7ab7e396da1aa6df1195",
+            "src/agentperf/trace.py": "f36967ac2e35d0eddd7dc0005382f54ed4916d140f63ad0c83b24cb9e20068e6"
+          },
+          "runtime_candidate": {
+            "python/sglang/kernels/ops/quantization/int8_prefill_gemm.py": "bd5b3190994bbe32001182a46a65f873147b7c78bff97c5f625d14302c23eb87",
+            "python/sglang/srt/layers/quantization/w8a8_int8.py": "134b736217e6599b43f9359cbbcac96d0a8ae4eae8266b0efe2865e91b594e31",
+            "python/sglang/srt/layers/quantization/compressed_tensors/schemes/compressed_tensors_w8a8_int8.py": "f47bfb64ef4831bf3c819fc050a9d74dd9e0ee9cfc46cbe2d9b857e275f68f5d"
+          }
+        },
+        "upstream_commit": "0bcd822377da7b5718e674eaf9c870d349424dd1",
+        "upstream_worktree_commit": "e2f2c5bfea0e3dfac3c04e73a05d563b9898e687",
+        "model": "qwen3_8b_w8a8",
+        "profile": "prefill_on",
+        "suite": "short",
+        "cases": [
+          {
+            "model": "qwen3_8b_w8a8",
+            "profile": "prefill_on",
+            "workload": "short_prefill_96",
+            "repetition": 1,
+            "case_id": "qwen3_8b_w8a8__prefill_on__short_prefill_96__r1"
+          },
+          {
+            "model": "qwen3_8b_w8a8",
+            "profile": "prefill_on",
+            "workload": "short_prefill_128",
+            "repetition": 1,
+            "case_id": "qwen3_8b_w8a8__prefill_on__short_prefill_128__r1"
+          },
+          {
+            "model": "qwen3_8b_w8a8",
+            "profile": "prefill_on",
+            "workload": "short_prefill_160",
+            "repetition": 1,
+            "case_id": "qwen3_8b_w8a8__prefill_on__short_prefill_160__r1"
+          }
+        ],
+        "server_command": [
+          "/opt/sglang/bin/python",
+          "-m",
+          "sglang.launch_server",
+          "--model-path",
+          "/data/models/Qwen3-8B-W8A8",
+          "--host",
+          "127.0.0.1",
+          "--port",
+          "30000",
+          "--dtype",
+          "float16",
+          "--mem-fraction-static",
+          "0.82",
+          "--quantization",
+          "w8a8_int8",
+          "--attention-backend",
+          "flashinfer",
+          "--enable-metrics",
+          "--enable-cache-report"
+        ],
+        "server_environment": {
+          "SGLANG_A10_INT8_PREFILL": "true",
+          "SGLANG_W8A8_FUSED_RMSNORM_QUANT": "false"
+        },
+        "benchmark_commands": [
+          [
+            "/opt/sglang/bin/python",
+            "-m",
+            "sglang.benchmark.serving",
+            "--backend",
+            "sglang",
+            "--host",
+            "127.0.0.1",
+            "--port",
+            "30000",
+            "--model",
+            "/data/models/Qwen3-8B-W8A8",
+            "--dataset-name",
+            "random-ids",
+            "--num-prompts",
+            "160",
+            "--max-concurrency",
+            "1",
+            "--request-rate",
+            "inf",
+            "--warmup-requests",
+            "3",
+            "--output-file",
+            "results/paired/20260918T035158Z__short/launches/20260918T035357Z__qwen3_8b_w8a8__prefill_on__short/qwen3_8b_w8a8__prefill_on__short_prefill_96__r1.jsonl",
+            "--output-details",
+            "--cache-report",
+            "--flush-cache",
+            "--tokenize-prompt",
+            "--random-input-len",
+            "96",
+            "--random-output-len",
+            "1",
+            "--random-range-ratio",
+            "1"
+          ],
+          [
+            "/opt/sglang/bin/python",
+            "-m",
+            "sglang.benchmark.serving",
+            "--backend",
+            "sglang",
+            "--host",
+            "127.0.0.1",
+            "--port",
+            "30000",
+            "--model",
+            "/data/models/Qwen3-8B-W8A8",
+            "--dataset-name",
+            "random-ids",
+            "--num-prompts",
+            "160",
+            "--max-concurrency",
+            "1",
+            "--request-rate",
+            "inf",
+            "--warmup-requests",
+            "3",
+            "--output-file",
+            "results/paired/20260918T035158Z__short/launches/20260918T035357Z__qwen3_8b_w8a8__prefill_on__short/qwen3_8b_w8a8__prefill_on__short_prefill_128__r1.jsonl",
+            "--output-details",
+            "--cache-report",
+            "--flush-cache",
+            "--tokenize-prompt",
+            "--random-input-len",
+            "128",
+            "--random-output-len",
+            "1",
+            "--random-range-ratio",
+            "1"
+          ],
+          [
+            "/opt/sglang/bin/python",
+            "-m",
+            "sglang.benchmark.serving",
+            "--backend",
+            "sglang",
+            "--host",
+            "127.0.0.1",
+            "--port",
+            "30000",
+            "--model",
+            "/data/models/Qwen3-8B-W8A8",
+            "--dataset-name",
+            "random-ids",
+            "--num-prompts",
+            "160",
+            "--max-concurrency",
+            "1",
+            "--request-rate",
+            "inf",
+            "--warmup-requests",
+            "3",
+            "--output-file",
+            "results/paired/20260918T035158Z__short/launches/20260918T035357Z__qwen3_8b_w8a8__prefill_on__short/qwen3_8b_w8a8__prefill_on__short_prefill_160__r1.jsonl",
+            "--output-details",
+            "--cache-report",
+            "--flush-cache",
+            "--tokenize-prompt",
+            "--random-input-len",
+            "160",
+            "--random-output-len",
+            "1",
+            "--random-range-ratio",
+            "1"
+          ]
+        ],
+        "config": {
+          "schema_version": 1,
+          "upstream_commit": "0bcd822377da7b5718e674eaf9c870d349424dd1",
+          "defaults": {
+            "host": "127.0.0.1",
+            "port": 30000,
+            "warmup_requests": 3,
+            "repetitions": 1,
+            "server_ready_timeout_s": 900,
+            "mem_fraction_static": 0.82
+          },
+          "models": {
+            "qwen3_8b_fp16": {
+              "path_env": "AGENTPERF_MODEL_QWEN3_8B_FP16",
+              "dtype": "float16",
+              "quantization": null,
+              "role": "primary-baseline"
+            },
+            "qwen3_8b_awq": {
+              "path_env": "AGENTPERF_MODEL_QWEN3_8B_AWQ",
+              "dtype": "float16",
+              "quantization": "awq_marlin",
+              "role": "primary-int4"
+            },
+            "qwen3_8b_w8a8": {
+              "path_env": "AGENTPERF_MODEL_QWEN3_8B_W8A8",
+              "dtype": "float16",
+              "quantization": "w8a8_int8",
+              "role": "primary-int8-calibrated"
+            },
+            "qwen3_8b_gptq": {
+              "path_env": "AGENTPERF_MODEL_QWEN3_8B_GPTQ",
+              "dtype": "float16",
+              "quantization": "gptq_marlin",
+              "role": "secondary-int4"
+            },
+            "qwen35_9b_fp16": {
+              "path_env": "AGENTPERF_MODEL_QWEN35_9B_FP16",
+              "dtype": "float16",
+              "quantization": null,
+              "role": "secondary-compatibility"
+            }
+          },
+          "server_profiles": {
+            "baseline": {
+              "args": [
+                "--attention-backend",
+                "flashinfer",
+                "--enable-metrics",
+                "--enable-cache-report"
+              ]
+            },
+            "eager": {
+              "args": [
+                "--attention-backend",
+                "flashinfer",
+                "--disable-cuda-graph",
+                "--enable-metrics",
+                "--enable-cache-report"
+              ]
+            },
+            "triton_attention": {
+              "args": [
+                "--attention-backend",
+                "triton",
+                "--enable-metrics",
+                "--enable-cache-report"
+              ]
+            },
+            "chunk1024": {
+              "args": [
+                "--attention-backend",
+                "flashinfer",
+                "--chunked-prefill-size",
+                "1024",
+                "--prefill-decode-interval",
+                "4",
+                "--enable-metrics",
+                "--enable-cache-report"
+              ]
+            },
+            "w8a8_fused": {
+              "env": {
+                "SGLANG_W8A8_FUSED_RMSNORM_QUANT": "true"
+              },
+              "args": [
+                "--attention-backend",
+                "flashinfer",
+                "--enable-metrics",
+                "--enable-cache-report"
+              ]
+            },
+            "w8a8_fused_chunk1024": {
+              "env": {
+                "SGLANG_W8A8_FUSED_RMSNORM_QUANT": "true"
+              },
+              "args": [
+                "--attention-backend",
+                "flashinfer",
+                "--chunked-prefill-size",
+                "1024",
+                "--prefill-decode-interval",
+                "4",
+                "--enable-metrics",
+                "--enable-cache-report"
+              ]
+            },
+            "adaptive_chunk1024": {
+              "args": [
+                "--attention-backend",
+                "flashinfer",
+                "--chunked-prefill-size",
+                "2048",
+                "--enable-slo-aware-chunking",
+                "--slo-aware-chunked-prefill-size",
+                "1024",
+                "--prefill-decode-interval",
+                "4",
+                "--enable-metrics",
+                "--enable-cache-report"
+              ]
+            },
+            "slo_chunk512_i4": {
+              "args": [
+                "--attention-backend",
+                "flashinfer",
+                "--chunked-prefill-size",
+                "512",
+                "--prefill-decode-interval",
+                "4",
+                "--enable-metrics",
+                "--enable-cache-report"
+              ]
+            },
+            "slo_chunk1024_i4": {
+              "args": [
+                "--attention-backend",
+                "flashinfer",
+                "--chunked-prefill-size",
+                "1024",
+                "--prefill-decode-interval",
+                "4",
+                "--enable-metrics",
+                "--enable-cache-report"
+              ]
+            },
+            "slo_chunk1024_i4_fp16_reduce": {
+              "env": {
+                "SGLANG_MARLIN_USE_FP32_REDUCE": "false"
+              },
+              "args": [
+                "--attention-backend",
+                "flashinfer",
+                "--chunked-prefill-size",
+                "1024",
+                "--prefill-decode-interval",
+                "4",
+                "--enable-metrics",
+                "--enable-cache-report"
+              ]
+            },
+            "slo_adaptive_i4": {
+              "args": [
+                "--attention-backend",
+                "flashinfer",
+                "--chunked-prefill-size",
+                "2048",
+                "--enable-slo-aware-chunking",
+                "--slo-aware-chunked-prefill-size",
+                "512",
+                "--prefill-decode-interval",
+                "4",
+                "--enable-metrics",
+                "--enable-cache-report"
+              ]
+            },
+            "slo_adaptive1024_i4": {
+              "args": [
+                "--attention-backend",
+                "flashinfer",
+                "--chunked-prefill-size",
+                "2048",
+                "--enable-slo-aware-chunking",
+                "--slo-aware-chunked-prefill-size",
+                "1024",
+                "--prefill-decode-interval",
+                "4",
+                "--enable-metrics",
+                "--enable-cache-report"
+              ]
+            },
+            "prefill_off": {
+              "args": [
+                "--attention-backend",
+                "flashinfer",
+                "--enable-metrics",
+                "--enable-cache-report"
+              ],
+              "env": {
+                "SGLANG_A10_INT8_PREFILL": "false",
+                "SGLANG_W8A8_FUSED_RMSNORM_QUANT": "false"
+              }
+            },
+            "prefill_on": {
+              "args": [
+                "--attention-backend",
+                "flashinfer",
+                "--enable-metrics",
+                "--enable-cache-report"
+              ],
+              "env": {
+                "SGLANG_A10_INT8_PREFILL": "true",
+                "SGLANG_W8A8_FUSED_RMSNORM_QUANT": "false"
+              }
+            }
+          },
+          "workloads": {
+            "smoke": {
+              "dataset": "random-ids",
+              "num_prompts": 8,
+              "max_concurrency": 1,
+              "request_rate": "inf",
+              "args": [
+                "--tokenize-prompt",
+                "--random-input-len",
+                "256",
+                "--random-output-len",
+                "32",
+                "--random-range-ratio",
+                "1"
+              ]
+            },
+            "decode_1k_512": {
+              "dataset": "random-ids",
+              "num_prompts": 160,
+              "max_concurrency": 16,
+              "request_rate": "inf",
+              "args": [
+                "--tokenize-prompt",
+                "--random-input-len",
+                "1024",
+                "--random-output-len",
+                "512",
+                "--random-range-ratio",
+                "1"
+              ]
+            },
+            "prefill_8k_64": {
+              "dataset": "random-ids",
+              "num_prompts": 80,
+              "max_concurrency": 8,
+              "request_rate": "inf",
+              "args": [
+                "--tokenize-prompt",
+                "--random-input-len",
+                "8192",
+                "--random-output-len",
+                "64",
+                "--random-range-ratio",
+                "1"
+              ]
+            },
+            "mixed_prefill_2k_8k": {
+              "dataset": "random-ids",
+              "num_prompts": 80,
+              "max_concurrency": 8,
+              "request_rate": "inf",
+              "args": [
+                "--tokenize-prompt",
+                "--random-input-len",
+                "8192",
+                "--random-output-len",
+                "64",
+                "--random-range-ratio",
+                "0.25"
+              ]
+            },
+            "profile_mixed_prefill": {
+              "dataset": "random-ids",
+              "num_prompts": 40,
+              "max_concurrency": 8,
+              "request_rate": "inf",
+              "repetitions": 1,
+              "args": [
+                "--tokenize-prompt",
+                "--random-input-len",
+                "8192",
+                "--random-output-len",
+                "64",
+                "--random-range-ratio",
+                "0.25",
+                "--profile",
+                "--profile-activities",
+                "CPU",
+                "GPU",
+                "--profile-start-step",
+                "10",
+                "--profile-steps",
+                "30",
+                "--profile-output-dir",
+                "/workspace/agentperf/profiles/torch",
+                "--profile-prefix",
+                "mixed-prefill"
+              ]
+            },
+            "profile_decode": {
+              "dataset": "random-ids",
+              "num_prompts": 8,
+              "max_concurrency": 1,
+              "request_rate": "inf",
+              "repetitions": 1,
+              "args": [
+                "--tokenize-prompt",
+                "--random-input-len",
+                "1024",
+                "--random-output-len",
+                "512",
+                "--random-range-ratio",
+                "1.0",
+                "--profile",
+                "--profile-activities",
+                "CPU",
+                "GPU",
+                "--profile-start-step",
+                "50",
+                "--profile-steps",
+                "50",
+                "--profile-output-dir",
+                "/workspace/agentperf/profiles/torch",
+                "--profile-prefix",
+                "decode"
+              ]
+            },
+            "agent_prefix_4k": {
+              "dataset": "generated-shared-prefix",
+              "num_prompts": 160,
+              "max_concurrency": 16,
+              "request_rate": "8",
+              "args": [
+                "--gsp-num-groups",
+                "10",
+                "--gsp-prompts-per-group",
+                "16",
+                "--gsp-system-prompt-len",
+                "4096",
+                "--gsp-question-len",
+                "256",
+                "--gsp-output-len",
+                "128"
+              ]
+            },
+            "short_prefill_96": {
+              "dataset": "random-ids",
+              "num_prompts": 160,
+              "max_concurrency": 1,
+              "request_rate": "inf",
+              "args": [
+                "--tokenize-prompt",
+                "--random-input-len",
+                "96",
+                "--random-output-len",
+                "1",
+                "--random-range-ratio",
+                "1"
+              ]
+            },
+            "short_prefill_128": {
+              "dataset": "random-ids",
+              "num_prompts": 160,
+              "max_concurrency": 1,
+              "request_rate": "inf",
+              "args": [
+                "--tokenize-prompt",
+                "--random-input-len",
+                "128",
+                "--random-output-len",
+                "1",
+                "--random-range-ratio",
+                "1"
+              ]
+            },
+            "short_prefill_160": {
+              "dataset": "random-ids",
+              "num_prompts": 160,
+              "max_concurrency": 1,
+              "request_rate": "inf",
+              "args": [
+                "--tokenize-prompt",
+                "--random-input-len",
+                "160",
+                "--random-output-len",
+                "1",
+                "--random-range-ratio",
+                "1"
+              ]
+            },
+            "prefill_dispatch_proof": {
+              "dataset": "random-ids",
+              "num_prompts": 32,
+              "max_concurrency": 1,
+              "request_rate": "inf",
+              "args": [
+                "--tokenize-prompt",
+                "--random-input-len",
+                "128",
+                "--random-output-len",
+                "1",
+                "--random-range-ratio",
+                "1",
+                "--profile",
+                "--profile-activities",
+                "CPU",
+                "GPU",
+                "--profile-start-step",
+                "5",
+                "--profile-steps",
+                "5",
+                "--profile-output-dir",
+                "/workspace/agentperf/profiles/torch",
+                "--profile-prefix",
+                "prefill-dispatch-proof"
+              ]
+            }
+          },
+          "suites": {
+            "smoke": [
+              "smoke"
+            ],
+            "core": [
+              "decode_1k_512",
+              "prefill_8k_64",
+              "agent_prefix_4k"
+            ],
+            "decode_only": [
+              "decode_1k_512"
+            ],
+            "prefill_only": [
+              "prefill_8k_64"
+            ],
+            "agent_prefix_only": [
+              "agent_prefix_4k"
+            ],
+            "mixed_prefill_only": [
+              "mixed_prefill_2k_8k"
+            ],
+            "profile": [
+              "profile_mixed_prefill"
+            ],
+            "profile_decode": [
+              "profile_decode"
+            ],
+            "all": [
+              "smoke",
+              "decode_1k_512",
+              "prefill_8k_64",
+              "agent_prefix_4k"
+            ],
+            "short": [
+              "short_prefill_96",
+              "short_prefill_128",
+              "short_prefill_160"
+            ],
+            "proof": [
+              "prefill_dispatch_proof"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "repetition": 2,
+      "run": "results/paired/20260918T035158Z__short/launches/20260918T035543Z__qwen3_8b_w8a8__prefill_on__short",
+      "manifest": {
+        "created_at": "20260918T035543Z",
+        "harness_commit": "45e4e4d729b0fdd50c5b2f96d858345405bcc27d",
+        "source_files_sha256": {
+          "harness": {
+            "scripts/bench_production_prefill.py": "b8710f405cedd0ba5a0ab33e16ab1608fcaad89a11b9f43a3727eee1fabbd6da",
+            "scripts/bench_real_weight_prefill.py": "c505fb55dc12a07d76b3e9cf9e1b90d88bbd155ce80576065c3e0bfc1dfab524",
+            "scripts/bench_w8a8_gemm.py": "8ba065ee95b9f5121529399b94389c91196c911c5fa59d0465fa2b62778fc93f",
+            "scripts/bench_w8a8_norm_quant.py": "fca6287e41de231af09368df2f091e355be6be45bdc7a7c8db3da71847d5d306",
+            "scripts/prepare_wikitext_quality.py": "48351f79dfd8162c42a5be08ade9c5c62a037f02af395397a2f96d36775c8189",
+            "scripts/run_acceptance_quality.py": "c166981edc9d440afaee28f52e9aeb99e589dfc9750e8d1d005f4c7e5afe1e20",
+            "scripts/run_paired_prefill.py": "4069570266531f4ddcb5b30ecd9572280f3f97345574055909316a18a7059cdd",
+            "scripts/test_prefill_jit_variants.py": "c8159c25fa53cbb679e78a84b45a6ea3a24395eb98bb38c3511fbdd6ae899487",
+            "scripts/test_w8a8_dispatch_gpu.py": "1f09df9d79edba2c136ea50bd630df1d955af5598cdb0d66086deaef67ab6446",
+            "scripts/test_w8a8_splitk_gpu.py": "d6afffe617856ccf10679c0cf1aea226fe95740f5215aeb4fae1614f16db3b40",
+            "scripts/tune_w8a8_splitk.py": "970037e9f84ef902ca1ddd74b6ba4a566813f17e775c224ca0406ac4d3ca300b",
+            "scripts/verify_prefill_dispatch.py": "bdaa5aacceb0e032dca1b551a3c3f29c63172eec328d6e01a178080365f25ed9",
+            "scripts/w8a8_splitk_candidate.py": "fc2211c5decfebdbdbf037af56dc7c7f053bd15b864ec0b1532c54cb1982b4cd",
+            "src/agentperf/__init__.py": "62094910ad2c174fdc8f6f8af3cedac1ff8c46053ca2dca41b122520069c93fe",
+            "src/agentperf/cli.py": "47c984ca77adae93a414e2a5bb5ab9dd0b1570b6f9fb1a2a3b1a500276fd28e6",
+            "src/agentperf/commands.py": "eab080bdb4d2ee233146cdc867f87930f59de982581f3b61ea40ad2b6f2b7dcd",
+            "src/agentperf/config.py": "199c7eee1d6cf1f76a89ab57e31c2b323ce2a8bd928973a36743306107643810",
+            "src/agentperf/evidence.py": "01d5746557fb4f5c76170f1dbd212bbd3fab774729364ffedd157495acccba58",
+            "src/agentperf/models.py": "dad3cc78a4b111cfa76d4df2b65bd6606b0a90b8f7088e5c28355fbe8192389f",
+            "src/agentperf/quality.py": "100509255434e56de5364dce43422a2f2857ab8c5587ec5cf254656b7763caa7",
+            "src/agentperf/report.py": "15988014584385d0425544e3a05132f26912bcd8483d5c4c32003ade7cdb9fc6",
+            "src/agentperf/runner.py": "643124a1b9fdab6c2aff2ae24e0146f72f7387a86bd030e4b49fbff23236a319",
+            "src/agentperf/task_quality.py": "93319096802f21d77c9b44d87e9be0424f4e65a1d61a7ab7e396da1aa6df1195",
+            "src/agentperf/trace.py": "f36967ac2e35d0eddd7dc0005382f54ed4916d140f63ad0c83b24cb9e20068e6"
+          },
+          "runtime_candidate": {
+            "python/sglang/kernels/ops/quantization/int8_prefill_gemm.py": "bd5b3190994bbe32001182a46a65f873147b7c78bff97c5f625d14302c23eb87",
+            "python/sglang/srt/layers/quantization/w8a8_int8.py": "134b736217e6599b43f9359cbbcac96d0a8ae4eae8266b0efe2865e91b594e31",
+            "python/sglang/srt/layers/quantization/compressed_tensors/schemes/compressed_tensors_w8a8_int8.py": "f47bfb64ef4831bf3c819fc050a9d74dd9e0ee9cfc46cbe2d9b857e275f68f5d"
+          }
+        },
+        "upstream_commit": "0bcd822377da7b5718e674eaf9c870d349424dd1",
+        "upstream_worktree_commit": "e2f2c5bfea0e3dfac3c04e73a05d563b9898e687",
+        "model": "qwen3_8b_w8a8",
+        "profile": "prefill_on",
+        "suite": "short",
+        "cases": [
+          {
+            "model": "qwen3_8b_w8a8",
+            "profile": "prefill_on",
+            "workload": "short_prefill_96",
+            "repetition": 1,
+            "case_id": "qwen3_8b_w8a8__prefill_on__short_prefill_96__r1"
+          },
+          {
+            "model": "qwen3_8b_w8a8",
+            "profile": "prefill_on",
+            "workload": "short_prefill_128",
+            "repetition": 1,
+            "case_id": "qwen3_8b_w8a8__prefill_on__short_prefill_128__r1"
+          },
+          {
+            "model": "qwen3_8b_w8a8",
+            "profile": "prefill_on",
+            "workload": "short_prefill_160",
+            "repetition": 1,
+            "case_id": "qwen3_8b_w8a8__prefill_on__short_prefill_160__r1"
+          }
+        ],
+        "server_command": [
+          "/opt/sglang/bin/python",
+          "-m",
+          "sglang.launch_server",
+          "--model-path",
+          "/data/models/Qwen3-8B-W8A8",
+          "--host",
+          "127.0.0.1",
+          "--port",
+          "30000",
+          "--dtype",
+          "float16",
+          "--mem-fraction-static",
+          "0.82",
+          "--quantization",
+          "w8a8_int8",
+          "--attention-backend",
+          "flashinfer",
+          "--enable-metrics",
+          "--enable-cache-report"
+        ],
+        "server_environment": {
+          "SGLANG_A10_INT8_PREFILL": "true",
+          "SGLANG_W8A8_FUSED_RMSNORM_QUANT": "false"
+        },
+        "benchmark_commands": [
+          [
+            "/opt/sglang/bin/python",
+            "-m",
+            "sglang.benchmark.serving",
+            "--backend",
+            "sglang",
+            "--host",
+            "127.0.0.1",
+            "--port",
+            "30000",
+            "--model",
+            "/data/models/Qwen3-8B-W8A8",
+            "--dataset-name",
+            "random-ids",
+            "--num-prompts",
+            "160",
+            "--max-concurrency",
+            "1",
+            "--request-rate",
+            "inf",
+            "--warmup-requests",
+            "3",
+            "--output-file",
+            "results/paired/20260918T035158Z__short/launches/20260918T035543Z__qwen3_8b_w8a8__prefill_on__short/qwen3_8b_w8a8__prefill_on__short_prefill_96__r1.jsonl",
+            "--output-details",
+            "--cache-report",
+            "--flush-cache",
+            "--tokenize-prompt",
+            "--random-input-len",
+            "96",
+            "--random-output-len",
+            "1",
+            "--random-range-ratio",
+            "1"
+          ],
+          [
+            "/opt/sglang/bin/python",
+            "-m",
+            "sglang.benchmark.serving",
+            "--backend",
+            "sglang",
+            "--host",
+            "127.0.0.1",
+            "--port",
+            "30000",
+            "--model",
+            "/data/models/Qwen3-8B-W8A8",
+            "--dataset-name",
+            "random-ids",
+            "--num-prompts",
+            "160",
+            "--max-concurrency",
+            "1",
+            "--request-rate",
+            "inf",
+            "--warmup-requests",
+            "3",
+            "--output-file",
+            "results/paired/20260918T035158Z__short/launches/20260918T035543Z__qwen3_8b_w8a8__prefill_on__short/qwen3_8b_w8a8__prefill_on__short_prefill_128__r1.jsonl",
+            "--output-details",
+            "--cache-report",
+            "--flush-cache",
+            "--tokenize-prompt",
+            "--random-input-len",
+            "128",
+            "--random-output-len",
+            "1",
+            "--random-range-ratio",
+            "1"
+          ],
+          [
+            "/opt/sglang/bin/python",
+            "-m",
+            "sglang.benchmark.serving",
+            "--backend",
+            "sglang",
+            "--host",
+            "127.0.0.1",
+            "--port",
+            "30000",
+            "--model",
+            "/data/models/Qwen3-8B-W8A8",
+            "--dataset-name",
+            "random-ids",
+            "--num-prompts",
+            "160",
+            "--max-concurrency",
+            "1",
+            "--request-rate",
+            "inf",
+            "--warmup-requests",
+            "3",
+            "--output-file",
+            "results/paired/20260918T035158Z__short/launches/20260918T035543Z__qwen3_8b_w8a8__prefill_on__short/qwen3_8b_w8a8__prefill_on__short_prefill_160__r1.jsonl",
+            "--output-details",
+            "--cache-report",
+            "--flush-cache",
+            "--tokenize-prompt",
+            "--random-input-len",
+            "160",
+            "--random-output-len",
+            "1",
+            "--random-range-ratio",
+            "1"
+          ]
+        ],
+        "config": {
+          "schema_version": 1,
+          "upstream_commit": "0bcd822377da7b5718e674eaf9c870d349424dd1",
+          "defaults": {
+            "host": "127.0.0.1",
+            "port": 30000,
+            "warmup_requests": 3,
+            "repetitions": 1,
+            "server_ready_timeout_s": 900,
+            "mem_fraction_static": 0.82
+          },
+          "models": {
+            "qwen3_8b_fp16": {
+              "path_env": "AGENTPERF_MODEL_QWEN3_8B_FP16",
+              "dtype": "float16",
+              "quantization": null,
+              "role": "primary-baseline"
+            },
+            "qwen3_8b_awq": {
+              "path_env": "AGENTPERF_MODEL_QWEN3_8B_AWQ",
+              "dtype": "float16",
+              "quantization": "awq_marlin",
+              "role": "primary-int4"
+            },
+            "qwen3_8b_w8a8": {
+              "path_env": "AGENTPERF_MODEL_QWEN3_8B_W8A8",
+              "dtype": "float16",
+              "quantization": "w8a8_int8",
+              "role": "primary-int8-calibrated"
+            },
+            "qwen3_8b_gptq": {
+              "path_env": "AGENTPERF_MODEL_QWEN3_8B_GPTQ",
+              "dtype": "float16",
+              "quantization": "gptq_marlin",
+              "role": "secondary-int4"
+            },
+            "qwen35_9b_fp16": {
+              "path_env": "AGENTPERF_MODEL_QWEN35_9B_FP16",
+              "dtype": "float16",
+              "quantization": null,
+              "role": "secondary-compatibility"
+            }
+          },
+          "server_profiles": {
+            "baseline": {
+              "args": [
+                "--attention-backend",
+                "flashinfer",
+                "--enable-metrics",
+                "--enable-cache-report"
+              ]
+            },
+            "eager": {
+              "args": [
+                "--attention-backend",
+                "flashinfer",
+                "--disable-cuda-graph",
+                "--enable-metrics",
+                "--enable-cache-report"
+              ]
+            },
+            "triton_attention": {
+              "args": [
+                "--attention-backend",
+                "triton",
+                "--enable-metrics",
+                "--enable-cache-report"
+              ]
+            },
+            "chunk1024": {
+              "args": [
+                "--attention-backend",
+                "flashinfer",
+                "--chunked-prefill-size",
+                "1024",
+                "--prefill-decode-interval",
+                "4",
+                "--enable-metrics",
+                "--enable-cache-report"
+              ]
+            },
+            "w8a8_fused": {
+              "env": {
+                "SGLANG_W8A8_FUSED_RMSNORM_QUANT": "true"
+              },
+              "args": [
+                "--attention-backend",
+                "flashinfer",
+                "--enable-metrics",
+                "--enable-cache-report"
+              ]
+            },
+            "w8a8_fused_chunk1024": {
+              "env": {
+                "SGLANG_W8A8_FUSED_RMSNORM_QUANT": "true"
+              },
+              "args": [
+                "--attention-backend",
+                "flashinfer",
+                "--chunked-prefill-size",
+                "1024",
+                "--prefill-decode-interval",
+                "4",
+                "--enable-metrics",
+                "--enable-cache-report"
+              ]
+            },
+            "adaptive_chunk1024": {
+              "args": [
+                "--attention-backend",
+                "flashinfer",
+                "--chunked-prefill-size",
+                "2048",
+                "--enable-slo-aware-chunking",
+                "--slo-aware-chunked-prefill-size",
+                "1024",
+                "--prefill-decode-interval",
+                "4",
+                "--enable-metrics",
+                "--enable-cache-report"
+              ]
+            },
+            "slo_chunk512_i4": {
+              "args": [
+                "--attention-backend",
+                "flashinfer",
+                "--chunked-prefill-size",
+                "512",
+                "--prefill-decode-interval",
+                "4",
+                "--enable-metrics",
+                "--enable-cache-report"
+              ]
+            },
+            "slo_chunk1024_i4": {
+              "args": [
+                "--attention-backend",
+                "flashinfer",
+                "--chunked-prefill-size",
+                "1024",
+                "--prefill-decode-interval",
+                "4",
+                "--enable-metrics",
+                "--enable-cache-report"
+              ]
+            },
+            "slo_chunk1024_i4_fp16_reduce": {
+              "env": {
+                "SGLANG_MARLIN_USE_FP32_REDUCE": "false"
+              },
+              "args": [
+                "--attention-backend",
+                "flashinfer",
+                "--chunked-prefill-size",
+                "1024",
+                "--prefill-decode-interval",
+                "4",
+                "--enable-metrics",
+                "--enable-cache-report"
+              ]
+            },
+            "slo_adaptive_i4": {
+              "args": [
+                "--attention-backend",
+                "flashinfer",
+                "--chunked-prefill-size",
+                "2048",
+                "--enable-slo-aware-chunking",
+                "--slo-aware-chunked-prefill-size",
+                "512",
+                "--prefill-decode-interval",
+                "4",
+                "--enable-metrics",
+                "--enable-cache-report"
+              ]
+            },
+            "slo_adaptive1024_i4": {
+              "args": [
+                "--attention-backend",
+                "flashinfer",
+                "--chunked-prefill-size",
+                "2048",
+                "--enable-slo-aware-chunking",
+                "--slo-aware-chunked-prefill-size",
+                "1024",
+                "--prefill-decode-interval",
+                "4",
+                "--enable-metrics",
+                "--enable-cache-report"
+              ]
+            },
+            "prefill_off": {
+              "args": [
+                "--attention-backend",
+                "flashinfer",
+                "--enable-metrics",
+                "--enable-cache-report"
+              ],
+              "env": {
+                "SGLANG_A10_INT8_PREFILL": "false",
+                "SGLANG_W8A8_FUSED_RMSNORM_QUANT": "false"
+              }
+            },
+            "prefill_on": {
+              "args": [
+                "--attention-backend",
+                "flashinfer",
+                "--enable-metrics",
+                "--enable-cache-report"
+              ],
+              "env": {
+                "SGLANG_A10_INT8_PREFILL": "true",
+                "SGLANG_W8A8_FUSED_RMSNORM_QUANT": "false"
+              }
+            }
+          },
+          "workloads": {
+            "smoke": {
+              "dataset": "random-ids",
+              "num_prompts": 8,
+              "max_concurrency": 1,
+              "request_rate": "inf",
+              "args": [
+                "--tokenize-prompt",
+                "--random-input-len",
+                "256",
+                "--random-output-len",
+                "32",
+                "--random-range-ratio",
+                "1"
+              ]
+            },
+            "decode_1k_512": {
+              "dataset": "random-ids",
+              "num_prompts": 160,
+              "max_concurrency": 16,
+              "request_rate": "inf",
+              "args": [
+                "--tokenize-prompt",
+                "--random-input-len",
+                "1024",
+                "--random-output-len",
+                "512",
+                "--random-range-ratio",
+                "1"
+              ]
+            },
+            "prefill_8k_64": {
+              "dataset": "random-ids",
+              "num_prompts": 80,
+              "max_concurrency": 8,
+              "request_rate": "inf",
+              "args": [
+                "--tokenize-prompt",
+                "--random-input-len",
+                "8192",
+                "--random-output-len",
+                "64",
+                "--random-range-ratio",
+                "1"
+              ]
+            },
+            "mixed_prefill_2k_8k": {
+              "dataset": "random-ids",
+              "num_prompts": 80,
+              "max_concurrency": 8,
+              "request_rate": "inf",
+              "args": [
+                "--tokenize-prompt",
+                "--random-input-len",
+                "8192",
+                "--random-output-len",
+                "64",
+                "--random-range-ratio",
+                "0.25"
+              ]
+            },
+            "profile_mixed_prefill": {
+              "dataset": "random-ids",
+              "num_prompts": 40,
+              "max_concurrency": 8,
+              "request_rate": "inf",
+              "repetitions": 1,
+              "args": [
+                "--tokenize-prompt",
+                "--random-input-len",
+                "8192",
+                "--random-output-len",
+                "64",
+                "--random-range-ratio",
+                "0.25",
+                "--profile",
+                "--profile-activities",
+                "CPU",
+                "GPU",
+                "--profile-start-step",
+                "10",
+                "--profile-steps",
+                "30",
+                "--profile-output-dir",
+                "/workspace/agentperf/profiles/torch",
+                "--profile-prefix",
+                "mixed-prefill"
+              ]
+            },
+            "profile_decode": {
+              "dataset": "random-ids",
+              "num_prompts": 8,
+              "max_concurrency": 1,
+              "request_rate": "inf",
+              "repetitions": 1,
+              "args": [
+                "--tokenize-prompt",
+                "--random-input-len",
+                "1024",
+                "--random-output-len",
+                "512",
+                "--random-range-ratio",
+                "1.0",
+                "--profile",
+                "--profile-activities",
+                "CPU",
+                "GPU",
+                "--profile-start-step",
+                "50",
+                "--profile-steps",
+                "50",
+                "--profile-output-dir",
+                "/workspace/agentperf/profiles/torch",
+                "--profile-prefix",
+                "decode"
+              ]
+            },
+            "agent_prefix_4k": {
+              "dataset": "generated-shared-prefix",
+              "num_prompts": 160,
+              "max_concurrency": 16,
+              "request_rate": "8",
+              "args": [
+                "--gsp-num-groups",
+                "10",
+                "--gsp-prompts-per-group",
+                "16",
+                "--gsp-system-prompt-len",
+                "4096",
+                "--gsp-question-len",
+                "256",
+                "--gsp-output-len",
+                "128"
+              ]
+            },
+            "short_prefill_96": {
+              "dataset": "random-ids",
+              "num_prompts": 160,
+              "max_concurrency": 1,
+              "request_rate": "inf",
+              "args": [
+                "--tokenize-prompt",
+                "--random-input-len",
+                "96",
+                "--random-output-len",
+                "1",
+                "--random-range-ratio",
+                "1"
+              ]
+            },
+            "short_prefill_128": {
+              "dataset": "random-ids",
+              "num_prompts": 160,
+              "max_concurrency": 1,
+              "request_rate": "inf",
+              "args": [
+                "--tokenize-prompt",
+                "--random-input-len",
+                "128",
+                "--random-output-len",
+                "1",
+                "--random-range-ratio",
+                "1"
+              ]
+            },
+            "short_prefill_160": {
+              "dataset": "random-ids",
+              "num_prompts": 160,
+              "max_concurrency": 1,
+              "request_rate": "inf",
+              "args": [
+                "--tokenize-prompt",
+                "--random-input-len",
+                "160",
+                "--random-output-len",
+                "1",
+                "--random-range-ratio",
+                "1"
+              ]
+            },
+            "prefill_dispatch_proof": {
+              "dataset": "random-ids",
+              "num_prompts": 32,
+              "max_concurrency": 1,
+              "request_rate": "inf",
+              "args": [
+                "--tokenize-prompt",
+                "--random-input-len",
+                "128",
+                "--random-output-len",
+                "1",
+                "--random-range-ratio",
+                "1",
+                "--profile",
+                "--profile-activities",
+                "CPU",
+                "GPU",
+                "--profile-start-step",
+                "5",
+                "--profile-steps",
+                "5",
+                "--profile-output-dir",
+                "/workspace/agentperf/profiles/torch",
+                "--profile-prefix",
+                "prefill-dispatch-proof"
+              ]
+            }
+          },
+          "suites": {
+            "smoke": [
+              "smoke"
+            ],
+            "core": [
+              "decode_1k_512",
+              "prefill_8k_64",
+              "agent_prefix_4k"
+            ],
+            "decode_only": [
+              "decode_1k_512"
+            ],
+            "prefill_only": [
+              "prefill_8k_64"
+            ],
+            "agent_prefix_only": [
+              "agent_prefix_4k"
+            ],
+            "mixed_prefill_only": [
+              "mixed_prefill_2k_8k"
+            ],
+            "profile": [
+              "profile_mixed_prefill"
+            ],
+            "profile_decode": [
+              "profile_decode"
+            ],
+            "all": [
+              "smoke",
+              "decode_1k_512",
+              "prefill_8k_64",
+              "agent_prefix_4k"
+            ],
+            "short": [
+              "short_prefill_96",
+              "short_prefill_128",
+              "short_prefill_160"
+            ],
+            "proof": [
+              "prefill_dispatch_proof"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "repetition": 3,
+      "run": "results/paired/20260918T035158Z__short/launches/20260918T040054Z__qwen3_8b_w8a8__prefill_on__short",
+      "manifest": {
+        "created_at": "20260918T040054Z",
+        "harness_commit": "45e4e4d729b0fdd50c5b2f96d858345405bcc27d",
+        "source_files_sha256": {
+          "harness": {
+            "scripts/bench_production_prefill.py": "b8710f405cedd0ba5a0ab33e16ab1608fcaad89a11b9f43a3727eee1fabbd6da",
+            "scripts/bench_real_weight_prefill.py": "c505fb55dc12a07d76b3e9cf9e1b90d88bbd155ce80576065c3e0bfc1dfab524",
+            "scripts/bench_w8a8_gemm.py": "8ba065ee95b9f5121529399b94389c91196c911c5fa59d0465fa2b62778fc93f",
+            "scripts/bench_w8a8_norm_quant.py": "fca6287e41de231af09368df2f091e355be6be45bdc7a7c8db3da71847d5d306",
+            "scripts/prepare_wikitext_quality.py": "48351f79dfd8162c42a5be08ade9c5c62a037f02af395397a2f96d36775c8189",
+            "scripts/run_acceptance_quality.py": "c166981edc9d440afaee28f52e9aeb99e589dfc9750e8d1d005f4c7e5afe1e20",
+            "scripts/run_paired_prefill.py": "4069570266531f4ddcb5b30ecd9572280f3f97345574055909316a18a7059cdd",
+            "scripts/test_prefill_jit_variants.py": "c8159c25fa53cbb679e78a84b45a6ea3a24395eb98bb38c3511fbdd6ae899487",
+            "scripts/test_w8a8_dispatch_gpu.py": "1f09df9d79edba2c136ea50bd630df1d955af5598cdb0d66086deaef67ab6446",
+            "scripts/test_w8a8_splitk_gpu.py": "d6afffe617856ccf10679c0cf1aea226fe95740f5215aeb4fae1614f16db3b40",
+            "scripts/tune_w8a8_splitk.py": "970037e9f84ef902ca1ddd74b6ba4a566813f17e775c224ca0406ac4d3ca300b",
+            "scripts/verify_prefill_dispatch.py": "bdaa5aacceb0e032dca1b551a3c3f29c63172eec328d6e01a178080365f25ed9",
+            "scripts/w8a8_splitk_candidate.py": "fc2211c5decfebdbdbf037af56dc7c7f053bd15b864ec0b1532c54cb1982b4cd",
+            "src/agentperf/__init__.py": "62094910ad2c174fdc8f6f8af3cedac1ff8c46053ca2dca41b122520069c93fe",
+            "src/agentperf/cli.py": "47c984ca77adae93a414e2a5bb5ab9dd0b1570b6f9fb1a2a3b1a500276fd28e6",
+            "src/agentperf/commands.py": "eab080bdb4d2ee233146cdc867f87930f59de982581f3b61ea40ad2b6f2b7dcd",
+            "src/agentperf/config.py": "199c7eee1d6cf1f76a89ab57e31c2b323ce2a8bd928973a36743306107643810",
+            "src/agentperf/evidence.py": "01d5746557fb4f5c76170f1dbd212bbd3fab774729364ffedd157495acccba58",
+            "src/agentperf/models.py": "dad3cc78a4b111cfa76d4df2b65bd6606b0a90b8f7088e5c28355fbe8192389f",
+            "src/agentperf/quality.py": "100509255434e56de5364dce43422a2f2857ab8c5587ec5cf254656b7763caa7",
+            "src/agentperf/report.py": "15988014584385d0425544e3a05132f26912bcd8483d5c4c32003ade7cdb9fc6",
+            "src/agentperf/runner.py": "643124a1b9fdab6c2aff2ae24e0146f72f7387a86bd030e4b49fbff23236a319",
+            "src/agentperf/task_quality.py": "93319096802f21d77c9b44d87e9be0424f4e65a1d61a7ab7e396da1aa6df1195",
+            "src/agentperf/trace.py": "f36967ac2e35d0eddd7dc0005382f54ed4916d140f63ad0c83b24cb9e20068e6"
+          },
+          "runtime_candidate": {
+            "python/sglang/kernels/ops/quantization/int8_prefill_gemm.py": "bd5b3190994bbe32001182a46a65f873147b7c78bff97c5f625d14302c23eb87",
+            "python/sglang/srt/layers/quantization/w8a8_int8.py": "134b736217e6599b43f9359cbbcac96d0a8ae4eae8266b0efe2865e91b594e31",
+            "python/sglang/srt/layers/quantization/compressed_tensors/schemes/compressed_tensors_w8a8_int8.py": "f47bfb64ef4831bf3c819fc050a9d74dd9e0ee9cfc46cbe2d9b857e275f68f5d"
+          }
+        },
+        "upstream_commit": "0bcd822377da7b5718e674eaf9c870d349424dd1",
+        "upstream_worktree_commit": "e2f2c5bfea0e3dfac3c04e73a05d563b9898e687",
+        "model": "qwen3_8b_w8a8",
+        "profile": "prefill_on",
+        "suite": "short",
+        "cases": [
+          {
+            "model": "qwen3_8b_w8a8",
+            "profile": "prefill_on",
+            "workload": "short_prefill_96",
+            "repetition": 1,
+            "case_id": "qwen3_8b_w8a8__prefill_on__short_prefill_96__r1"
+          },
+          {
+            "model": "qwen3_8b_w8a8",
+            "profile": "prefill_on",
+            "workload": "short_prefill_128",
+            "repetition": 1,
+            "case_id": "qwen3_8b_w8a8__prefill_on__short_prefill_128__r1"
+          },
+          {
+            "model": "qwen3_8b_w8a8",
+            "profile": "prefill_on",
+            "workload": "short_prefill_160",
+            "repetition": 1,
+            "case_id": "qwen3_8b_w8a8__prefill_on__short_prefill_160__r1"
+          }
+        ],
+        "server_command": [
+          "/opt/sglang/bin/python",
+          "-m",
+          "sglang.launch_server",
+          "--model-path",
+          "/data/models/Qwen3-8B-W8A8",
+          "--host",
+          "127.0.0.1",
+          "--port",
+          "30000",
+          "--dtype",
+          "float16",
+          "--mem-fraction-static",
+          "0.82",
+          "--quantization",
+          "w8a8_int8",
+          "--attention-backend",
+          "flashinfer",
+          "--enable-metrics",
+          "--enable-cache-report"
+        ],
+        "server_environment": {
+          "SGLANG_A10_INT8_PREFILL": "true",
+          "SGLANG_W8A8_FUSED_RMSNORM_QUANT": "false"
+        },
+        "benchmark_commands": [
+          [
+            "/opt/sglang/bin/python",
+            "-m",
+            "sglang.benchmark.serving",
+            "--backend",
+            "sglang",
+            "--host",
+            "127.0.0.1",
+            "--port",
+            "30000",
+            "--model",
+            "/data/models/Qwen3-8B-W8A8",
+            "--dataset-name",
+            "random-ids",
+            "--num-prompts",
+            "160",
+            "--max-concurrency",
+            "1",
+            "--request-rate",
+            "inf",
+            "--warmup-requests",
+            "3",
+            "--output-file",
+            "results/paired/20260918T035158Z__short/launches/20260918T040054Z__qwen3_8b_w8a8__prefill_on__short/qwen3_8b_w8a8__prefill_on__short_prefill_96__r1.jsonl",
+            "--output-details",
+            "--cache-report",
+            "--flush-cache",
+            "--tokenize-prompt",
+            "--random-input-len",
+            "96",
+            "--random-output-len",
+            "1",
+            "--random-range-ratio",
+            "1"
+          ],
+          [
+            "/opt/sglang/bin/python",
+            "-m",
+            "sglang.benchmark.serving",
+            "--backend",
+            "sglang",
+            "--host",
+            "127.0.0.1",
+            "--port",
+            "30000",
+            "--model",
+            "/data/models/Qwen3-8B-W8A8",
+            "--dataset-name",
+            "random-ids",
+            "--num-prompts",
+            "160",
+            "--max-concurrency",
+            "1",
+            "--request-rate",
+            "inf",
+            "--warmup-requests",
+            "3",
+            "--output-file",
+            "results/paired/20260918T035158Z__short/launches/20260918T040054Z__qwen3_8b_w8a8__prefill_on__short/qwen3_8b_w8a8__prefill_on__short_prefill_128__r1.jsonl",
+            "--output-details",
+            "--cache-report",
+            "--flush-cache",
+            "--tokenize-prompt",
+            "--random-input-len",
+            "128",
+            "--random-output-len",
+            "1",
+            "--random-range-ratio",
+            "1"
+          ],
+          [
+            "/opt/sglang/bin/python",
+            "-m",
+            "sglang.benchmark.serving",
+            "--backend",
+            "sglang",
+            "--host",
+            "127.0.0.1",
+            "--port",
+            "30000",
+            "--model",
+            "/data/models/Qwen3-8B-W8A8",
+            "--dataset-name",
+            "random-ids",
+            "--num-prompts",
+            "160",
+            "--max-concurrency",
+            "1",
+            "--request-rate",
+            "inf",
+            "--warmup-requests",
+            "3",
+            "--output-file",
+            "results/paired/20260918T035158Z__short/launches/20260918T040054Z__qwen3_8b_w8a8__prefill_on__short/qwen3_8b_w8a8__prefill_on__short_prefill_160__r1.jsonl",
+            "--output-details",
+            "--cache-report",
+            "--flush-cache",
+            "--tokenize-prompt",
+            "--random-input-len",
+            "160",
+            "--random-output-len",
+            "1",
+            "--random-range-ratio",
+            "1"
+          ]
+        ],
+        "config": {
+          "schema_version": 1,
+          "upstream_commit": "0bcd822377da7b5718e674eaf9c870d349424dd1",
+          "defaults": {
+            "host": "127.0.0.1",
+            "port": 30000,
+            "warmup_requests": 3,
+            "repetitions": 1,
+            "server_ready_timeout_s": 900,
+            "mem_fraction_static": 0.82
+          },
+          "models": {
+            "qwen3_8b_fp16": {
+              "path_env": "AGENTPERF_MODEL_QWEN3_8B_FP16",
+              "dtype": "float16",
+              "quantization": null,
+              "role": "primary-baseline"
+            },
+            "qwen3_8b_awq": {
+              "path_env": "AGENTPERF_MODEL_QWEN3_8B_AWQ",
+              "dtype": "float16",
+              "quantization": "awq_marlin",
+              "role": "primary-int4"
+            },
+            "qwen3_8b_w8a8": {
+              "path_env": "AGENTPERF_MODEL_QWEN3_8B_W8A8",
+              "dtype": "float16",
+              "quantization": "w8a8_int8",
+              "role": "primary-int8-calibrated"
+            },
+            "qwen3_8b_gptq": {
+              "path_env": "AGENTPERF_MODEL_QWEN3_8B_GPTQ",
+              "dtype": "float16",
+              "quantization": "gptq_marlin",
+              "role": "secondary-int4"
+            },
+            "qwen35_9b_fp16": {
+              "path_env": "AGENTPERF_MODEL_QWEN35_9B_FP16",
+              "dtype": "float16",
+              "quantization": null,
+              "role": "secondary-compatibility"
+            }
+          },
+          "server_profiles": {
+            "baseline": {
+              "args": [
+                "--attention-backend",
+                "flashinfer",
+                "--enable-metrics",
+                "--enable-cache-report"
+              ]
+            },
+            "eager": {
+              "args": [
+                "--attention-backend",
+                "flashinfer",
+                "--disable-cuda-graph",
+                "--enable-metrics",
+                "--enable-cache-report"
+              ]
+            },
+            "triton_attention": {
+              "args": [
+                "--attention-backend",
+                "triton",
+                "--enable-metrics",
+                "--enable-cache-report"
+              ]
+            },
+            "chunk1024": {
+              "args": [
+                "--attention-backend",
+                "flashinfer",
+                "--chunked-prefill-size",
+                "1024",
+                "--prefill-decode-interval",
+                "4",
+                "--enable-metrics",
+                "--enable-cache-report"
+              ]
+            },
+            "w8a8_fused": {
+              "env": {
+                "SGLANG_W8A8_FUSED_RMSNORM_QUANT": "true"
+              },
+              "args": [
+                "--attention-backend",
+                "flashinfer",
+                "--enable-metrics",
+                "--enable-cache-report"
+              ]
+            },
+            "w8a8_fused_chunk1024": {
+              "env": {
+                "SGLANG_W8A8_FUSED_RMSNORM_QUANT": "true"
+              },
+              "args": [
+                "--attention-backend",
+                "flashinfer",
+                "--chunked-prefill-size",
+                "1024",
+                "--prefill-decode-interval",
+                "4",
+                "--enable-metrics",
+                "--enable-cache-report"
+              ]
+            },
+            "adaptive_chunk1024": {
+              "args": [
+                "--attention-backend",
+                "flashinfer",
+                "--chunked-prefill-size",
+                "2048",
+                "--enable-slo-aware-chunking",
+                "--slo-aware-chunked-prefill-size",
+                "1024",
+                "--prefill-decode-interval",
+                "4",
+                "--enable-metrics",
+                "--enable-cache-report"
+              ]
+            },
+            "slo_chunk512_i4": {
+              "args": [
+                "--attention-backend",
+                "flashinfer",
+                "--chunked-prefill-size",
+                "512",
+                "--prefill-decode-interval",
+                "4",
+                "--enable-metrics",
+                "--enable-cache-report"
+              ]
+            },
+            "slo_chunk1024_i4": {
+              "args": [
+                "--attention-backend",
+                "flashinfer",
+                "--chunked-prefill-size",
+                "1024",
+                "--prefill-decode-interval",
+                "4",
+                "--enable-metrics",
+                "--enable-cache-report"
+              ]
+            },
+            "slo_chunk1024_i4_fp16_reduce": {
+              "env": {
+                "SGLANG_MARLIN_USE_FP32_REDUCE": "false"
+              },
+              "args": [
+                "--attention-backend",
+                "flashinfer",
+                "--chunked-prefill-size",
+                "1024",
+                "--prefill-decode-interval",
+                "4",
+                "--enable-metrics",
+                "--enable-cache-report"
+              ]
+            },
+            "slo_adaptive_i4": {
+              "args": [
+                "--attention-backend",
+                "flashinfer",
+                "--chunked-prefill-size",
+                "2048",
+                "--enable-slo-aware-chunking",
+                "--slo-aware-chunked-prefill-size",
+                "512",
+                "--prefill-decode-interval",
+                "4",
+                "--enable-metrics",
+                "--enable-cache-report"
+              ]
+            },
+            "slo_adaptive1024_i4": {
+              "args": [
+                "--attention-backend",
+                "flashinfer",
+                "--chunked-prefill-size",
+                "2048",
+                "--enable-slo-aware-chunking",
+                "--slo-aware-chunked-prefill-size",
+                "1024",
+                "--prefill-decode-interval",
+                "4",
+                "--enable-metrics",
+                "--enable-cache-report"
+              ]
+            },
+            "prefill_off": {
+              "args": [
+                "--attention-backend",
+                "flashinfer",
+                "--enable-metrics",
+                "--enable-cache-report"
+              ],
+              "env": {
+                "SGLANG_A10_INT8_PREFILL": "false",
+                "SGLANG_W8A8_FUSED_RMSNORM_QUANT": "false"
+              }
+            },
+            "prefill_on": {
+              "args": [
+                "--attention-backend",
+                "flashinfer",
+                "--enable-metrics",
+                "--enable-cache-report"
+              ],
+              "env": {
+                "SGLANG_A10_INT8_PREFILL": "true",
+                "SGLANG_W8A8_FUSED_RMSNORM_QUANT": "false"
+              }
+            }
+          },
+          "workloads": {
+            "smoke": {
+              "dataset": "random-ids",
+              "num_prompts": 8,
+              "max_concurrency": 1,
+              "request_rate": "inf",
+              "args": [
+                "--tokenize-prompt",
+                "--random-input-len",
+                "256",
+                "--random-output-len",
+                "32",
+                "--random-range-ratio",
+                "1"
+              ]
+            },
+            "decode_1k_512": {
+              "dataset": "random-ids",
+              "num_prompts": 160,
+              "max_concurrency": 16,
+              "request_rate": "inf",
+              "args": [
+                "--tokenize-prompt",
+                "--random-input-len",
+                "1024",
+                "--random-output-len",
+                "512",
+                "--random-range-ratio",
+                "1"
+              ]
+            },
+            "prefill_8k_64": {
+              "dataset": "random-ids",
+              "num_prompts": 80,
+              "max_concurrency": 8,
+              "request_rate": "inf",
+              "args": [
+                "--tokenize-prompt",
+                "--random-input-len",
+                "8192",
+                "--random-output-len",
+                "64",
+                "--random-range-ratio",
+                "1"
+              ]
+            },
+            "mixed_prefill_2k_8k": {
+              "dataset": "random-ids",
+              "num_prompts": 80,
+              "max_concurrency": 8,
+              "request_rate": "inf",
+              "args": [
+                "--tokenize-prompt",
+                "--random-input-len",
+                "8192",
+                "--random-output-len",
+                "64",
+                "--random-range-ratio",
+                "0.25"
+              ]
+            },
+            "profile_mixed_prefill": {
+              "dataset": "random-ids",
+              "num_prompts": 40,
+              "max_concurrency": 8,
+              "request_rate": "inf",
+              "repetitions": 1,
+              "args": [
+                "--tokenize-prompt",
+                "--random-input-len",
+                "8192",
+                "--random-output-len",
+                "64",
+                "--random-range-ratio",
+                "0.25",
+                "--profile",
+                "--profile-activities",
+                "CPU",
+                "GPU",
+                "--profile-start-step",
+                "10",
+                "--profile-steps",
+                "30",
+                "--profile-output-dir",
+                "/workspace/agentperf/profiles/torch",
+                "--profile-prefix",
+                "mixed-prefill"
+              ]
+            },
+            "profile_decode": {
+              "dataset": "random-ids",
+              "num_prompts": 8,
+              "max_concurrency": 1,
+              "request_rate": "inf",
+              "repetitions": 1,
+              "args": [
+                "--tokenize-prompt",
+                "--random-input-len",
+                "1024",
+                "--random-output-len",
+                "512",
+                "--random-range-ratio",
+                "1.0",
+                "--profile",
+                "--profile-activities",
+                "CPU",
+                "GPU",
+                "--profile-start-step",
+                "50",
+                "--profile-steps",
+                "50",
+                "--profile-output-dir",
+                "/workspace/agentperf/profiles/torch",
+                "--profile-prefix",
+                "decode"
+              ]
+            },
+            "agent_prefix_4k": {
+              "dataset": "generated-shared-prefix",
+              "num_prompts": 160,
+              "max_concurrency": 16,
+              "request_rate": "8",
+              "args": [
+                "--gsp-num-groups",
+                "10",
+                "--gsp-prompts-per-group",
+                "16",
+                "--gsp-system-prompt-len",
+                "4096",
+                "--gsp-question-len",
+                "256",
+                "--gsp-output-len",
+                "128"
+              ]
+            },
+            "short_prefill_96": {
+              "dataset": "random-ids",
+              "num_prompts": 160,
+              "max_concurrency": 1,
+              "request_rate": "inf",
+              "args": [
+                "--tokenize-prompt",
+                "--random-input-len",
+                "96",
+                "--random-output-len",
+                "1",
+                "--random-range-ratio",
+                "1"
+              ]
+            },
+            "short_prefill_128": {
+              "dataset": "random-ids",
+              "num_prompts": 160,
+              "max_concurrency": 1,
+              "request_rate": "inf",
+              "args": [
+                "--tokenize-prompt",
+                "--random-input-len",
+                "128",
+                "--random-output-len",
+                "1",
+                "--random-range-ratio",
+                "1"
+              ]
+            },
+            "short_prefill_160": {
+              "dataset": "random-ids",
+              "num_prompts": 160,
+              "max_concurrency": 1,
+              "request_rate": "inf",
+              "args": [
+                "--tokenize-prompt",
+                "--random-input-len",
+                "160",
+                "--random-output-len",
+                "1",
+                "--random-range-ratio",
+                "1"
+              ]
+            },
+            "prefill_dispatch_proof": {
+              "dataset": "random-ids",
+              "num_prompts": 32,
+              "max_concurrency": 1,
+              "request_rate": "inf",
+              "args": [
+                "--tokenize-prompt",
+                "--random-input-len",
+                "128",
+                "--random-output-len",
+                "1",
+                "--random-range-ratio",
+                "1",
+                "--profile",
+                "--profile-activities",
+                "CPU",
+                "GPU",
+                "--profile-start-step",
+                "5",
+                "--profile-steps",
+                "5",
+                "--profile-output-dir",
+                "/workspace/agentperf/profiles/torch",
+                "--profile-prefix",
+                "prefill-dispatch-proof"
+              ]
+            }
+          },
+          "suites": {
+            "smoke": [
+              "smoke"
+            ],
+            "core": [
+              "decode_1k_512",
+              "prefill_8k_64",
+              "agent_prefix_4k"
+            ],
+            "decode_only": [
+              "decode_1k_512"
+            ],
+            "prefill_only": [
+              "prefill_8k_64"
+            ],
+            "agent_prefix_only": [
+              "agent_prefix_4k"
+            ],
+            "mixed_prefill_only": [
+              "mixed_prefill_2k_8k"
+            ],
+            "profile": [
+              "profile_mixed_prefill"
+            ],
+            "profile_decode": [
+              "profile_decode"
+            ],
+            "all": [
+              "smoke",
+              "decode_1k_512",
+              "prefill_8k_64",
+              "agent_prefix_4k"
+            ],
+            "short": [
+              "short_prefill_96",
+              "short_prefill_128",
+              "short_prefill_160"
+            ],
+            "proof": [
+              "prefill_dispatch_proof"
+            ]
+          }
+        }
+      }
+    }
+  ]
+}

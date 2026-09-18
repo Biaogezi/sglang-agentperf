@@ -15,11 +15,14 @@ from agentperf.runner import run_plan
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--config", default="configs/experiment_matrix.json")
-    parser.add_argument("--suite", choices=["short", "core", "proof"], default="short")
+    parser.add_argument(
+        "--suite", choices=["short", "short_decode", "core", "proof", "agent"], default="short"
+    )
     parser.add_argument("--repetitions", type=int, default=3)
     parser.add_argument("--output-root", default="results/paired")
     parser.add_argument("--prefill-backend", choices=["disabled", "breakable", "tc_piecewise"])
     parser.add_argument("--candidate", choices=["gemm", "fusion", "combined"], default="gemm")
+    parser.add_argument("--disable-overlap", action="store_true")
     args = parser.parse_args()
     config = copy.deepcopy(load_config(args.config))
     config["defaults"]["repetitions"] = 1
@@ -29,6 +32,8 @@ def main():
             "SGLANG_A10_INT8_PREFILL": enabled if args.candidate != "fusion" else "false",
             "SGLANG_W8A8_FUSED_RMSNORM_QUANT": enabled if args.candidate != "gemm" else "false",
         }
+        if args.disable_overlap:
+            config["server_profiles"][profile]["args"].append("--disable-overlap-schedule")
         if args.prefill_backend:
             config["server_profiles"][profile]["args"] += [
                 "--cuda-graph-backend-prefill",
@@ -51,6 +56,12 @@ def main():
             ],
         }
     config["suites"]["short"] = [f"short_prefill_{length}" for length in (96, 128, 160)]
+    for length in (96, 128, 160):
+        workload = copy.deepcopy(config["workloads"][f"short_prefill_{length}"])
+        workload["num_prompts"] = 80
+        workload["args"][workload["args"].index("--random-output-len") + 1] = "32"
+        config["workloads"][f"short_decode_{length}"] = workload
+    config["suites"]["short_decode"] = [f"short_decode_{length}" for length in (96, 128, 160)]
     config["workloads"]["prefill_dispatch_proof"] = copy.deepcopy(
         config["workloads"]["short_prefill_128"]
     )

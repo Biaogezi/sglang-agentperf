@@ -1,0 +1,46 @@
+{
+  "method": "W8A8Int8LinearMethod",
+  "native_norm_fusion_eligible": true,
+  "cases": [
+    {
+      "m": 1,
+      "custom_kernel_calls": 0,
+      "exact_equal": true
+    },
+    {
+      "m": 64,
+      "custom_kernel_calls": 0,
+      "exact_equal": true
+    },
+    {
+      "m": 79,
+      "custom_kernel_calls": 0,
+      "exact_equal": true
+    },
+    {
+      "m": 80,
+      "custom_kernel_calls": 1,
+      "exact_equal": true
+    },
+    {
+      "m": 96,
+      "custom_kernel_calls": 1,
+      "exact_equal": true
+    },
+    {
+      "m": 128,
+      "custom_kernel_calls": 1,
+      "exact_equal": true
+    },
+    {
+      "m": 129,
+      "custom_kernel_calls": 0,
+      "exact_equal": true
+    },
+    {
+      "m": 160,
+      "custom_kernel_calls": 0,
+      "exact_equal": true
+    }
+  ]
+}

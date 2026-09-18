@@ -286,7 +286,7 @@ def audit_paired_run(root: Path, *, minimum_repetitions: int = 3) -> dict[str, A
                     failures.append(f"{profile}: missing {path.name}")
                     continue
                 record = read_last_json(path)
-                expected = workload["num_prompts"]
+                expected = workload["num_prompts"] * workload.get("turns_per_conversation", 1)
                 errors = record.get("errors")
                 if record.get("completed") != expected:
                     failures.append(f"{name}: incomplete requests")

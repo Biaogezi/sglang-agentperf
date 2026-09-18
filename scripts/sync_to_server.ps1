@@ -23,7 +23,7 @@ if ($TrackedFiles | Where-Object { $_ -match '(^|/)(\.env|[^/]+\.(pem|key))$' })
 
 try {
     # Only committed project files; never .git, local secrets, raw results or model caches.
-    git -C $ProjectRoot archive --format=tar.gz --output=$ArchivePath HEAD
+    git -C $ProjectRoot -c core.autocrlf=false archive --format=tar.gz --output=$ArchivePath HEAD
     if ($LASTEXITCODE -ne 0) { throw "Failed to create sync archive" }
     ssh -i $KeyPath "$UserName@$HostName" "mkdir '$RemotePath'"
     if ($LASTEXITCODE -ne 0) { throw "Failed to create remote project directory" }

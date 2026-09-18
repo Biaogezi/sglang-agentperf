@@ -160,6 +160,20 @@
     }
   },
   "workloads": {
+    "synthetic_agent_replay": {
+      "dataset": "agentic-trace",
+      "backend": "sglang-oai-chat",
+      "num_prompts": 24,
+      "turns_per_conversation": 4,
+      "max_concurrency": 4,
+      "request_rate": "inf",
+      "args": [
+        "--dataset-path", "configs/synthetic_agent_trace.json",
+        "--sharegpt-output-len", "32",
+        "--agentic-max-turns", "4",
+        "--extra-request-body", "{\"chat_template_kwargs\": {\"enable_thinking\": false}}"
+      ]
+    },
     "smoke": {
       "dataset": "random-ids",
       "num_prompts": 8,
@@ -261,6 +275,7 @@
     }
   },
   "suites": {
+    "agent": ["synthetic_agent_replay"],
     "smoke": ["smoke"],
     "core": ["decode_1k_512", "prefill_8k_64", "agent_prefix_4k"],
     "decode_only": ["decode_1k_512"],

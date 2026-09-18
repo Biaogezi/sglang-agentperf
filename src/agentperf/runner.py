@@ -139,6 +139,12 @@ def run_plan(
             benchmark_command(config, case, run_dir / f"{case.case_id}.jsonl") for case in plan
         ],
         "config": config,
+        "dataset_files_sha256": {
+            str(path): hashlib.sha256(path.read_bytes()).hexdigest()
+            for case in plan
+            if "--dataset-path" in (args := config["workloads"][case.workload]["args"])
+            for path in [Path(args[args.index("--dataset-path") + 1])]
+        },
     }
     (run_dir / "manifest.json").write_text(
         json.dumps(manifest, indent=2, ensure_ascii=False) + "\n", encoding="utf-8"

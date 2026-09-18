@@ -54,9 +54,7 @@ def snapshot_evidence(run_dir: Path, output_dir: Path) -> dict[str, Any]:
         "source_run": run_dir.name,
         "files": files,
     }
-    (output_dir / "checksums.json").write_text(
-        json.dumps(index, indent=2) + "\n", encoding="utf-8"
-    )
+    (output_dir / "checksums.json").write_text(json.dumps(index, indent=2) + "\n", encoding="utf-8")
     return index
 
 
@@ -103,7 +101,33 @@ def snapshot_trace_evidence(
         "source_trace": trace_path.name,
         "files": files,
     }
-    (output_dir / "checksums.json").write_text(
-        json.dumps(index, indent=2) + "\n", encoding="utf-8"
-    )
+    (output_dir / "checksums.json").write_text(json.dumps(index, indent=2) + "\n", encoding="utf-8")
+    return index
+
+
+def snapshot_gpu_validation(run_dir: Path, output_dir: Path) -> dict[str, Any]:
+    """Publish bounded GPU-test logs, including failed tests when present."""
+    manifest_path = run_dir / "manifest.json"
+    manifest = json.loads(manifest_path.read_text())
+    scripts = [Path(test["command"][-1]).name for test in manifest["tests"]]
+    required = [manifest_path, *(run_dir / f"{script}.log" for script in scripts)]
+    if not scripts or not all(path.is_file() for path in required):
+        raise ValueError("GPU validation is missing its manifest or declared logs")
+    output_dir.mkdir(parents=True, exist_ok=False)
+    for source in required:
+        shutil.copy2(source, output_dir / source.name)
+    index = {
+        "schema_version": 1,
+        "source_run": run_dir.name,
+        "files": [
+            {
+                "name": path.name,
+                "size_bytes": path.stat().st_size,
+                "sha256": _sha256(path),
+                "published": True,
+            }
+            for path in required
+        ],
+    }
+    (output_dir / "checksums.json").write_text(json.dumps(index, indent=2) + "\n")
     return index

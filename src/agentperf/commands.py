@@ -54,7 +54,7 @@ def benchmark_command(
         "-m",
         "sglang.benchmark.serving",
         "--backend",
-        "sglang",
+        workload.get("backend", "sglang"),
         "--host",
         str(defaults["host"]),
         "--port",

@@ -20,17 +20,21 @@ def main():
         ).strip(),
         "tests": [],
     }
-    for script in (
+    scripts = (
         "test_w8a8_splitk_gpu.py",
         "test_w8a8_dispatch_gpu.py",
         "test_prefill_jit_variants.py",
         "test_native_norm_fusion_gpu.py",
-    ):
+    )
+    payload["expected_tests"] = len(scripts)
+    for script in scripts:
         command = [sys.executable, f"scripts/{script}"]
         with (root / f"{script}.log").open("w") as handle:
             result = subprocess.run(command, stdout=handle, stderr=subprocess.STDOUT, check=False)
         payload["tests"].append({"command": command, "returncode": result.returncode})
-        payload["passed"] = all(row["returncode"] == 0 for row in payload["tests"])
+        payload["passed"] = len(payload["tests"]) == len(scripts) and all(
+            row["returncode"] == 0 for row in payload["tests"]
+        )
         (root / "manifest.json").write_text(json.dumps(payload, indent=2) + "\n")
         print(f"GPU_TEST {script} returncode={result.returncode} evidence={root}", flush=True)
         if result.returncode:
