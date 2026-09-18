@@ -5,3 +5,5 @@
 *.md text eol=lf
 *.lock text eol=lf
 *.patch text eol=lf whitespace=-blank-at-eol
+# Evidence hashes identify exact bytes; Git must not rewrite CSV/JSON newlines.
+/evidence/** -text
