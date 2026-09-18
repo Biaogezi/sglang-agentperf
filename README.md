@@ -73,8 +73,9 @@ flowchart LR
 ```
 
 Each optimization starts from a trace-backed hypothesis. Static controls and the source candidate
-run through the same matrix; the patch is retained only when it clears both the performance and
-quality gates.
+run through the same matrix; a candidate is accepted only when it clears both performance and
+quality gates. Rejected experimental patches remain reviewable and default-off, not advertised
+as accepted acceleration.
 
 ## Local preparation
 
@@ -169,8 +170,9 @@ one-output-token, concurrency-one test improved throughput 12.08%; the final-sou
 **13.15%** (4143.97 to 4688.91 input tok/s), with p99 TTFT 31.705→28.115 ms. This clears the
 unchanged 10% gate only for that measured regime, not arbitrary agent traffic. With 32 output
 tokens at concurrency one, throughput gain is only 0.27% at 128 input tokens. Final quality
-passes (+8.466e-7 same-checkpoint NLL delta, all 40 task texts unchanged); core and multi-turn
-regressions are still running. See
+passes (+8.466e-7 same-checkpoint NLL delta, all 40 task texts unchanged). Three-round core
+regressions complete all 2,400 requests with throughput changes within ±0.3%; shared-prefix text
+matches 468/480 pairs rather than all pairs. Multi-turn and graph-coverage checks are still running. See
 [Optimization 006](docs/OPTIMIZATION_006_LATENCY_CONTROL.md) and the full experiment history in
 [Optimization 004](docs/OPTIMIZATION_004_SM86_INT8_PREFILL.md).
 

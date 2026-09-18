@@ -1,0 +1,56 @@
+{
+  "note": "Observed cache state, not randomized cold/warm trials. TTFT includes queuing. A positive cached-token count does not mean the whole prompt was cached. Small zero-cache groups do not establish a stable population p99.",
+  "runs": [
+    {
+      "file": "qwen3_8b_w8a8__prefill_off__agent_prefix_4k__r1.jsonl",
+      "groups": {
+        "zero_cached_tokens": {
+          "requests": 10,
+          "ttft_mean_ms": 2324.607256699892,
+          "ttft_p50_ms": 2161.8263950003893,
+          "ttft_p99_ms": 3745.9298698800376
+        },
+        "positive_cached_tokens": {
+          "requests": 150,
+          "ttft_mean_ms": 905.8202406133082,
+          "ttft_p50_ms": 783.7155480001456,
+          "ttft_p99_ms": 4046.6400541691446
+        }
+      }
+    },
+    {
+      "file": "qwen3_8b_w8a8__prefill_off__agent_prefix_4k__r2.jsonl",
+      "groups": {
+        "zero_cached_tokens": {
+          "requests": 10,
+          "ttft_mean_ms": 2323.534919499798,
+          "ttft_p50_ms": 2158.467674500571,
+          "ttft_p99_ms": 3742.9625540694906
+        },
+        "positive_cached_tokens": {
+          "requests": 150,
+          "ttft_mean_ms": 903.6719393999616,
+          "ttft_p50_ms": 806.9532674999209,
+          "ttft_p99_ms": 4041.016402019738
+        }
+      }
+    },
+    {
+      "file": "qwen3_8b_w8a8__prefill_off__agent_prefix_4k__r3.jsonl",
+      "groups": {
+        "zero_cached_tokens": {
+          "requests": 10,
+          "ttft_mean_ms": 2329.363512599957,
+          "ttft_p50_ms": 2165.920012001152,
+          "ttft_p99_ms": 3755.668435437692
+        },
+        "positive_cached_tokens": {
+          "requests": 150,
+          "ttft_mean_ms": 905.5520609399537,
+          "ttft_p50_ms": 708.8985095015232,
+          "ttft_p99_ms": 4056.4724938214176
+        }
+      }
+    }
+  ]
+}
