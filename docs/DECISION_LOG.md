@@ -66,7 +66,7 @@ criterion. Add the trace evidence and decision here before coding the patch.
   check; use exact-shape W8A8 GEMM dispatch or tuning as the primary retained-optimization target.
 - Full evidence: [Profile 002](PROFILE_002_W8A8_KERNELS.md).
 
-## 2026-09-18 — Reject W8A8 RMSNorm + quantization fusion for serving
+## 2026-09-18 — RMSNorm fusion experiment (serving conclusion superseded)
 
 - Implemented a default-off Triton fusion for residual add, RMSNorm, dynamic per-token INT8
   quantization, and pre-quantized handoff to QKV/gate-up linear layers.
@@ -76,6 +76,14 @@ criterion. Add the trace evidence and decision here before coding the patch.
   tested Qwen3 hidden-size shapes.
 - Three-repetition serving controls show no end-to-end win: throughput changes range from -0.01%
   to -0.77%; the static chunk-1024 control also loses 0.59% throughput.
-- Decision: reject for serving. The trace correctly showed this pair was too small a share of the
-  critical path; continue with A10-specific W8A8 GEMM dispatch/tile tuning.
+- Original decision was to reject for serving; the dispatch audit below invalidates this conclusion.
 - Full evidence: [Optimization 003](OPTIMIZATION_003_W8A8_NORM_QUANT_FUSION.md).
+
+## 2026-09-18 — Dispatch audit and correction
+
+- `--quantization w8a8_int8` instantiates `W8A8Int8LinearMethod`; the norm-fusion guard supports
+  only `CompressedTensorsLinearMethod`. Thus the historical serving switch was a no-op.
+- Retract the serving-performance rejection and the attribution of NLL parity to the fused kernel.
+  Standalone kernel tests remain valid. Serving efficacy is not established.
+- Add a direct quant-method dispatch test and require GPU-trace presence/absence for source A/B.
+- The new SM86 GEMM candidate integrates both methods and tests range boundaries plus fallback.

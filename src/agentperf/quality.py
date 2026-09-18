@@ -54,18 +54,32 @@ def extract_logprobs(response: dict[str, Any]) -> list[float]:
     return values
 
 
-def _load_corpus(path: Path) -> list[dict[str, str]]:
-    records: list[dict[str, str]] = []
+def _load_corpus(path: Path) -> list[dict[str, Any]]:
+    records: list[dict[str, Any]] = []
     for line_number, line in enumerate(path.read_text(encoding="utf-8").splitlines(), 1):
         if not line.strip():
             continue
         record = json.loads(line)
-        if not isinstance(record, dict) or not isinstance(record.get("text"), str):
+        if not isinstance(record, dict):
             raise TypeError(f"Invalid corpus record at line {line_number}")
-        text = record["text"].strip()
-        if not text:
-            raise ValueError(f"Empty text at line {line_number}")
-        records.append({"id": str(record.get("id", line_number)), "text": text})
+        item = {"id": str(record.get("id", line_number))}
+        if "input_ids" in record:
+            ids = record["input_ids"]
+            if "text" in record or not isinstance(ids, list) or len(ids) < 2:
+                raise ValueError(
+                    f"Expected only input_ids with at least two tokens at line {line_number}"
+                )
+            if not all(type(token) is int and token >= 0 for token in ids):
+                raise ValueError(f"Invalid token ID at line {line_number}")
+            item["input_ids"] = ids
+        elif isinstance(record.get("text"), str):
+            text = record["text"].strip()
+            if not text:
+                raise ValueError(f"Empty text at line {line_number}")
+            item["text"] = text
+        else:
+            raise TypeError(f"Invalid corpus record at line {line_number}")
+        records.append(item)
     if not records:
         raise ValueError("Corpus is empty")
     return records
@@ -87,7 +101,7 @@ def score_corpus(
         response = _post_json(
             endpoint.rstrip("/") + "/generate",
             {
-                "text": record["text"],
+                **{key: value for key, value in record.items() if key != "id"},
                 "sampling_params": {"temperature": 0, "max_new_tokens": 1},
                 "return_logprob": True,
                 "return_input_logprob": True,
@@ -140,9 +154,7 @@ def compare_quality(
         raise ValueError("Quality results scored different token counts")
 
     nll_delta = float(candidate["mean_nll"]) - float(baseline["mean_nll"])
-    ppl_delta_pct = (
-        (float(candidate["perplexity"]) / float(baseline["perplexity"])) - 1.0
-    ) * 100.0
+    ppl_delta_pct = ((float(candidate["perplexity"]) / float(baseline["perplexity"])) - 1.0) * 100.0
     return {
         "baseline_mean_nll": baseline["mean_nll"],
         "candidate_mean_nll": candidate["mean_nll"],

@@ -19,9 +19,7 @@ def test_summarize_repetitions(tmp_path: Path) -> None:
         }
         path = tmp_path / f"model__profile__workload__r{repetition}.jsonl"
         path.write_text(json.dumps(record) + "\n", encoding="utf-8")
-        path.with_suffix(".log").write_text(
-            "Cache hit rate: 25.0%\n", encoding="utf-8"
-        )
+        path.with_suffix(".log").write_text("Cache hit rate: 25.0%\n", encoding="utf-8")
 
     output = tmp_path / "summary.csv"
     (tmp_path / "server.log").write_text(
@@ -52,12 +50,8 @@ def test_compare_summaries_uses_positive_improvement_direction(tmp_path: Path) -
     candidate = tmp_path / "candidate.csv"
     output = tmp_path / "comparison.csv"
     header = "case,input_throughput_mean,tpot_p99_ms_mean\n"
-    baseline.write_text(
-        header + "model__baseline__prefill,100,200\n", encoding="utf-8"
-    )
-    candidate.write_text(
-        header + "model__candidate__prefill,110,100\n", encoding="utf-8"
-    )
+    baseline.write_text(header + "model__baseline__prefill,100,200\n", encoding="utf-8")
+    candidate.write_text(header + "model__candidate__prefill,110,100\n", encoding="utf-8")
 
     rows = compare_summaries(baseline, candidate, output)
 
@@ -82,3 +76,14 @@ def test_check_run_equivalence_matches_workload_and_repetition(tmp_path: Path) -
     result = check_run_equivalence(baseline, candidate)
 
     assert result == {"matched_repetitions": 1, "equivalent": True, "mismatches": []}
+
+
+def test_compare_zero_latency_is_undefined_not_error(tmp_path: Path) -> None:
+    header = "case,input_throughput_mean,tpot_p99_ms_mean\n"
+    baseline, candidate = tmp_path / "baseline.csv", tmp_path / "candidate.csv"
+    baseline.write_text(header + "m__off__short,100,0\n", encoding="utf-8")
+    candidate.write_text(header + "m__on__short,120,0\n", encoding="utf-8")
+    row = compare_summaries(baseline, candidate, tmp_path / "comparison.csv")[0]
+    assert row["input_throughput_mean_improvement_pct"] == pytest.approx(20)
+    assert row["baseline_tpot_p99_ms_mean"] == 0
+    assert row["tpot_p99_ms_mean_improvement_pct"] == ""

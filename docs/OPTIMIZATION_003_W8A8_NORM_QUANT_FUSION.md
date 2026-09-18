@@ -1,6 +1,17 @@
 # Optimization 003 — W8A8 RMSNorm + activation quantization fusion
 
-Status: **rejected for serving; kernel result retained**.
+Status: **serving experiment invalidated by dispatch audit; kernel result retained**.
+
+## Correction (2026-09-18)
+
+The serving profiles explicitly select `--quantization w8a8_int8`, which constructs
+`W8A8Int8LinearMethod`. This patch's norm-fusion guard accepts only
+`CompressedTensorsLinearMethod` with `CompressedTensorsW8A8Int8`. Therefore the fusion switch
+was a no-op in those serving runs. `scripts/test_w8a8_dispatch_gpu.py` now asserts this distinction.
+The historical measurements below are retained for audit, but neither their performance nor
+their NLL equality is evidence about the fused implementation. The earlier serving rejection
+and causal explanation were incorrect. Only the standalone kernel correctness/timing tests
+actually exercised the fusion. Future candidates require a positive GPU-trace dispatch proof.
 
 ## Hypothesis
 
@@ -43,7 +54,7 @@ pair and must not be described as end-to-end speedups.
 | 1024 × 4096 | no | 0.06453 | 0.03068 | 110.3% |
 | 1024 × 4096 | yes | 0.09934 | 0.06458 | 53.8% |
 
-## End-to-end result
+## Historical end-to-end measurements (fusion not exercised)
 
 Every serving point contains three repetitions and uses the same checkpoint, container, request
 counts and concurrency as its control. The manifests record the actual source commits; these
@@ -63,14 +74,10 @@ provides no evidence of a win.
 
 ## Decision
 
-Reject the fusion for production serving. Profiling predicted the result: separate quantization
-and RMSNorm account for only 3.53% of batch-one decode and 5.74% of mixed-prefill kernel time,
-while INT8 GEMM accounts for 77.92% and 64.71%. The fusion substantially accelerates its local
-operator pair but cannot clear the pre-registered end-to-end gate and slightly regresses all
-throughput controls.
-
-This is retained as a bounded negative result because it demonstrates the distinction between a
-microbenchmark win and a deployable inference optimization.
+Keep the fusion default-off and classify serving efficacy as **not established**, not rejected
+on performance grounds. Separate quantization and RMSNorm account for only 3.53% of batch-one
+decode and 5.74% of mixed-prefill kernel time, while INT8 GEMM accounts for 77.92% and 64.71%.
+Those traces justify prioritizing GEMM but do not rescue an invalid fusion experiment.
 
 ## GEMM follow-up
 

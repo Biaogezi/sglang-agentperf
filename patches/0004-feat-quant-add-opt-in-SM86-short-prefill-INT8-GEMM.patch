@@ -1,0 +1,225 @@
+From 19c10e5233ff963138551aa5e412f09372807c50 Mon Sep 17 00:00:00 2001
+From: biaogezi <scwang@bupt.edu.cn>
+Date: Fri, 18 Sep 2026 10:50:39 +0800
+Subject: [PATCH] feat(quant): add opt-in SM86 short-prefill INT8 GEMM dispatch
+
+---
+ .../ops/quantization/int8_prefill_gemm.py     | 98 +++++++++++++++++++
+ .../schemes/compressed_tensors_w8a8_int8.py   | 22 +++++
+ .../srt/layers/quantization/w8a8_int8.py      | 20 ++++
+ 3 files changed, 140 insertions(+)
+ create mode 100644 python/sglang/kernels/ops/quantization/int8_prefill_gemm.py
+
+diff --git a/python/sglang/kernels/ops/quantization/int8_prefill_gemm.py b/python/sglang/kernels/ops/quantization/int8_prefill_gemm.py
+new file mode 100644
+index 0000000..48f77f7
+--- /dev/null
++++ b/python/sglang/kernels/ops/quantization/int8_prefill_gemm.py
+@@ -0,0 +1,98 @@
++# SPDX-License-Identifier: Apache-2.0
++"""Opt-in SM86 W8A8 short-prefill GEMM.
++
++This kernel uses an INT32 Tensor Core accumulator and combines row/channel
++scaling in the epilogue. Its 128x128x128 tile is selected only for measured
++medium-M Qwen3-8B projections; all other shapes retain the existing backend.
++"""
++
++import torch
++import triton
++import triton.language as tl
++
++
++@triton.jit
++def _int8_prefill(
++    A,
++    B,
++    SA,
++    SB,
++    BIAS,
++    OUT,
++    M: tl.constexpr,
++    N: tl.constexpr,
++    K: tl.constexpr,
++    HAS_BIAS: tl.constexpr,
++):
++    mi = tl.program_id(0) * 128 + tl.arange(0, 128)
++    ni = tl.program_id(1) * 128 + tl.arange(0, 128)
++    ki = tl.arange(0, 128)
++    acc = tl.full((128, 128), 0, tl.int32)
++    for step in range(tl.cdiv(K, 128)):
++        kk = ki + step * 128
++        a = tl.load(
++            A + mi[:, None] * K + kk[None, :], (mi[:, None] < M) & (kk[None, :] < K), other=0
++        )
++        b = tl.load(
++            B + kk[:, None] + ni[None, :] * K, (kk[:, None] < K) & (ni[None, :] < N), other=0
++        )
++        acc += tl.dot(a, b)
++    sa = tl.load(SA + mi, mi < M, other=0)
++    sb = tl.load(SB + ni, ni < N, other=0)
++    # Match CUTLASS's multiplication order; no reassociation or fused bias FMA.
++    values = acc.to(tl.float32) * (sa[:, None] * sb[None, :])
++    if HAS_BIAS:
++        values += tl.load(BIAS + ni, ni < N, other=0).to(tl.float32)[None, :]
++    tl.store(OUT + mi[:, None] * N + ni[None, :], values, (mi[:, None] < M) & (ni[None, :] < N))
++
++
++def supports_a10_prefill(a, b, sa, sb, out_dtype, bias=None):
++    """Shape/layout contract; hardware and environment are checked at weight load."""
++    return (
++        a.ndim == 2
++        and b.ndim == 2
++        and a.device == b.device == sa.device == sb.device
++        and a.dtype == b.dtype == torch.int8
++        and out_dtype in (torch.float16, torch.bfloat16)
++        and a.is_contiguous()
++        and b.stride() == (1, a.shape[1])
++        and 80 <= a.shape[0] <= 128
++        and a.shape[1] == b.shape[0] == 4096
++        and b.shape[1] in (6144, 24576)
++        and sa.dtype == sb.dtype == torch.float32
++        and sa.is_contiguous()
++        and sb.is_contiguous()
++        and sa.numel() == a.shape[0]
++        and sb.numel() == b.shape[1]
++        and (
++            bias is None
++            or (
++                bias.device == a.device
++                and bias.dtype == out_dtype
++                and bias.is_contiguous()
++                and bias.numel() == b.shape[1]
++            )
++        )
++    )
++
++
++def a10_int8_prefill_mm(a, b, sa, sb, out_dtype, bias=None):
++    m, k = a.shape
++    n = b.shape[1]
++    out = torch.empty((m, n), device=a.device, dtype=out_dtype)
++    _int8_prefill[(triton.cdiv(m, 128), triton.cdiv(n, 128))](
++        a,
++        b,
++        sa,
++        sb,
++        bias,
++        out,
++        m,
++        n,
++        k,
++        bias is not None,
++        num_warps=4,
++        num_stages=3,
++        enable_fp_fusion=False,
++    )
++    return out
+diff --git a/python/sglang/srt/layers/quantization/compressed_tensors/schemes/compressed_tensors_w8a8_int8.py b/python/sglang/srt/layers/quantization/compressed_tensors/schemes/compressed_tensors_w8a8_int8.py
+index ff9684c..74e0daa 100644
+--- a/python/sglang/srt/layers/quantization/compressed_tensors/schemes/compressed_tensors_w8a8_int8.py
++++ b/python/sglang/srt/layers/quantization/compressed_tensors/schemes/compressed_tensors_w8a8_int8.py
+@@ -2,6 +2,7 @@
+ # SPDX-License-Identifier: Apache-2.0
+ # SPDX-FileCopyrightText: Copyright contributors to the vLLM project
+ 
++import os
+ from typing import Callable, Optional
+ 
+ import torch
+@@ -38,6 +39,7 @@ class CompressedTensorsW8A8Int8(CompressedTensorsLinearScheme):
+         self.strategy = strategy
+         self.is_static_input_scheme = is_static_input_scheme
+         self.input_symmetric = input_symmetric
++        self._a10_prefill = False
+ 
+     def create_weights(
+         self,
+@@ -100,6 +102,13 @@ class CompressedTensorsW8A8Int8(CompressedTensorsLinearScheme):
+         return 80
+ 
+     def process_weights_after_loading(self, layer) -> None:
++        self._a10_prefill = (
++            _is_cuda
++            and os.getenv("SGLANG_A10_INT8_PREFILL", "false").lower() in ("true", "1")
++            and not self.is_static_input_scheme
++            and self.input_symmetric
++            and torch.cuda.get_device_capability(layer.weight.device) == (8, 6)
++        )
+         # If per tensor, when we have a fused module (e.g. QKV) with per
+         # tensor scales (thus N scales being passed to the kernel),
+         # requantize so we can always run per channel
+@@ -179,6 +188,19 @@ class CompressedTensorsW8A8Int8(CompressedTensorsLinearScheme):
+             output_dtype = x.dtype
+             x_q, x_scale = per_token_quant_int8(x)
+ 
++        if self._a10_prefill:
++            from sglang.kernels.ops.quantization.int8_prefill_gemm import (
++                a10_int8_prefill_mm,
++                supports_a10_prefill,
++            )
++
++            if supports_a10_prefill(
++                x_q, layer.weight, x_scale, layer.weight_scale, output_dtype, bias
++            ):
++                return a10_int8_prefill_mm(
++                    x_q, layer.weight, x_scale, layer.weight_scale, output_dtype, bias
++                )
++
+         return int8_scaled_mm(
+             x_q,
+             layer.weight,
+diff --git a/python/sglang/srt/layers/quantization/w8a8_int8.py b/python/sglang/srt/layers/quantization/w8a8_int8.py
+index 8dc8dd2..8a3776e 100644
+--- a/python/sglang/srt/layers/quantization/w8a8_int8.py
++++ b/python/sglang/srt/layers/quantization/w8a8_int8.py
+@@ -1,6 +1,7 @@
+ from __future__ import annotations
+ 
+ import logging
++import os
+ from types import MappingProxyType
+ from typing import TYPE_CHECKING, Any, Dict, List, Mapping, Optional, cast
+ 
+@@ -158,6 +159,7 @@ class W8A8Int8LinearMethod(LinearMethodBase):
+ 
+     def __init__(self, quantization_config: W8A8Int8Config):
+         self.quantization_config = quantization_config
++        self._a10_prefill = False
+ 
+     def process_weights_after_loading(self, layer: torch.nn.Module) -> None:
+         if _is_cpu:
+@@ -170,6 +172,11 @@ class W8A8Int8LinearMethod(LinearMethodBase):
+         else:
+             layer.weight = Parameter(layer.weight.t(), requires_grad=False)
+         layer.weight_scale = Parameter(layer.weight_scale.data, requires_grad=False)
++        self._a10_prefill = (
++            _is_cuda
++            and os.getenv("SGLANG_A10_INT8_PREFILL", "false").lower() in ("true", "1")
++            and torch.cuda.get_device_capability(layer.weight.device) == (8, 6)
++        )
+ 
+     def create_weights(
+         self,
+@@ -223,6 +230,19 @@ class W8A8Int8LinearMethod(LinearMethodBase):
+         x_scale_2d = x_scale.view(-1, x_scale.shape[-1])
+         output_shape = [*x_q.shape[:-1], layer.weight.shape[1]]
+ 
++        if self._a10_prefill:
++            from sglang.kernels.ops.quantization.int8_prefill_gemm import (
++                a10_int8_prefill_mm,
++                supports_a10_prefill,
++            )
++
++            if supports_a10_prefill(
++                x_q_2d, layer.weight, x_scale_2d, layer.weight_scale, x.dtype, bias
++            ):
++                return a10_int8_prefill_mm(
++                    x_q_2d, layer.weight, x_scale_2d, layer.weight_scale, x.dtype, bias
++                ).view(output_shape)
++
+         output = int8_scaled_mm(
+             x_q_2d,
+             layer.weight,
+-- 
+2.47.1.windows.2
+

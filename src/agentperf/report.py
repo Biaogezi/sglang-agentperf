@@ -33,9 +33,7 @@ COMPARISON_METRICS = {
 CASE_BEGIN = "AGENTPERF_CASE_BEGIN "
 CASE_END = "AGENTPERF_CASE_END "
 RETRACTED_REQUESTS = re.compile(r"#retracted_reqs:\s*(\d+)")
-PREFILL_BATCH = re.compile(
-    r"Prefill batch,.*#new-token:\s*(\d+),.*#running-req:\s*(\d+)"
-)
+PREFILL_BATCH = re.compile(r"Prefill batch,.*#new-token:\s*(\d+),.*#running-req:\s*(\d+)")
 CACHE_HIT_RATE = re.compile(r"Cache hit rate:\s*([0-9.]+)%")
 
 
@@ -120,7 +118,9 @@ def summarize_run(run_dir: Path, output_csv: Path) -> list[dict[str, Any]]:
                 statistics.stdev(values) if len(values) >= 2 else 0.0 if values else ""
             )
         for metric in ("retraction_events", "retracted_requests"):
-            values = [server_stats.get(case_id, {}).get(metric, 0) for case_id in grouped_case_ids[group]]
+            values = [
+                server_stats.get(case_id, {}).get(metric, 0) for case_id in grouped_case_ids[group]
+            ]
             row[f"{metric}_mean"] = statistics.fmean(values)
             row[f"{metric}_stdev"] = statistics.stdev(values) if len(values) >= 2 else 0.0
         cache_hit_rates = [
@@ -128,13 +128,13 @@ def summarize_run(run_dir: Path, output_csv: Path) -> list[dict[str, Any]]:
             for case_id in grouped_case_ids[group]
             if (value := read_cache_hit_rate(run_dir / f"{case_id}.log")) is not None
         ]
-        row["cache_hit_rate_mean"] = (
-            statistics.fmean(cache_hit_rates) if cache_hit_rates else ""
-        )
+        row["cache_hit_rate_mean"] = statistics.fmean(cache_hit_rates) if cache_hit_rates else ""
         row["cache_hit_rate_stdev"] = (
             statistics.stdev(cache_hit_rates)
             if len(cache_hit_rates) >= 2
-            else 0.0 if cache_hit_rates else ""
+            else 0.0
+            if cache_hit_rates
+            else ""
         )
         mixed_chunk_sizes = []
         for case_id in grouped_case_ids[group]:
@@ -148,7 +148,9 @@ def summarize_run(run_dir: Path, output_csv: Path) -> list[dict[str, Any]]:
         row["mixed_prefill_chunk_size_stdev"] = (
             statistics.stdev(mixed_chunk_sizes)
             if len(mixed_chunk_sizes) >= 2
-            else 0.0 if mixed_chunk_sizes else ""
+            else 0.0
+            if mixed_chunk_sizes
+            else ""
         )
         rows.append(row)
 
@@ -173,9 +175,7 @@ def compare_summaries(
 
     def read_rows(path: Path) -> dict[str, dict[str, str]]:
         with path.open(encoding="utf-8", newline="") as handle:
-            return {
-                _workload_name(row["case"]): row for row in csv.DictReader(handle)
-            }
+            return {_workload_name(row["case"]): row for row in csv.DictReader(handle)}
 
     baseline_rows = read_rows(baseline_csv)
     candidate_rows = read_rows(candidate_csv)
@@ -193,18 +193,27 @@ def compare_summaries(
                 continue
             baseline_value = float(baseline[metric])
             candidate_value = float(candidate[metric])
+            row[f"baseline_{metric}"] = baseline_value
+            row[f"candidate_{metric}"] = candidate_value
+            # One-token output has no inter-token latency. A relative change
+            # against zero is undefined, not a 0% improvement or a fatal error.
+            if baseline_value == 0:
+                row[f"{metric}_improvement_pct"] = ""
+                continue
             improvement = (
                 (candidate_value - baseline_value) / baseline_value
                 if higher_is_better
                 else (baseline_value - candidate_value) / baseline_value
             )
-            row[f"baseline_{metric}"] = baseline_value
-            row[f"candidate_{metric}"] = candidate_value
             row[f"{metric}_improvement_pct"] = improvement * 100
         rows.append(row)
 
     output_csv.parent.mkdir(parents=True, exist_ok=True)
-    fieldnames = list(rows[0].keys()) if rows else ["workload", "baseline_case", "candidate_case"]
+    fieldnames = (
+        list(dict.fromkeys(key for row in rows for key in row))
+        if rows
+        else ["workload", "baseline_case", "candidate_case"]
+    )
     with output_csv.open("w", encoding="utf-8", newline="") as handle:
         writer = csv.DictWriter(handle, fieldnames=fieldnames)
         writer.writeheader()
