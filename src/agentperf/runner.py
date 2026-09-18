@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import hashlib
 import json
 import os
 import signal
@@ -14,6 +15,32 @@ from typing import Any
 from .commands import benchmark_command, server_command
 from .config import build_plan, validate_model_artifact
 from .quality import score_corpus
+
+
+def source_fingerprints() -> dict[str, dict[str, str]]:
+    """Record executed Python bytes as well as Git IDs, including uncommitted helpers."""
+    root = Path(__file__).resolve().parents[2]
+    upstream = Path("/workspace/sglang")
+    if not upstream.is_dir():
+        upstream = root / "upstream/sglang"
+    harness = [*root.glob("src/agentperf/*.py"), *root.glob("scripts/*.py")]
+    runtime = [
+        upstream / "python/sglang/kernels/ops/quantization/int8_prefill_gemm.py",
+        upstream / "python/sglang/srt/layers/quantization/w8a8_int8.py",
+        upstream
+        / "python/sglang/srt/layers/quantization/compressed_tensors/schemes/compressed_tensors_w8a8_int8.py",
+    ]
+    return {
+        "harness": {
+            path.relative_to(root).as_posix(): hashlib.sha256(path.read_bytes()).hexdigest()
+            for path in sorted(harness)
+        },
+        "runtime_candidate": {
+            path.relative_to(upstream).as_posix(): hashlib.sha256(path.read_bytes()).hexdigest()
+            for path in runtime
+            if path.is_file()
+        },
+    }
 
 
 def _git_head(path: Path | None = None) -> str | None:
@@ -95,6 +122,7 @@ def run_plan(
     manifest = {
         "created_at": timestamp,
         "harness_commit": _git_head(),
+        "source_files_sha256": source_fingerprints(),
         "upstream_commit": config["upstream_commit"],
         "upstream_worktree_commit": _git_head(Path("/workspace/sglang")),
         "model": model,
@@ -104,8 +132,7 @@ def run_plan(
         "server_command": server_argv,
         "server_environment": server_environment,
         "benchmark_commands": [
-            benchmark_command(config, case, run_dir / f"{case.case_id}.jsonl")
-            for case in plan
+            benchmark_command(config, case, run_dir / f"{case.case_id}.jsonl") for case in plan
         ],
         "config": config,
     }
@@ -184,6 +211,7 @@ def run_quality_plan(
     manifest = {
         "created_at": timestamp,
         "harness_commit": _git_head(),
+        "source_files_sha256": source_fingerprints(),
         "upstream_commit": config["upstream_commit"],
         "upstream_worktree_commit": _git_head(Path("/workspace/sglang")),
         "model": model,

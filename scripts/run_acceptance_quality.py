@@ -15,7 +15,12 @@ from transformers import AutoTokenizer
 from agentperf.commands import resolve_model_path, server_command
 from agentperf.config import load_config, validate_model_artifact
 from agentperf.quality import _post_json, compare_quality, score_corpus
-from agentperf.runner import _git_head, terminate_process_group, wait_for_server
+from agentperf.runner import (
+    _git_head,
+    source_fingerprints,
+    terminate_process_group,
+    wait_for_server,
+)
 from agentperf.task_quality import judge, regression_tasks
 
 
@@ -52,6 +57,7 @@ def main():
             "command": argv,
             "environment": profile["env"],
             "harness_commit": _git_head(),
+            "source_files_sha256": source_fingerprints(),
             "upstream_worktree_commit": _git_head(Path("/workspace/sglang")),
             "script_sha256": hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),
             "taskset_sha256": taskset_sha,
