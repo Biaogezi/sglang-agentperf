@@ -33,6 +33,10 @@ captured-graph HBM, and replay time. Do not change default buckets until these d
 | AWQ schemes | `python/sglang/srt/layers/quantization/awq/` |
 | GPTQ schemes | `python/sglang/srt/layers/quantization/gptq/` |
 | W8A8 path | `python/sglang/srt/layers/quantization/w8a8_int8.py` |
+| Compressed-tensors W8A8 path | `python/sglang/srt/layers/quantization/compressed_tensors/schemes/compressed_tensors_w8a8_int8.py` |
+| Custom guarded GEMM | `python/sglang/kernels/ops/quantization/int8_prefill_gemm.py` |
+| Fused normalization + activation quantization | `python/sglang/kernels/ops/quantization/int8_kernel.py` and `python/sglang/srt/layers/layernorm.py` |
+| Qwen3 opt-in TP=1 handoff | `python/sglang/srt/models/qwen3.py` |
 | NVIDIA AWQ dispatch | `python/sglang/srt/hardware_backend/gpu/quantization/awq_kernels.py` |
 | NVIDIA GPTQ dispatch | `python/sglang/srt/hardware_backend/gpu/quantization/gptq_kernels.py` |
 | Marlin utilities | `python/sglang/srt/layers/quantization/marlin_utils.py` |
@@ -66,4 +70,3 @@ metadata preparation. No broad refactor is allowed without a trace showing the b
 Every runtime patch starts with the narrow unit tests colocated with the touched subsystem, then
 `bench_one_batch` for phase isolation, and finally the online suite in this repository. A local
 microbenchmark is explanatory evidence only; the acceptance gate remains online serving behavior.
-

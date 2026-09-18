@@ -1,6 +1,7 @@
 """Prove arbitrary supported row counts reuse bounded compiled variants."""
 
 import json
+import re
 
 import torch
 import triton
@@ -14,6 +15,7 @@ def main():
     b = torch.randint(-128, 128, (n, k), dtype=torch.int8, device="cuda").t()
     sb = torch.rand((n, 1), device="cuda") * 0.001
     hashes = {}
+    compiled_metadata = {}
     for m in (80, 81, 83, 95, 96, 97, 111, 112, 113, 127, 128):
         a = torch.randint(-128, 128, (m, k), dtype=torch.int8, device="cuda")
         sa = torch.rand((m, 1), device="cuda") * 0.001
@@ -37,6 +39,13 @@ def main():
             enable_fp_fusion=False,
         )
         hashes[m] = compiled.hash
+        mma = sorted(set(re.findall(r"mma\.sync\.[^;\s]+", compiled.asm["ptx"])))
+        assert any(".s8.s8" in instruction for instruction in mma)
+        compiled_metadata[compiled.hash] = {
+            "mma_instructions": mma,
+            "registers_per_thread": compiled.n_regs,
+            "shared_memory_bytes": compiled.metadata.shared,
+        }
     assert len({value for m, value in hashes.items() if m < 128}) == 1
     assert len(set(hashes.values())) == 2
     print(
@@ -45,6 +54,7 @@ def main():
                 "passed": len(hashes),
                 "compiled_variant_count": len(set(hashes.values())),
                 "row_count_to_binary_hash": hashes,
+                "compiled_metadata": compiled_metadata,
             },
             indent=2,
         )

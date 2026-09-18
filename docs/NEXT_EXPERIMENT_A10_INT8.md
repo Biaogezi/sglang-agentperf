@@ -1,6 +1,10 @@
 # Next experiment: A10 INT8 GEMM tuning
 
-Status: prepared hypothesis; no accepted source speedup yet.
+Status: historical build plan, superseded by [Optimization 004](OPTIMIZATION_004_SM86_INT8_PREFILL.md).
+
+The installed CUTLASS wheel was not replaced. The later implementation uses a guarded Triton
+kernel in the Python runtime, with GPU correctness, execution traces and serving evidence.
+The build checkpoint below describes the earlier abandoned wheel-build route, not current status.
 
 ## Motivation and constraints
 
