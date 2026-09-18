@@ -1,0 +1,36 @@
+{
+  "schema_version": 1,
+  "source_run": "20260918T044641Z",
+  "files": [
+    {
+      "name": "manifest.json",
+      "size_bytes": 4878,
+      "sha256": "e3da8ab68d3d680652178e8e12210363f15438d9f3a781e504228ec2898ec970",
+      "published": true
+    },
+    {
+      "name": "test_w8a8_splitk_gpu.py.log",
+      "size_bytes": 83,
+      "sha256": "9feccbfee34e8087bf28bf9e90ebe039861b8588bdd4cecc04e111b4ae1fb152",
+      "published": true
+    },
+    {
+      "name": "test_w8a8_dispatch_gpu.py.log",
+      "size_bytes": 785,
+      "sha256": "a7036eccf44a82b57a7b3e2ba49129f1a2b466ca44150335b11b4a241eae8538",
+      "published": true
+    },
+    {
+      "name": "test_prefill_jit_variants.py.log",
+      "size_bytes": 1490,
+      "sha256": "fbf9adc249f898fda92377c3ebfd9ad5539192490b559554cd2d5cb9c9b3eac9",
+      "published": true
+    },
+    {
+      "name": "test_native_norm_fusion_gpu.py.log",
+      "size_bytes": 11794,
+      "sha256": "33deb765b1cdfa3639f9f805b95e37dce97fe4a588c96b066a9b8ae76ab73969",
+      "published": true
+    }
+  ]
+}

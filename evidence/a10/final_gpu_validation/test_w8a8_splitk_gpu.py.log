@@ -1,0 +1,1 @@
+{"passed": 44, "reference": "exact FP64 integer dot; FP32 scales; CUTLASS parity"}

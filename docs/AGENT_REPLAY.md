@@ -16,7 +16,7 @@ Protocol:
 - Fixed 32 generated tokens per turn using the upstream ignore-EOS benchmark behavior.
 - Thinking disabled through `chat_template_kwargs`, temperature zero.
 - Flush prefix cache before each measured run; retain cache reuse **within** a conversation.
-- Record dataset SHA-256, source fingerprints, actual token counts, output texts and errors.
+- Record dataset SHA-256, source fingerprints, output token counts, output texts and errors.
 - Alternating server restarts and three repetitions for each accepted OFF/ON result.
 - Compare output histories as well as timing: if responses diverge, later prompts differ too.
   Such measurements cannot be called identical-input replay, even at temperature zero.
@@ -32,3 +32,13 @@ python scripts/audit_paired_run.py results/paired/RUN_DIRECTORY
 Native fixed-token prefill micro-workloads and natural-text multi-turn replay answer different
 questions; their absolute throughput must not be compared as though they were the same inputs.
 Status/results are recorded in the final experiment report once measurements finish.
+
+## Upstream metric limitation
+
+At the pinned release, `AgenticTraceDataset` treats the first turn's `prompt_tokens` as
+informational, and `benchmark.serving.calculate_metrics` receives `input_requests=None` for
+multi-turn requests. The chat request client does not update `output.prompt_len` from server
+usage. Therefore the emitted input tok/s and prompt-denominator cache-hit rate are **not valid
+multi-turn metrics** (our fixtures leave that informational length zero). Do not report them.
+Use completed requests, output tok/s, TTFT, TPOT and E2E for this replay; preserve the raw fields
+so the limitation is auditable. This project has not patched that upstream benchmark limitation.

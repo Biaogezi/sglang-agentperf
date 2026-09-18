@@ -33,12 +33,14 @@ bash scripts/bootstrap_remote.sh
 cp configs/host.env.example .env
 ```
 
-Download only the two required checkpoints first:
+Download pinned checkpoints inside the container (its Hugging Face client is already installed).
+W8A8 is the primary candidate; FP16 is the quality control. AWQ is optional for reproducing the
+historical quality/performance trade-off and is not an accepted quality-equivalent deployment.
 
 ```bash
-source .venv/bin/activate
-hf download Qwen/Qwen3-8B --local-dir /data/models/Qwen3-8B
-hf download Qwen/Qwen3-8B-AWQ --local-dir /data/models/Qwen3-8B-AWQ
+bash scripts/container_shell.sh python -c 'from huggingface_hub import snapshot_download; snapshot_download("nytopop/Qwen3-8B.w8a8", revision="13e255a9648ec08d3873bce1c3d9886a76494c43", local_dir="/data/models/Qwen3-8B-W8A8")'
+bash scripts/container_shell.sh python -c 'from huggingface_hub import snapshot_download; snapshot_download("Qwen/Qwen3-8B", revision="b968826d9c46dd6066d109eabc6255188de91218", local_dir="/data/models/Qwen3-8B")'
+bash scripts/container_shell.sh python -m agentperf.cli verify-model --model qwen3_8b_w8a8 --model-dir /data/models/Qwen3-8B-W8A8
 ```
 
 Model IDs and trust status are recorded in `configs/model_sources.json`. The GPTQ checkpoint is a
@@ -133,3 +135,36 @@ standard full-document WikiText perplexity or a broad language-model capability 
 
 All switches remain opt-in. Do not enable a candidate on unmeasured hardware merely because it
 passes CPU CI; CUDA numerical tests and serving measurements require the actual GPU.
+
+## 8. Reproduce the primary candidate and quality gate
+
+Use Linux Bash for these commands. Bootstrap applies all seven locked patches; rejected switches
+stay OFF. The performance control is the **same patched tree, custom GEMM OFF**, not a different
+version of SGLang. Never run two GPU experiments at the same time.
+
+Download the pinned test parquet from the
+[dataset's fixed revision](https://huggingface.co/datasets/Salesforce/wikitext/tree/b08601e04326c79dfdd32d625aee71d232d685c3/wikitext-2-raw-v1).
+The preparation script independently verifies its SHA-256 before reading it:
+
+```bash
+bash scripts/container_shell.sh python -c 'from huggingface_hub import hf_hub_download; hf_hub_download("Salesforce/wikitext", "wikitext-2-raw-v1/test-00000-of-00001.parquet", repo_type="dataset", revision="b08601e04326c79dfdd32d625aee71d232d685c3", local_dir="quality-input")'
+bash scripts/container_shell.sh python scripts/prepare_wikitext_quality.py --parquet quality-input/wikitext-2-raw-v1/test-00000-of-00001.parquet --tokenizer /data/models/Qwen3-8B-W8A8 --output quality/wikitext2_128tokens.jsonl
+bash scripts/container_shell.sh python scripts/run_acceptance_quality.py --model qwen3_8b_fp16 --profiles off
+bash scripts/container_shell.sh python scripts/run_acceptance_quality.py --candidate gemm
+
+bash scripts/container_shell.sh python scripts/run_paired_prefill.py --suite short --candidate gemm --disable-overlap --repetitions 3
+bash scripts/container_shell.sh python scripts/run_paired_prefill.py --suite short_decode --candidate gemm --disable-overlap --repetitions 3
+bash scripts/container_shell.sh python scripts/run_paired_prefill.py --suite core --candidate gemm --repetitions 3
+bash scripts/container_shell.sh python scripts/run_paired_prefill.py --suite agent --candidate gemm --repetitions 3
+```
+
+The primary low-concurrency measurement disables overlap on **both** arms; core/agent tests keep
+the default overlap scheduler. Do not attribute that existing flag to the new kernel. After each
+pair, run `scripts/audit_paired_run.py` and inspect both failure counts and output agreement.
+Use the run IDs printed by the commands; never overwrite older experiment directories.
+
+For execution proof, use `--suite proof --candidate gemm --disable-overlap --repetitions 1`.
+The GEMM-only ON trace should contain `_int8_prefill` but not the custom norm-fusion kernel.
+Do not use its profiled latency as a performance result. Raw files live in `results/`, `quality/`
+and `profiles/`; copy them to durable storage before releasing a rented instance. `evidence/`
+contains compact public results and hashes, not all raw traces or model weights.
