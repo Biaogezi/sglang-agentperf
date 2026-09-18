@@ -1,6 +1,7 @@
 # Optimization 007 — test the shape guard under saturated short-context decode
 
-Status: one-pair screen shows no benefit; not accepted as a decode optimization.
+Status: default-coverage screen has no gain; graph128 screen shows +6.96%, below the 10% gate.
+Independent three-repeat graph128 validation and diagnostic traces are in progress.
 
 The candidate is named short-prefill GEMM, but dispatch is based on matrix rows, not forward
 mode. A decode step with 80..128 token rows has the same supported QKV/gate-up dimensions.
@@ -65,3 +66,19 @@ If promising, repeat three times and collect independent trace proof. Compare cu
 within the same graph configuration. Any default-OFF → graph128-OFF gain belongs to upstream
 configuration/coverage, not our GEMM. Monitor capture-memory costs and do not silently lower
 KV capacity or change workload lengths if capture fails.
+
+### Graph128 screening result
+
+Run `20260918T073157Z__batch_decode` completes all 1,280 requests. OFF→ON output throughput is
+2461.326→2632.568 tok/s (+6.957%); p99 TPOT is 49.942→47.580 ms (-4.729%); p99 TTFT
+is 2282.926→2281.044 ms. Text matches 627/640 pairs. This single screen is below the
+pre-registered throughput/latency gates and is not an accepted broad decode speedup.
+
+Logs confirm actual batch-128 decode replay (`cuda graph: True`). In the OFF arm, decode capture
+memory is 0.36 GB versus 0.12 GB in the earlier default screen; both retain 74,673 KV token slots
+and the same 0.82 memory fraction. These are launch-reported capture allocations, not exact
+whole-process peaks. The +1.7% difference between the two OFF screens is not a repeated
+configuration-performance result. Public snapshots: `batch_graph128_screen_off/on`.
+
+Three independent alternating graph128 pairs are run next, **without mixing in the screening
+pair or changing the gate**. Separate default-coverage and graph128 traces are diagnostic only.

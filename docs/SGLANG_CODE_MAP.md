@@ -2,6 +2,13 @@
 
 Pinned source: `v0.5.19` / `0bcd822377da7b5718e674eaf9c870d349424dd1`.
 
+This map contains the original investigation branches, not a claim that all branches became
+accepted optimizations. The selected runtime change is Candidate B's guarded INT8 GEMM.
+The inspectable source additions live in [patch 0004](../patches/0004-feat-quant-add-opt-in-SM86-short-prefill-INT8-GEMM.patch),
+with bounded JIT refinement in [patch 0005](../patches/0005-perf-quant-bound-prefill-JIT-variants-and-remove-ful.patch).
+Bootstrap applies the complete locked series; `upstream/sglang/` itself is intentionally not
+vendored into this repository. See [the final report](FINAL_REPORT.zh-CN.md) for actual coverage.
+
 ## Measurement path
 
 | Concern | Primary source | Initial inspection target |

@@ -45,6 +45,7 @@ Only a bottleneck demonstrated in a trace becomes an optimization target.
 
 ```text
 configs/                 versioned models, server profiles and workload matrix
+patches/                 reviewable runtime changes; rejected candidates remain default-off
 src/agentperf/           pure-Python plan builder, runner and result summarizer
 scripts/                 remote bootstrap, environment capture and Nsight helpers
 tests/                   CPU-only validation for orchestration and result logic
@@ -189,3 +190,5 @@ Readers can independently recompute the primary throughput and TTFT numbers from
 
 For a Chinese walkthrough of architecture, implementation ownership and interview questions, read
 [项目讲解与面试准备](docs/PROJECT_GUIDE.zh-CN.md).
+The evidence-bound [Chinese resume description](docs/RESUME.zh-CN.md) keeps the workload and
+hardware qualifiers attached to each accepted result.

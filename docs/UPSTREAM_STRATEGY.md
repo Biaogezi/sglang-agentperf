@@ -1,5 +1,9 @@
 # Upstream contribution strategy
 
+Status: future contribution plan, **no upstream PR submitted or merged**. The seven-patch
+experiment tree includes rejected opt-in candidates and is not proposed as an upstream series
+unchanged. Accepted A10 evidence and project completion are tracked in the final report.
+
 The project uses two Git histories:
 
 - this repository: experiment definitions, automation and evidence;
@@ -18,10 +22,9 @@ exists, and “contributed to SGLang” only when the contribution status is sta
 ## Branches
 
 ```bash
-git -C upstream/sglang switch -c agentperf/baseline-v0.5.19
-git -C upstream/sglang switch -c agentperf/optimization-name
+git -C upstream/sglang switch -c codex/baseline-v0.5.19
+git -C upstream/sglang switch -c codex/optimization-name
 ```
 
 Before submission, fetch `sgl-project/sglang` main, rebase, rerun correctness tests and repeat the
 performance comparison against the rebased parent commit.
-
