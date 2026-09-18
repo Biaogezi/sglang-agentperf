@@ -241,10 +241,77 @@ def check_run_equivalence(baseline_dir: Path, candidate_dir: Path) -> dict[str, 
         {"workload": key[0], "repetition": key[1], "field": field}
         for key in matched
         for field in fields
-        if baseline[key].get(field) != candidate[key].get(field)
+        if field not in baseline[key]
+        or field not in candidate[key]
+        or baseline[key][field] != candidate[key][field]
     ]
+    mismatches.extend(
+        {"workload": key[0], "repetition": key[1], "field": "missing_record"}
+        for key in sorted(baseline.keys() ^ candidate.keys())
+    )
     return {
         "matched_repetitions": len(matched),
         "equivalent": bool(matched) and not mismatches,
         "mismatches": mismatches,
+    }
+
+
+def audit_paired_run(root: Path, *, minimum_repetitions: int = 3) -> dict[str, Any]:
+    """Reject incomplete, mixed-source or failed-request paired experiments."""
+    failures = []
+    source_ids = set()
+    successful = 0
+    workloads: dict[str, set[tuple[str, int]]] = {}
+    for profile in ("prefill_off", "prefill_on"):
+        directory = root / profile
+        launches = json.loads((directory / "manifest.json").read_text())["launches"]
+        repetitions = [launch["repetition"] for launch in launches]
+        if len(repetitions) < minimum_repetitions or len(set(repetitions)) != len(repetitions):
+            failures.append(f"{profile}: insufficient or duplicate repetitions")
+        expected_files = set()
+        workloads[profile] = set()
+        for launch in launches:
+            manifest = launch["manifest"]
+            fingerprint = manifest.get("source_files_sha256")
+            if not fingerprint or not fingerprint.get("runtime_candidate"):
+                failures.append(f"{profile}: missing executed-source fingerprints")
+            source_ids.add(json.dumps(fingerprint, sort_keys=True))
+            for case in manifest["cases"]:
+                name = case["case_id"].rsplit("__r", 1)[0] + f"__r{launch['repetition']}"
+                expected_files.add(name + ".jsonl")
+                workload = manifest["config"]["workloads"][case["workload"]]
+                workloads[profile].add((case["workload"], launch["repetition"]))
+                path = directory / (name + ".jsonl")
+                if not path.is_file():
+                    failures.append(f"{profile}: missing {path.name}")
+                    continue
+                record = read_last_json(path)
+                expected = workload["num_prompts"]
+                errors = record.get("errors")
+                if record.get("completed") != expected:
+                    failures.append(f"{name}: incomplete requests")
+                if not isinstance(errors, list) or len(errors) != expected or any(errors):
+                    failures.append(f"{name}: missing or nonempty request errors")
+                successful += int(record.get("completed", 0))
+                if workload["dataset"] == "random-ids":
+                    args = workload["args"]
+                    if "--tokenize-prompt" not in args:
+                        failures.append(f"{name}: nominal text lengths are not native IDs")
+                    ratio = args[args.index("--random-range-ratio") + 1]
+                    if float(ratio) == 1:
+                        length = int(args[args.index("--random-input-len") + 1])
+                        if record.get("input_lens") != [length] * expected:
+                            failures.append(f"{name}: fixed token lengths differ")
+        if expected_files != {path.name for path in directory.glob("*.jsonl")}:
+            failures.append(f"{profile}: unexpected or missing output files")
+    if len(source_ids) != 1:
+        failures.append("Executed source bytes differ across OFF/ON launches")
+    if workloads["prefill_off"] != workloads["prefill_on"]:
+        failures.append("OFF/ON workload repetitions differ")
+    return {
+        "passed": not failures,
+        "failures": failures,
+        "completed_requests": successful,
+        "matched_repetitions": len(workloads["prefill_off"] & workloads["prefill_on"]),
+        "output_equivalence": check_run_equivalence(root / "prefill_off", root / "prefill_on"),
     }

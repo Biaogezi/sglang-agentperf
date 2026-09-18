@@ -87,3 +87,73 @@ def test_compare_zero_latency_is_undefined_not_error(tmp_path: Path) -> None:
     assert row["input_throughput_mean_improvement_pct"] == pytest.approx(20)
     assert row["baseline_tpot_p99_ms_mean"] == 0
     assert row["tpot_p99_ms_mean_improvement_pct"] == ""
+
+
+def test_equivalence_rejects_missing_fields_and_missing_runs(tmp_path: Path) -> None:
+    baseline, candidate = tmp_path / "off", tmp_path / "on"
+    baseline.mkdir()
+    candidate.mkdir()
+    for directory in (baseline, candidate):
+        (directory / "model__arm__work__r1.jsonl").write_text('{"completed": 1}\n')
+    result = check_run_equivalence(baseline, candidate)
+    assert not result["equivalent"]
+    assert len(result["mismatches"]) == 3
+    record = '{"generated_texts":["a"], "output_lens":[1], "errors":[""]}\n'
+    for directory in (baseline, candidate):
+        (directory / "model__arm__work__r1.jsonl").write_text(record)
+    (baseline / "model__arm__work__r2.jsonl").write_text(record)
+    assert not check_run_equivalence(baseline, candidate)["equivalent"]
+
+
+def test_paired_audit_requires_matching_sources_and_all_requests(tmp_path: Path) -> None:
+    from agentperf.report import audit_paired_run
+
+    for arm in ("prefill_off", "prefill_on"):
+        directory = tmp_path / arm
+        directory.mkdir()
+        manifest = {
+            "launches": [
+                {
+                    "repetition": 1,
+                    "manifest": {
+                        "source_files_sha256": {"runtime_candidate": {"kernel.py": "same"}},
+                        "cases": [{"case_id": f"m__{arm}__work__r1", "workload": "work"}],
+                        "config": {
+                            "workloads": {
+                                "work": {
+                                    "num_prompts": 1,
+                                    "dataset": "random-ids",
+                                    "args": [
+                                        "--tokenize-prompt",
+                                        "--random-input-len",
+                                        "128",
+                                        "--random-range-ratio",
+                                        "1",
+                                    ],
+                                }
+                            }
+                        },
+                    },
+                }
+            ]
+        }
+        (directory / "manifest.json").write_text(json.dumps(manifest))
+        (directory / f"m__{arm}__work__r1.jsonl").write_text(
+            json.dumps(
+                {
+                    "completed": 1,
+                    "errors": [""],
+                    "input_lens": [128],
+                    "generated_texts": ["x"],
+                    "output_lens": [1],
+                }
+            )
+            + "\n"
+        )
+    assert audit_paired_run(tmp_path, minimum_repetitions=1)["passed"]
+    assert not audit_paired_run(tmp_path)["passed"]
+    path = tmp_path / "prefill_on/manifest.json"
+    bad = json.loads(path.read_text())
+    bad["launches"][0]["manifest"]["source_files_sha256"]["runtime_candidate"] = {"k": "changed"}
+    path.write_text(json.dumps(bad))
+    assert not audit_paired_run(tmp_path, minimum_repetitions=1)["passed"]
