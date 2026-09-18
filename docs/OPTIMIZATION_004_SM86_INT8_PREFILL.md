@@ -102,3 +102,34 @@ checks because they include explanation despite the instruction to return only a
 Do not describe this as 100% task accuracy. The short application prompts fall outside the
 candidate M range; they are fallback regressions, while the 128-token NLL windows exercise its
 target range. Task source and raw-output hashes are retained separately from capability claims.
+
+### Corrected native-token result, first tile configuration
+
+After adding `--tokenize-prompt`, three alternating OFF/ON repetitions yield:
+
+| Actual input length | Input throughput change | p99 TTFT reduction |
+|---|---:|---:|
+| 96 | +6.01% | 6.54% |
+| 128 | +7.83% | 7.83% |
+| 160 (fallback) | -0.29% | 0.02% |
+
+All nine paired output records match exactly. These results are real positive but bounded
+serving gains; they remain below the original 10% throughput acceptance gate. Snapshots are
+`prefill_native_v1_off/` and `prefill_native_v1_on/`. The source at measurement time was
+`997819a602`, before the JIT hardening below.
+
+### JIT specialization hardening
+
+The eager/text diagnostic exposed many first-use shape compilations: M had been `tl.constexpr`,
+so lengths 80 through 128 could create dozens of variants per projection. Patch 0005 makes M a
+non-specialized runtime argument and retains one full-row-tile specialization. The fixed-shape
+graph-captured kernel and the arbitrary-length eager kernel therefore share a bounded binary set.
+
+A GPU test covers eleven lengths including 81/83/95/97/113/127 and verifies the exact compiled
+binary hashes: ten partial-row lengths share one binary, and M=128 uses a second. This count is
+for fixed N/K/dtype/bias, not the whole model. All outputs match CUTLASS bit-for-bit, and the
+44-case ragged-dimension/extreme-input suite also passes after removing provably redundant masks.
+
+The five-patch source tree is `b2bb6ee38d3bc33f5fdf6f4068ca42fa9fc9b9f0`; serving performance
+of this hardened revision still requires a separate measurement. A wider real-weight tile,
+warp-count and pipeline-depth search is in progress; screening winners are not accepted results.

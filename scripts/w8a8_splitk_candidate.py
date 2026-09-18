@@ -32,27 +32,26 @@ def _gemm(
     split = tl.program_id(2)
     ki = split * BK + tl.arange(0, BK)
     acc = tl.full((BM, BN), 0, tl.int32)
+    row_mask = tl.full((BM,), True, tl.int1) if M % BM == 0 else mi < M
+    col_mask = tl.full((BN,), True, tl.int1) if N % BN == 0 else ni < N
     for step in range(tl.cdiv(K, BK * SPLITS)):
         kk = ki + step * BK * SPLITS
-        a = tl.load(
-            A + mi[:, None] * K + kk[None, :], (mi[:, None] < M) & (kk[None, :] < K), other=0
-        )
-        b = tl.load(
-            B + kk[:, None] + ni[None, :] * K, (kk[:, None] < K) & (ni[None, :] < N), other=0
-        )
+        k_mask = tl.full((BK,), True, tl.int1) if K % (BK * SPLITS) == 0 else kk < K
+        a = tl.load(A + mi[:, None] * K + kk[None, :], row_mask[:, None] & k_mask[None, :], other=0)
+        b = tl.load(B + kk[:, None] + ni[None, :] * K, k_mask[:, None] & col_mask[None, :], other=0)
         acc += tl.dot(a, b)
     if SPLITS == 1:
-        sa = tl.load(SA + mi, mi < M, other=0)
-        sb = tl.load(SB + ni, ni < N, other=0)
+        sa = tl.load(SA + mi, row_mask, other=0)
+        sb = tl.load(SB + ni, col_mask, other=0)
         values = acc.to(tl.float32) * (sa[:, None] * sb[None, :])
         if HAS_BIAS:
-            values += tl.load(BIAS + ni, ni < N, other=0).to(tl.float32)[None, :]
-        tl.store(OUT + mi[:, None] * N + ni[None, :], values, (mi[:, None] < M) & (ni[None, :] < N))
+            values += tl.load(BIAS + ni, col_mask, other=0).to(tl.float32)[None, :]
+        tl.store(OUT + mi[:, None] * N + ni[None, :], values, row_mask[:, None] & col_mask[None, :])
     else:
         tl.store(
             P + split * M * N + mi[:, None] * N + ni[None, :],
             acc,
-            (mi[:, None] < M) & (ni[None, :] < N),
+            row_mask[:, None] & col_mask[None, :],
         )
 
 

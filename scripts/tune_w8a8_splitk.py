@@ -24,6 +24,14 @@ def main():
     parser.add_argument("--output", required=True)
     parser.add_argument("--batch-tiles", nargs="+", type=int, default=[16])
     parser.add_argument("--splits", nargs="+", type=int, default=[1, 2, 4, 8])
+    parser.add_argument("--column-tiles", nargs="+", type=int, default=[32, 64, 128])
+    parser.add_argument("--k-tiles", nargs="+", type=int, default=[64, 128])
+    parser.add_argument("--warps", nargs="+", type=int, default=[4])
+    parser.add_argument("--stages", nargs="+", type=int, default=[3])
+    parser.add_argument(
+        "--real-weights",
+        help="Local calibrated model: use layer-0 weights and quantized Gaussian activations",
+    )
     args = parser.parse_args()
     output = Path(args.output)
     output.parent.mkdir(parents=True, exist_ok=True)
@@ -35,18 +43,51 @@ def main():
         "timing": "CUDA Graph; 3 rounds; median",
         "results": results,
         "rejected_configurations": [],
+        "input_distribution": "real layer-0 weights, Gaussian activation quantization"
+        if args.real_weights
+        else "uniform full-range INT8",
     }
     payload["source_sha256"] = {
         path.name: hashlib.sha256(path.read_bytes()).hexdigest()
         for path in (Path(__file__), Path(__file__).with_name("w8a8_splitk_candidate.py"))
     }
     torch.manual_seed(17)
+    if args.real_weights:
+        from safetensors import safe_open
+        from sglang.kernels.ops.quantization.int8_kernel import per_token_quant_int8
+
+        model_root = Path(args.real_weights)
+        weight_map = json.loads((model_root / "model.safetensors.index.json").read_text())[
+            "weight_map"
+        ]
+        projection_names = {
+            "qkv": ["self_attn.q_proj", "self_attn.k_proj", "self_attn.v_proj"],
+            "o": ["self_attn.o_proj"],
+            "gate_up": ["mlp.gate_proj", "mlp.up_proj"],
+            "down": ["mlp.down_proj"],
+        }
+
+        def load_weight(key):
+            with safe_open(model_root / weight_map[key], framework="pt", device="cpu") as handle:
+                return handle.get_tensor(key).to("cuda")
+
     for name, m in itertools.product(args.projections, args.rows):
         k, n = SHAPES[name]
         a = torch.randint(-128, 128, (m, k), device="cuda", dtype=torch.int8)
         b = torch.randint(-128, 128, (n, k), device="cuda", dtype=torch.int8).t()
         sa = torch.rand((m, 1), device="cuda") * 0.001
         sb = torch.rand((n, 1), device="cuda") * 0.001
+        if args.real_weights:
+            a, sa = per_token_quant_int8(torch.randn((m, k), device="cuda", dtype=torch.float16))
+            b = torch.cat(
+                [load_weight(f"model.layers.0.{part}.weight") for part in projection_names[name]]
+            ).t()
+            sb = torch.cat(
+                [
+                    load_weight(f"model.layers.0.{part}.weight_scale")
+                    for part in projection_names[name]
+                ]
+            ).float()
         baseline = partial(int8_scaled_mm, a, b, sa, sb, torch.float16)
         # FP32 exactly represents these input integers and their bounded dot products.
         with torch.no_grad():
@@ -54,10 +95,17 @@ def main():
             reference = ((a.float() @ b.float()) * (sa * sb.view(1, -1))).half()
         torch.testing.assert_close(baseline(), reference, rtol=1e-3, atol=1e-4)
         candidates = []
-        for bm, bn, bk, splits in itertools.product(
-            args.batch_tiles, [32, 64, 128], [64, 128], args.splits
+        for bm, bn, bk, splits, warps, stages in itertools.product(
+            args.batch_tiles, args.column_tiles, args.k_tiles, args.splits, args.warps, args.stages
         ):
-            config = {"bm": bm, "bn": bn, "bk": bk, "splits": splits, "warps": 4, "stages": 3}
+            config = {
+                "bm": bm,
+                "bn": bn,
+                "bk": bk,
+                "splits": splits,
+                "warps": warps,
+                "stages": stages,
+            }
             candidate = partial(splitk_mm, a, b, sa, sb, **config)
             try:
                 actual = candidate()

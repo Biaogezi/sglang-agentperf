@@ -1,6 +1,6 @@
 repository=https://github.com/sgl-project/sglang.git
 ref=v0.5.19
 commit=0bcd822377da7b5718e674eaf9c870d349424dd1
-patches=patches/0001-feat-scheduler-add-SLO-aware-adaptive-prefill-chunki.patch patches/0002-feat-quant-make-Marlin-reduction-precision-configura.patch patches/0003-feat-quant-fuse-RMSNorm-with-dynamic-INT8-quantizati.patch patches/0004-feat-quant-add-opt-in-SM86-short-prefill-INT8-GEMM.patch
-patched_tree=68ffb227829efeceff3e2ecd459bdfd43ab0387f
+patches=patches/0001-feat-scheduler-add-SLO-aware-adaptive-prefill-chunki.patch patches/0002-feat-quant-make-Marlin-reduction-precision-configura.patch patches/0003-feat-quant-fuse-RMSNorm-with-dynamic-INT8-quantizati.patch patches/0004-feat-quant-add-opt-in-SM86-short-prefill-INT8-GEMM.patch patches/0005-perf-quant-bound-prefill-JIT-variants-and-remove-ful.patch
+patched_tree=b2bb6ee38d3bc33f5fdf6f4068ca42fa9fc9b9f0
 resolved_at=2026-09-18
