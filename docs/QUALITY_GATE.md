@@ -46,3 +46,17 @@ format even though its answers contained the expected numbers. This weakness mus
 The corpus SHA, dataset revision/hash, tokenizer path, runtime source fingerprints and task-set
 hash are retained. No task result here establishes general instruction-following or tool-use
 quality. JSON extraction is a constrained regression, not a full tool-calling benchmark.
+
+## Expanded checkpoint comparison (2026-09-18)
+
+With both custom switches OFF, the identical 8,128-token corpus gives FP16 mean NLL
+**2.94421470** and AWQ-Marlin **3.02027352**: delta **+0.07605882**, or +7.90% in
+exponentiated mean NLL. AWQ **fails** the unchanged +0.02 numerical gate. Its historical
+335-token smoke passed; the larger test supersedes that acceptance, not the recorded timings.
+AWQ remains a quality/performance trade-off reference, not the release's quality-approved path.
+
+FP16 scores 0/16 strict arithmetic-format, 16/16 JSON and 8/8 retrieval; AWQ scores 5/16,
+16/16 and 8/8 respectively. These tiny task samples do not negate the numerical failure.
+The W8A8 source candidate is evaluated separately against both FP16 and its same-checkpoint OFF
+control. Published data: `evidence/a10/fp16_quality_expanded/` and
+`evidence/a10/awq_quality_expanded/`, including original synthetic-task answers.

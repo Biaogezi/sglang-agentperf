@@ -87,3 +87,12 @@ criterion. Add the trace evidence and decision here before coding the patch.
   Standalone kernel tests remain valid. Serving efficacy is not established.
 - Add a direct quant-method dispatch test and require GPU-trace presence/absence for source A/B.
 - The new SM86 GEMM candidate integrates both methods and tests range boundaries plus fallback.
+
+## 2026-09-18 — Tighten checkpoint acceptance with a larger fixed test
+
+- Expanded from 335 smoke tokens to 8,128 scored tokens in 64 independent fixed-length windows.
+- FP16 NLL is 2.94421470; AWQ is 3.02027352, a +0.07605882 increase.
+- Decision: AWQ fails the unchanged +0.02 gate despite the earlier smoke pass. Retain its
+  throughput measurements as a quality/performance trade-off, not accepted lossless acceleration.
+- Preserve original synthetic task answers and score arithmetic, JSON and retrieval separately.
+- Keep final source acceptance separate from checkpoint-format selection.

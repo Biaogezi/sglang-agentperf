@@ -1,0 +1,530 @@
+[
+  {
+    "id": "arithmetic_0",
+    "category": "arithmetic",
+    "input_tokens": 32,
+    "text": "149",
+    "passed": true,
+    "expected": "149",
+    "finish_reason": {
+      "type": "stop",
+      "matched": 151645
+    }
+  },
+  {
+    "id": "json_0",
+    "category": "json_extraction",
+    "input_tokens": 50,
+    "text": "{\"city\": \"Beijing\", \"days\": 1}",
+    "passed": true,
+    "expected": {
+      "city": "Beijing",
+      "days": 1
+    },
+    "finish_reason": {
+      "type": "stop",
+      "matched": 151645
+    }
+  },
+  {
+    "id": "arithmetic_1",
+    "category": "arithmetic",
+    "input_tokens": 33,
+    "text": "213",
+    "passed": true,
+    "expected": "213",
+    "finish_reason": {
+      "type": "stop",
+      "matched": 151645
+    }
+  },
+  {
+    "id": "json_1",
+    "category": "json_extraction",
+    "input_tokens": 49,
+    "text": "{\"city\": \"London\", \"days\": 2}",
+    "passed": true,
+    "expected": {
+      "city": "London",
+      "days": 2
+    },
+    "finish_reason": {
+      "type": "stop",
+      "matched": 151645
+    }
+  },
+  {
+    "id": "arithmetic_2",
+    "category": "arithmetic",
+    "input_tokens": 33,
+    "text": "289",
+    "passed": true,
+    "expected": "289",
+    "finish_reason": {
+      "type": "stop",
+      "matched": 151645
+    }
+  },
+  {
+    "id": "json_2",
+    "category": "json_extraction",
+    "input_tokens": 49,
+    "text": "{\"city\": \"Paris\", \"days\": 3}",
+    "passed": true,
+    "expected": {
+      "city": "Paris",
+      "days": 3
+    },
+    "finish_reason": {
+      "type": "stop",
+      "matched": 151645
+    }
+  },
+  {
+    "id": "arithmetic_3",
+    "category": "arithmetic",
+    "input_tokens": 33,
+    "text": "343",
+    "passed": false,
+    "expected": "377",
+    "finish_reason": {
+      "type": "stop",
+      "matched": 151645
+    }
+  },
+  {
+    "id": "json_3",
+    "category": "json_extraction",
+    "input_tokens": 50,
+    "text": "{\"city\": \"Tokyo\", \"days\": 4}",
+    "passed": true,
+    "expected": {
+      "city": "Tokyo",
+      "days": 4
+    },
+    "finish_reason": {
+      "type": "stop",
+      "matched": 151645
+    }
+  },
+  {
+    "id": "arithmetic_4",
+    "category": "arithmetic",
+    "input_tokens": 33,
+    "text": "409",
+    "passed": false,
+    "expected": "477",
+    "finish_reason": {
+      "type": "stop",
+      "matched": 151645
+    }
+  },
+  {
+    "id": "json_4",
+    "category": "json_extraction",
+    "input_tokens": 50,
+    "text": "{\"city\": \"Beijing\", \"days\": 5}",
+    "passed": true,
+    "expected": {
+      "city": "Beijing",
+      "days": 5
+    },
+    "finish_reason": {
+      "type": "stop",
+      "matched": 151645
+    }
+  },
+  {
+    "id": "arithmetic_5",
+    "category": "arithmetic",
+    "input_tokens": 33,
+    "text": "593",
+    "passed": false,
+    "expected": "589",
+    "finish_reason": {
+      "type": "stop",
+      "matched": 151645
+    }
+  },
+  {
+    "id": "json_5",
+    "category": "json_extraction",
+    "input_tokens": 49,
+    "text": "{\"city\": \"London\", \"days\": 6}",
+    "passed": true,
+    "expected": {
+      "city": "London",
+      "days": 6
+    },
+    "finish_reason": {
+      "type": "stop",
+      "matched": 151645
+    }
+  },
+  {
+    "id": "arithmetic_6",
+    "category": "arithmetic",
+    "input_tokens": 33,
+    "text": "713",
+    "passed": true,
+    "expected": "713",
+    "finish_reason": {
+      "type": "stop",
+      "matched": 151645
+    }
+  },
+  {
+    "id": "json_6",
+    "category": "json_extraction",
+    "input_tokens": 49,
+    "text": "{\"city\": \"Paris\", \"days\": 7}",
+    "passed": true,
+    "expected": {
+      "city": "Paris",
+      "days": 7
+    },
+    "finish_reason": {
+      "type": "stop",
+      "matched": 151645
+    }
+  },
+  {
+    "id": "arithmetic_7",
+    "category": "arithmetic",
+    "input_tokens": 33,
+    "text": "First, compute $ 38 \\times 22 $:\n\n$$\n38 \\times 22 = 836\n$$\n\nThen add 13:\n\n$$\n836 + 13 = 849\n$$\n\n**Answer:** 849",
+    "passed": false,
+    "expected": "849",
+    "finish_reason": {
+      "type": "stop",
+      "matched": 151645
+    }
+  },
+  {
+    "id": "json_7",
+    "category": "json_extraction",
+    "input_tokens": 50,
+    "text": "{\"city\": \"Tokyo\", \"days\": 8}",
+    "passed": true,
+    "expected": {
+      "city": "Tokyo",
+      "days": 8
+    },
+    "finish_reason": {
+      "type": "stop",
+      "matched": 151645
+    }
+  },
+  {
+    "id": "arithmetic_8",
+    "category": "arithmetic",
+    "input_tokens": 33,
+    "text": "1000",
+    "passed": false,
+    "expected": "997",
+    "finish_reason": {
+      "type": "stop",
+      "matched": 151645
+    }
+  },
+  {
+    "id": "json_8",
+    "category": "json_extraction",
+    "input_tokens": 50,
+    "text": "{\"city\": \"Beijing\", \"days\": 9}",
+    "passed": true,
+    "expected": {
+      "city": "Beijing",
+      "days": 9
+    },
+    "finish_reason": {
+      "type": "stop",
+      "matched": 151645
+    }
+  },
+  {
+    "id": "arithmetic_9",
+    "category": "arithmetic",
+    "input_tokens": 33,
+    "text": "First, compute $ 44 \\times 26 $:\n\n$$\n44 \\times 26 = 1144\n$$\n\nThen add 13:\n\n$$\n1144 + 13 = 1157\n$$\n\n**Answer:** 1157",
+    "passed": false,
+    "expected": "1157",
+    "finish_reason": {
+      "type": "stop",
+      "matched": 151645
+    }
+  },
+  {
+    "id": "json_9",
+    "category": "json_extraction",
+    "input_tokens": 50,
+    "text": "{\"city\": \"London\", \"days\": 10}",
+    "passed": true,
+    "expected": {
+      "city": "London",
+      "days": 10
+    },
+    "finish_reason": {
+      "type": "stop",
+      "matched": 151645
+    }
+  },
+  {
+    "id": "arithmetic_10",
+    "category": "arithmetic",
+    "input_tokens": 33,
+    "text": "First, compute $ 47 \\times 28 $:\n\n$$\n47 \\times 28 = 1316\n$$\n\nNow add 13:\n\n$$\n1316 + 13 = 1329\n$$\n\n**Answer:** 1329",
+    "passed": false,
+    "expected": "1329",
+    "finish_reason": {
+      "type": "stop",
+      "matched": 151645
+    }
+  },
+  {
+    "id": "json_10",
+    "category": "json_extraction",
+    "input_tokens": 50,
+    "text": "{\"city\": \"Paris\", \"days\": 11}",
+    "passed": true,
+    "expected": {
+      "city": "Paris",
+      "days": 11
+    },
+    "finish_reason": {
+      "type": "stop",
+      "matched": 151645
+    }
+  },
+  {
+    "id": "arithmetic_11",
+    "category": "arithmetic",
+    "input_tokens": 33,
+    "text": "1513",
+    "passed": true,
+    "expected": "1513",
+    "finish_reason": {
+      "type": "stop",
+      "matched": 151645
+    }
+  },
+  {
+    "id": "json_11",
+    "category": "json_extraction",
+    "input_tokens": 51,
+    "text": "{\"city\": \"Tokyo\", \"days\": 12}",
+    "passed": true,
+    "expected": {
+      "city": "Tokyo",
+      "days": 12
+    },
+    "finish_reason": {
+      "type": "stop",
+      "matched": 151645
+    }
+  },
+  {
+    "id": "arithmetic_12",
+    "category": "arithmetic",
+    "input_tokens": 33,
+    "text": "First, compute $ 53 \\times 32 $:\n\n$$\n53 \\times 32 = 1696\n$$\n\nNow add 13:\n\n$$\n1696 + 13 = 1709\n$$\n\n**Answer:** 1709",
+    "passed": false,
+    "expected": "1709",
+    "finish_reason": {
+      "type": "stop",
+      "matched": 151645
+    }
+  },
+  {
+    "id": "json_12",
+    "category": "json_extraction",
+    "input_tokens": 51,
+    "text": "{\"city\": \"Beijing\", \"days\": 13}",
+    "passed": true,
+    "expected": {
+      "city": "Beijing",
+      "days": 13
+    },
+    "finish_reason": {
+      "type": "stop",
+      "matched": 151645
+    }
+  },
+  {
+    "id": "arithmetic_13",
+    "category": "arithmetic",
+    "input_tokens": 33,
+    "text": "First, compute $ 56 \\times 34 $:\n\n$$\n56 \\times 34 = 1904\n$$\n\nNow add 13:\n\n$$\n1904 + 13 = 1917\n$$\n\n**Answer:** 1917",
+    "passed": false,
+    "expected": "1917",
+    "finish_reason": {
+      "type": "stop",
+      "matched": 151645
+    }
+  },
+  {
+    "id": "json_13",
+    "category": "json_extraction",
+    "input_tokens": 50,
+    "text": "{\"city\": \"London\", \"days\": 14}",
+    "passed": true,
+    "expected": {
+      "city": "London",
+      "days": 14
+    },
+    "finish_reason": {
+      "type": "stop",
+      "matched": 151645
+    }
+  },
+  {
+    "id": "arithmetic_14",
+    "category": "arithmetic",
+    "input_tokens": 33,
+    "text": "First, compute $ 59 \\times 36 $:\n\n$$\n59 \\times 36 = 2124\n$$\n\nNow add 13:\n\n$$\n2124 + 13 = 2137\n$$\n\n**Answer:** 2137",
+    "passed": false,
+    "expected": "2137",
+    "finish_reason": {
+      "type": "stop",
+      "matched": 151645
+    }
+  },
+  {
+    "id": "json_14",
+    "category": "json_extraction",
+    "input_tokens": 50,
+    "text": "{\"city\": \"Paris\", \"days\": 15}",
+    "passed": true,
+    "expected": {
+      "city": "Paris",
+      "days": 15
+    },
+    "finish_reason": {
+      "type": "stop",
+      "matched": 151645
+    }
+  },
+  {
+    "id": "arithmetic_15",
+    "category": "arithmetic",
+    "input_tokens": 33,
+    "text": "First, compute $62 \\times 38$:\n\n$$\n62 \\times 38 = 2356\n$$\n\nNow add 13:\n\n$$\n2356 + 13 = 2369\n$$\n\n**Answer:** 2369",
+    "passed": false,
+    "expected": "2369",
+    "finish_reason": {
+      "type": "stop",
+      "matched": 151645
+    }
+  },
+  {
+    "id": "json_15",
+    "category": "json_extraction",
+    "input_tokens": 51,
+    "text": "{\"city\": \"Tokyo\", \"days\": 16}",
+    "passed": true,
+    "expected": {
+      "city": "Tokyo",
+      "days": 16
+    },
+    "finish_reason": {
+      "type": "stop",
+      "matched": 151645
+    }
+  },
+  {
+    "id": "retrieval_0",
+    "category": "long_retrieval",
+    "input_tokens": 10988,
+    "text": "420013",
+    "passed": true,
+    "expected": "420013",
+    "finish_reason": {
+      "type": "stop",
+      "matched": 151645
+    }
+  },
+  {
+    "id": "retrieval_1",
+    "category": "long_retrieval",
+    "input_tokens": 10988,
+    "text": "427932",
+    "passed": true,
+    "expected": "427932",
+    "finish_reason": {
+      "type": "stop",
+      "matched": 151645
+    }
+  },
+  {
+    "id": "retrieval_2",
+    "category": "long_retrieval",
+    "input_tokens": 10988,
+    "text": "435851",
+    "passed": true,
+    "expected": "435851",
+    "finish_reason": {
+      "type": "stop",
+      "matched": 151645
+    }
+  },
+  {
+    "id": "retrieval_3",
+    "category": "long_retrieval",
+    "input_tokens": 10988,
+    "text": "443770",
+    "passed": true,
+    "expected": "443770",
+    "finish_reason": {
+      "type": "stop",
+      "matched": 151645
+    }
+  },
+  {
+    "id": "retrieval_4",
+    "category": "long_retrieval",
+    "input_tokens": 10988,
+    "text": "451689",
+    "passed": true,
+    "expected": "451689",
+    "finish_reason": {
+      "type": "stop",
+      "matched": 151645
+    }
+  },
+  {
+    "id": "retrieval_5",
+    "category": "long_retrieval",
+    "input_tokens": 10988,
+    "text": "459608",
+    "passed": true,
+    "expected": "459608",
+    "finish_reason": {
+      "type": "stop",
+      "matched": 151645
+    }
+  },
+  {
+    "id": "retrieval_6",
+    "category": "long_retrieval",
+    "input_tokens": 10988,
+    "text": "467527",
+    "passed": true,
+    "expected": "467527",
+    "finish_reason": {
+      "type": "stop",
+      "matched": 151645
+    }
+  },
+  {
+    "id": "retrieval_7",
+    "category": "long_retrieval",
+    "input_tokens": 10988,
+    "text": "475446",
+    "passed": true,
+    "expected": "475446",
+    "finish_reason": {
+      "type": "stop",
+      "matched": 151645
+    }
+  }
+]

@@ -4,6 +4,11 @@ This report compares three Qwen3-8B serving paths on one NVIDIA A10 24 GiB under
 digest-pinned SGLang v0.5.19 runtime. It is a workload-specific deployment study, not a claim that
 one quantization format is universally superior.
 
+**2026-09-18 quality update:** the larger identical 8,128-token test measures FP16 NLL
+2.94421 and AWQ 3.02027 (delta +0.07606). AWQ fails the unchanged +0.02 gate, superseding
+the earlier small-smoke acceptance below. Preserve the timing observations, but do not label
+AWQ a quality-approved or lossless deployment. See [quality gate](QUALITY_GATE.md).
+
 ## Artifact and quality controls
 
 - FP16: `Qwen/Qwen3-8B`, revision
@@ -84,10 +89,12 @@ All three paths reported zero retraction events in these accepted runs.
   63.2%, and p99 ITL by 92.2%. Against AWQ at the same static chunk, it is 35.9% faster in input
   throughput and has lower values for all four reported tail-latency metrics.
 
-The defensible deployment conclusion is phase-aware: prefer AWQ for decode-heavy traffic and W8A8
-for long-prefill-heavy traffic. A disaggregated prefill/decode deployment could assign a different
-weight format to each worker pool; a single-GPU deployment should choose from its observed traffic
-mix and SLO, not from model size alone.
+The performance-only conclusion is phase-aware: AWQ is faster for this decode-heavy traffic and
+W8A8 for this long-prefill-heavy traffic. The expanded quality failure means AWQ is **not** the
+project's accepted deployment recommendation under its declared gate. A deployment must choose
+from its quality tolerance, traffic mix and SLO, not model size or throughput alone. Different
+quantization formats in disaggregated pools would additionally need compatible KV representations
+and a new correctness evaluation; that architecture has not been implemented here.
 
 ## Reproducibility
 

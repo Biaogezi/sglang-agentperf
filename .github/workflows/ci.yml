@@ -21,6 +21,7 @@ jobs:
       - run: python -m pip install -e '.[dev]'
       - run: python -m ruff check src tests scripts
       - run: python -m pytest -q
+      - run: python scripts/verify_evidence.py
 
   patch-reproducibility:
     runs-on: ubuntu-latest

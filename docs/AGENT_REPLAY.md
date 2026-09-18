@@ -25,7 +25,7 @@ Commands (inside the pinned GPU container):
 
 ```bash
 python scripts/prepare_agent_trace.py
-python scripts/run_paired_prefill.py --suite agent --candidate combined --repetitions 3
+python scripts/run_paired_prefill.py --suite agent --candidate gemm --repetitions 3
 python scripts/audit_paired_run.py results/paired/RUN_DIRECTORY
 ```
 

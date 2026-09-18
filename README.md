@@ -29,14 +29,17 @@ Only a bottleneck demonstrated in a trace becomes an optimization target.
 
 - Primary GPU: NVIDIA A10 24 GiB (SM 86).
 - Primary model: Qwen3-8B.
-- Secondary model: Qwen3.5-9B after the baseline is stable.
-- Precision paths: FP16, W8A8 INT8, AWQ/GPTQ-Marlin INT4 when compatible.
+- Validated model: Qwen3-8B only; secondary models are future work.
+- Measured precision paths: FP16, calibrated W8A8 INT8, AWQ-Marlin INT4.
 - Workloads: decode-bound, prefill-bound, generated shared-prefix, and tool-calling replay.
 - Metrics: p50/p95/p99 TTFT, TPOT and ITL; request/token throughput; HBM; cache hit rate;
   CUDA Graph coverage; CPU/GPU/kernel time.
-- Every reported point uses warmup plus at least three measured repetitions.
+- Accepted serving comparisons use warmup plus at least three measured repetitions.
+  GPU correctness, quality scoring and dispatch-proof traces are separately labelled checks.
 - A change is retained only if it improves throughput by >=10%, p99 TTFT/TPOT by >=15%, or
-  capacity by >=20%, while keeping the chosen quality metric within 1% of baseline.
+  capacity by >=20%. The operational numerical gate is mean NLL increase <=0.02 on identical
+  tokens, with no lost correct answers in the fixed task regressions; this is not a broad
+  model-capability guarantee or a claim of standard WikiText perplexity.
 
 ## Layout
 
@@ -118,13 +121,14 @@ results are labelled kernel-only. Simulator results are never presented as end-t
 
 ## Current findings
 
-- A revision-pinned, calibrated W8A8 checkpoint passes the pre-registered prompt-NLL gate:
-  mean NLL is 2.89195 versus 2.89436 for FP16 across the same 335 scored tokens (delta -0.00241;
-  acceptance threshold +0.02). Performance results are accepted only after this gate.
+- Quality gates now use 8,128 scored tokens, superseding the earlier 335-token smoke. Expanded
+  FP16 NLL is 2.94421; AWQ is 3.02027 and **fails** the unchanged +0.02 numerical gate.
+  Preserve AWQ's timing data as a quality/performance trade-off, not lossless acceleration.
+  The source candidate uses calibrated W8A8 and a separate same-checkpoint OFF/ON test.
 - Quantization has a measured phase crossover on the A10: AWQ-Marlin is 8.9% faster than W8A8 in
   decode output throughput, while calibrated W8A8 is 59.6% faster than AWQ on 8K-prefill input
-  throughput and cuts p99 TTFT by 23.6%. The project therefore reports workload-specific operating
-  points instead of claiming one format is always best. See the
+  throughput and cuts p99 TTFT by 23.6%. These historical text-roundtrip workloads have nominal,
+  not exact, input lengths. Quantization recipes are checkpoint authors' work, not ours. See the
   [quantization crossover report](docs/QUANTIZATION_CROSSOVER.md).
 - AWQ-Marlin removes the A10 KV-capacity failure mode seen in the FP16 load test and materially
   improves decode-bound and shared-prefix serving.
@@ -158,12 +162,19 @@ The resulting FP16-reduction experiment did not improve the trace-relevant 8K wo
 long-sequence outputs, so it was rejected. See
 [Optimization 002](docs/OPTIMIZATION_002_MARLIN_REDUCTION.md).
 
-The SM86 short-prefill INT8 GEMM candidate now has exact GPU correctness, quant-method fallback
-tests and positive serving-trace dispatch proof. Its first same-runtime three-round serving test
-improves nominal 96-token text-workload throughput by 5.02%, but only 0.73% at nominal 128;
-that dataset decoded/re-tokenized inputs and was not fixed-shape. It has **not** cleared
-the 10% serving gate. This distinction is preserved in
+The SM86 short-prefill INT8 GEMM candidate has exact GPU correctness, quant-method fallback
+tests, bounded row-count JIT variants and positive serving-trace dispatch proof. With the same
+existing no-overlap latency setting on both arms, its first three-round native 128-input-token,
+one-output-token, concurrency-one test improves throughput **12.08%** (4151.16 to 4652.61 input
+tok/s). This clears the unchanged 10% gate only for that measured regime, not arbitrary agent
+traffic. Final-source, long-output and multi-turn regressions are still pending. See
+[Optimization 006](docs/OPTIMIZATION_006_LATENCY_CONTROL.md) and the full experiment history in
 [Optimization 004](docs/OPTIMIZATION_004_SM86_INT8_PREFILL.md).
+
+The native W8A8 norm-fusion dispatch is now repaired and execution-proven. The combined candidate
+improves default-overlap 128-token throughput by 9.02%, below the gate, and changes some greedy
+answers. Norm fusion remains OFF in the selected GEMM-only candidate. See
+[Optimization 005](docs/OPTIMIZATION_005_NATIVE_W8A8_FUSION.md).
 
 For a Chinese walkthrough of architecture, implementation ownership and interview questions, read
 [项目讲解与面试准备](docs/PROJECT_GUIDE.zh-CN.md).
