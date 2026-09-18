@@ -35,6 +35,35 @@ flowchart TD
 的 logits；随后不断执行 decode；最后将结果返回并释放请求占用的资源。我们主要修改线性层计算
 和做实验，不改变这套上游请求生命周期。
 
+### 放大看一层：到底替换了哪两个矩阵乘
+
+下面是概念计算图，不逐行描述上游延迟/原地更新 residual 的内存约定。最终接受候选的 Norm
+融合开关关闭，原有激活量化仍然执行；只在绿色两个投影上可能选择新 GEMM。
+
+```mermaid
+flowchart TD
+    X[本层输入与 residual] --> N1[上游 RMSNorm]
+    N1 --> Q1[上游 per-token INT8 quant]
+    Q1 --> QKV[QKV 投影 K4096 N6144：形状守卫选择 Triton 或 CUTLASS]
+    QKV --> QR[上游 QK Norm 与 RoPE]
+    QR --> ATT[上游 FlashInfer Attention 与 KV cache]
+    ATT --> OP[O 投影：保留原后端]
+    OP --> N2[residual 合并与上游 RMSNorm]
+    X -. residual .-> N2
+    N2 --> Q2[上游 per-token INT8 quant]
+    Q2 --> GU[gate/up 投影 K4096 N24576：形状守卫选择 Triton 或 CUTLASS]
+    GU --> ACT[上游 SiLU gate × up]
+    ACT --> DOWN[down 投影 K12288 N4096：保留原后端]
+    DOWN --> NEXT[下一层与 residual 流]
+    N2 -. residual .-> NEXT
+    classDef selected fill:#ddf2e5,stroke:#23824c
+    class QKV,GU selected
+```
+
+这样也能解释优化上限：Attention、O/down 投影、激活函数、LM head、CPU 调度与返回路径没有
+因为这两个投影变快而自动消失。prefill、单请求 decode 和大 batch decode 的时间占比不同，
+需要各自的端到端测试，不能照搬微测的加速比例。
+
 ## 已做的工作及归属
 
 | 工作 | 自己实现了什么 | 不应如何描述 |
