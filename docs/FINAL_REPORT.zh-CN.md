@@ -67,6 +67,16 @@ scheduler，CUDA Graph 保持启用，Norm 融合关闭。这个已有调度开�
 
 公开证据：`evidence/a10/final_short_off/`、`final_short_on/`。
 
+最终树另跑独立 profiler：`20260918T050103Z__proof` 的 OFF/ON 各记录 5 个
+`EXTEND bs=1 toks=128`、没有 DECODE 步。ON 出现 360 次 `_int8_prefill`
+（5 步 × 36 层 × 2 个投影），OFF 为 0；两边自定义 Norm 融合均为 0。说明新路径确实执行，
+也支持此前“默认 overlap 在单 token 输出下额外执行 decode”的诊断。profiled 延迟不用于
+上述吞吐表。证据为 `final_proof_off/on`，原始 trace 已备份。
+
+短 prefill 整次启动过程的一秒遥测中，OFF/ON 采样到的最大显存同为 21,619 MiB，最高温度
+同为 55°C。包括模型加载和 CUDA Graph 捕获，不是单一 kernel 的分配峰值，也没有据此声称
+精确功耗节省或没有任何瞬时降频。
+
 ## 5. 正确性与量化质量
 
 最终树四组 GPU 检查全部通过：44 个矩阵正确性测试、8 个真实原生量化 method 的边界/回退测试、

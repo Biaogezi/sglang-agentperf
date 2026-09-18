@@ -72,3 +72,8 @@ The final same-checkpoint quality test scores 8,128 tokens: NLL delta +8.466e-7,
 task outputs identical, no lost correct task. Snapshots: `final_short_off/on` and
 `final_quality_off/on` under `evidence/a10/`. Long-output/core/agent regression is reported
 separately in the [final report](FINAL_REPORT.zh-CN.md); do not extrapolate this table.
+
+The final no-overlap proof trace (`20260918T050103Z__proof`) contains five EXTEND-128 steps
+and zero DECODE steps in each arm. ON executes `_int8_prefill` 360 times; OFF never does.
+Neither arm executes the custom norm-fusion kernel. This supports the extra-decode diagnosis
+without treating profiled duration as performance evidence. See `final_proof_off/on` snapshots.
