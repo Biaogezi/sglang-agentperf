@@ -165,9 +165,12 @@ long-sequence outputs, so it was rejected. See
 The SM86 short-prefill INT8 GEMM candidate has exact GPU correctness, quant-method fallback
 tests, bounded row-count JIT variants and positive serving-trace dispatch proof. With the same
 existing no-overlap latency setting on both arms, its first three-round native 128-input-token,
-one-output-token, concurrency-one test improves throughput **12.08%** (4151.16 to 4652.61 input
-tok/s). This clears the unchanged 10% gate only for that measured regime, not arbitrary agent
-traffic. Final-source, long-output and multi-turn regressions are still pending. See
+one-output-token, concurrency-one test improved throughput 12.08%; the final-source retest gives
+**13.15%** (4143.97 to 4688.91 input tok/s), with p99 TTFT 31.705→28.115 ms. This clears the
+unchanged 10% gate only for that measured regime, not arbitrary agent traffic. With 32 output
+tokens at concurrency one, throughput gain is only 0.27% at 128 input tokens. Final quality
+passes (+8.466e-7 same-checkpoint NLL delta, all 40 task texts unchanged); core and multi-turn
+regressions are still running. See
 [Optimization 006](docs/OPTIMIZATION_006_LATENCY_CONTROL.md) and the full experiment history in
 [Optimization 004](docs/OPTIMIZATION_004_SM86_INT8_PREFILL.md).
 
@@ -175,6 +178,10 @@ The native W8A8 norm-fusion dispatch is now repaired and execution-proven. The c
 improves default-overlap 128-token throughput by 9.02%, below the gate, and changes some greedy
 answers. Norm fusion remains OFF in the selected GEMM-only candidate. See
 [Optimization 005](docs/OPTIMIZATION_005_NATIVE_W8A8_FUSION.md).
+
+Current consolidated results: [A10 experiment report](docs/FINAL_REPORT.zh-CN.md).
+Readers can independently recompute the primary throughput and TTFT numbers from the
+[published per-request metrics](docs/EVIDENCE_GUIDE.md), not only trust summary percentages.
 
 For a Chinese walkthrough of architecture, implementation ownership and interview questions, read
 [项目讲解与面试准备](docs/PROJECT_GUIDE.zh-CN.md).

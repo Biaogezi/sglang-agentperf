@@ -15,7 +15,7 @@ continuous batching、FlashInfer、Marlin、CUTLASS 或第三方模型的量化�
 
 | 项目 | 固定值或说明 |
 |---|---|
-| 硬件 | 单 NVIDIA A10 24 GiB，8 vCPU / 30 GiB 主机；TP=1 |
+| 硬件 | 单 NVIDIA A10（`nvidia-smi` 可见 24,564 MiB），8 vCPU / 30 GiB 主机；TP=1 |
 | 上游 | v0.5.19，`0bcd822377da7b5718e674eaf9c870d349424dd1` |
 | 最终补丁源码树 | `bb70ae7f8fb7cede92b8655fbc503aeb5c42bcbd`，7 个可重放补丁 |
 | 运行环境 | `CONTAINER.lock` 固定镜像 digest；宿主机驱动独立记录 |
