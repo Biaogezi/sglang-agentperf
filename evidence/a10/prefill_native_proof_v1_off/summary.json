@@ -1,0 +1,284 @@
+{
+  "trace": "profiles\\prefill-dispatch-proof-1789702751.5779588-TP-0.trace.json.gz",
+  "event_count": 41852,
+  "gpu_activity": {
+    "events": 3200,
+    "span_ms": 120.509734375,
+    "active_ms": 98.774412109375,
+    "idle_pct": 18.036154820480654
+  },
+  "top_kernels": [
+    {
+      "name": "_ZN7cutlass6KernelINS_4gemm6kernel23GemmWithEpilogueVisitorINS1_11threadblock13MmaMultistageINS1_9GemmShapeILi64ELi64ELi128EEENS_9transform11threadblock28PredicatedTileAccessIteratorINS_11MatrixShapeILi64ELi128EEEaNS_6layout8RowMajorELi1ENS8_29PitchLinearWarpRakedThreadMapINS_16PitchLinearShapeILi128ELi64EEELi128ENSG_ILi8ELi4EEELi16EEENS_5ArrayIaLi16ELb0EEELb0ENSD_9NoPermuteEEENS9_25RegularTileAccessIteratorISC_aNSD_37RowMajorTensorOpMultiplicandCrosswiseILi8ELi128EEELi0ESJ_Li16EEELNS_4arch14CacheOperation4KindE1ENSA_INSB_ILi128ELi64EEEaNSD_11ColumnMajorELi0ESJ_SL_Lb0ESM_EENSO_ISV_aNSD_40ColumnMajorTensorOpMultiplicandCrosswiseILi8ELi128EEELi1ESJ_Li16EEELSU_1EiSE_NS4_9MmaPolicyINS1_4warp11MmaTensorOpINS6_ILi32ELi64ELi64EEEaSQ_aSZ_iSE_NS12_17MmaTensorOpPolicyINSS_3MmaINS6_ILi16ELi8ELi32EEELi32EaSE_aSW_iSE_NSS_21OpMultiplyAddSaturateEEENSB_ILi1ELi1EEEEELi2ELb0EbEENSB_ILi0ELi0EEES1D_Li2EEELi5ELNS1_23SharedMemoryClearOptionE0EbEENS_8epilogue11threadblock19EpilogueWithVisitorINS1I_27EpilogueVisitorPerRowPerColIS7_Li128ENS1I_22PredicatedTileIteratorINS1I_26OutputTileOptimalThreadMapINS1I_15OutputTileShapeILi64ELi8ELi2ELi1ELi1EEENS1N_ILi1ELi4ELi1ELi1ELi4EEELi128ELi8ELi16EEEfLb0ESM_Lb0EEENS1L_IS1Q_NS_6half_tELb0ESM_Lb0EEEifNS1H_6thread17LinearCombinationIS1S_Li8EffLNS1U_9ScaleType4KindE0ELNS_15FloatRoundStyleE2ES1S_EELb0EEES7_S1C_Li2ENS1H_4warp24FragmentIteratorTensorOpIS14_S17_iNSK_IiLi4ELb1EEESE_EENS21_25TileIteratorTensorOpMixedIS14_S17_iLi32ELi16ELi8ELi8ELb0EEENS1I_23SharedLoadIteratorMixedINS1Q_18CompactedThreadMapEiLi32ELi16ELi8ELi8ELb0EEENSB_ILi0ELi8EEELi1ELi1EEENS4_30GemmIdentityThreadblockSwizzleILi8EEEEEEEvNT_6ParamsE",
+      "count": 108,
+      "total_ms": 27.18847499999999,
+      "mean_us": 251.74513888888882,
+      "category_time_pct": 27.566979273873017
+    },
+    {
+      "name": "_ZN7cutlass6KernelINS_4gemm6kernel23GemmWithEpilogueVisitorINS1_11threadblock13MmaMultistageINS1_9GemmShapeILi64ELi128ELi128EEENS_9transform11threadblock28PredicatedTileAccessIteratorINS_11MatrixShapeILi64ELi128EEEaNS_6layout8RowMajorELi1ENS8_29PitchLinearWarpRakedThreadMapINS_16PitchLinearShapeILi128ELi64EEELi256ENSG_ILi8ELi4EEELi16EEENS_5ArrayIaLi16ELb0EEELb0ENSD_9NoPermuteEEENS9_25RegularTileAccessIteratorISC_aNSD_37RowMajorTensorOpMultiplicandCrosswiseILi8ELi128EEELi0ESJ_Li16EEELNS_4arch14CacheOperation4KindE1ENSA_INSB_ILi128ELi128EEEaNSD_11ColumnMajorELi0ENSF_INSG_ILi128ELi128EEELi256ESI_Li16EEESL_Lb0ESM_EENSO_ISV_aNSD_40ColumnMajorTensorOpMultiplicandCrosswiseILi8ELi128EEELi1ESY_Li16EEELSU_1EiSE_NS4_9MmaPolicyINS1_4warp11MmaTensorOpINS6_ILi32ELi64ELi64EEEaSQ_aS11_iSE_NS14_17MmaTensorOpPolicyINSS_3MmaINS6_ILi16ELi8ELi32EEELi32EaSE_aSW_iSE_NSS_21OpMultiplyAddSaturateEEENSB_ILi1ELi1EEEEELi2ELb0EbEENSB_ILi0ELi0EEES1F_Li2EEELi3ELNS1_23SharedMemoryClearOptionE0EbEENS_8epilogue11threadblock19EpilogueWithVisitorINS1K_27EpilogueVisitorPerRowPerColIS7_Li256ENS1K_22PredicatedTileIteratorINS1K_26OutputTileOptimalThreadMapINS1K_15OutputTileShapeILi128ELi8ELi2ELi1ELi1EEENS1P_ILi1ELi4ELi1ELi1ELi4EEELi256ELi8ELi16EEEfLb0ESM_Lb0EEENS1N_IS1S_NS_6half_tELb0ESM_Lb0EEEifNS1J_6thread17LinearCombinationIS1U_Li8EffLNS1W_9ScaleType4KindE0ELNS_15FloatRoundStyleE2ES1U_EELb0EEES7_S1E_Li2ENS1J_4warp24FragmentIteratorTensorOpIS16_S19_iNSK_IiLi4ELb1EEESE_EENS23_25TileIteratorTensorOpMixedIS16_S19_iLi32ELi16ELi8ELi8ELb0EEENS1K_23SharedLoadIteratorMixedINS1S_18CompactedThreadMapEiLi32ELi16ELi8ELi8ELb0EEENSB_ILi0ELi8EEELi1ELi1EEENS4_30GemmIdentityThreadblockSwizzleILi8EEEEEEEvNT_6ParamsE",
+      "count": 324,
+      "total_ms": 24.219767000000008,
+      "mean_us": 74.75236728395063,
+      "category_time_pct": 24.556942414277888
+    },
+    {
+      "name": "_ZN7cutlass6KernelINS_4gemm6kernel23GemmWithEpilogueVisitorINS1_11threadblock13MmaMultistageINS1_9GemmShapeILi16ELi128ELi128EEENS_9transform11threadblock28PredicatedTileAccessIteratorINS_11MatrixShapeILi16ELi128EEEaNS_6layout8RowMajorELi1ENS8_29PitchLinearWarpRakedThreadMapINS_16PitchLinearShapeILi128ELi16EEELi128ENSG_ILi8ELi4EEELi16EEENS_5ArrayIaLi16ELb0EEELb0ENSD_9NoPermuteEEENS9_25RegularTileAccessIteratorISC_aNSD_37RowMajorTensorOpMultiplicandCrosswiseILi8ELi128EEELi0ESJ_Li16EEELNS_4arch14CacheOperation4KindE1ENSA_INSB_ILi128ELi128EEEaNSD_11ColumnMajorELi0ENSF_INSG_ILi128ELi128EEELi128ESI_Li16EEESL_Lb0ESM_EENSO_ISV_aNSD_40ColumnMajorTensorOpMultiplicandCrosswiseILi8ELi128EEELi1ESY_Li16EEELSU_1EiSE_NS4_9MmaPolicyINS1_4warp11MmaTensorOpINS6_ILi16ELi64ELi64EEEaSQ_aS11_iSE_NS14_17MmaTensorOpPolicyINSS_3MmaINS6_ILi16ELi8ELi32EEELi32EaSE_aSW_iSE_NSS_21OpMultiplyAddSaturateEEENSB_ILi1ELi1EEEEELi2ELb0EbEENSB_ILi0ELi0EEES1F_Li2EEELi4ELNS1_23SharedMemoryClearOptionE0EbEENS_8epilogue11threadblock19EpilogueWithVisitorINS1K_27EpilogueVisitorPerRowPerColIS7_Li128ENS1K_22PredicatedTileIteratorINS1K_26OutputTileOptimalThreadMapINS1K_15OutputTileShapeILi128ELi8ELi1ELi1ELi1EEENS1P_ILi1ELi2ELi1ELi1ELi2EEELi128ELi8ELi16EEEfLb0ESM_Lb0EEENS1N_IS1S_NS_6half_tELb0ESM_Lb0EEEifNS1J_6thread17LinearCombinationIS1U_Li8EffLNS1W_9ScaleType4KindE0ELNS_15FloatRoundStyleE2ES1U_EELb0EEES7_S1E_Li2ENS1J_4warp24FragmentIteratorTensorOpIS16_S19_iNSK_IiLi4ELb1EEESE_EENS23_25TileIteratorTensorOpMixedIS16_S19_iLi32ELi16ELi8ELi8ELb0EEENS1K_23SharedLoadIteratorMixedINS1S_18CompactedThreadMapEiLi32ELi16ELi8ELi8ELb0EEENSB_ILi0ELi8EEELi1ELi1EEENS4_30GemmIdentityThreadblockSwizzleILi8EEEEEEEvNT_6ParamsE",
+      "count": 72,
+      "total_ms": 12.887350000000001,
+      "mean_us": 178.99097222222224,
+      "category_time_pct": 13.066761204707053
+    },
+    {
+      "name": "_ZN7cutlass6KernelINS_4gemm6kernel23GemmWithEpilogueVisitorINS1_11threadblock13MmaMultistageINS1_9GemmShapeILi16ELi64ELi128EEENS_9transform11threadblock28PredicatedTileAccessIteratorINS_11MatrixShapeILi16ELi128EEEaNS_6layout8RowMajorELi1ENS8_29PitchLinearWarpRakedThreadMapINS_16PitchLinearShapeILi128ELi16EEELi64ENSG_ILi8ELi4EEELi16EEENS_5ArrayIaLi16ELb0EEELb0ENSD_9NoPermuteEEENS9_25RegularTileAccessIteratorISC_aNSD_37RowMajorTensorOpMultiplicandCrosswiseILi8ELi128EEELi0ESJ_Li16EEELNS_4arch14CacheOperation4KindE1ENSA_INSB_ILi128ELi64EEEaNSD_11ColumnMajorELi0ENSF_INSG_ILi128ELi64EEELi64ESI_Li16EEESL_Lb0ESM_EENSO_ISV_aNSD_40ColumnMajorTensorOpMultiplicandCrosswiseILi8ELi128EEELi1ESY_Li16EEELSU_1EiSE_NS4_9MmaPolicyINS1_4warp11MmaTensorOpINS6_ILi16ELi64ELi64EEEaSQ_aS11_iSE_NS14_17MmaTensorOpPolicyINSS_3MmaINS6_ILi16ELi8ELi32EEELi32EaSE_aSW_iSE_NSS_21OpMultiplyAddSaturateEEENSB_ILi1ELi1EEEEELi2ELb0EbEENSB_ILi0ELi0EEES1F_Li2EEELi5ELNS1_23SharedMemoryClearOptionE0EbEENS_8epilogue11threadblock19EpilogueWithVisitorINS1K_27EpilogueVisitorPerRowPerColIS7_Li64ENS1K_22PredicatedTileIteratorINS1K_26OutputTileOptimalThreadMapINS1K_15OutputTileShapeILi64ELi8ELi1ELi1ELi1EEENS1P_ILi1ELi2ELi1ELi1ELi2EEELi64ELi8ELi16EEEfLb0ESM_Lb0EEENS1N_IS1S_NS_6half_tELb0ESM_Lb0EEEifNS1J_6thread17LinearCombinationIS1U_Li8EffLNS1W_9ScaleType4KindE0ELNS_15FloatRoundStyleE2ES1U_EELb0EEES7_S1E_Li2ENS1J_4warp24FragmentIteratorTensorOpIS16_S19_iNSK_IiLi4ELb1EEESE_EENS23_25TileIteratorTensorOpMixedIS16_S19_iLi32ELi16ELi8ELi8ELb0EEENS1K_23SharedLoadIteratorMixedINS1S_18CompactedThreadMapEiLi32ELi16ELi8ELi8ELb0EEENSB_ILi0ELi8EEELi1ELi1EEENS4_30GemmIdentityThreadblockSwizzleILi8EEEEEEEvNT_6ParamsE",
+      "count": 216,
+      "total_ms": 12.642899000000005,
+      "mean_us": 58.53193981481484,
+      "category_time_pct": 12.81890708083738
+    },
+    {
+      "name": "void gemv2T_kernel_val<int, int, __half, __half, __half, float, 128, 16, 4, 4, false, false, cublasGemvParamsEx<int, cublasGemvTensorStridedBatched<__half const>, cublasGemvTensorStridedBatched<__half const>, cublasGemvTensorStridedBatched<__half>, float> >(cublasGemvParamsEx<int, cublasGemvTensorStridedBatched<__half const>, cublasGemvTensorStridedBatched<__half const>, cublasGemvTensorStridedBatched<__half>, float>, float, float)",
+      "count": 5,
+      "total_ms": 10.757727000000001,
+      "mean_us": 2151.5454,
+      "category_time_pct": 10.907490664444557
+    },
+    {
+      "name": "_per_token_quant_int8",
+      "count": 720,
+      "total_ms": 2.363639999999997,
+      "mean_us": 3.2828333333333295,
+      "category_time_pct": 2.3965454072321877
+    },
+    {
+      "name": "kernel_cutlass_kernel_flashinfernormkernelsfused_add_rmsnormFusedAddRMSNormKernel_object_at__tensorptrf16gmemalign128oi64409640961_tensorptrf16gmemalign128oi64409640961_tensorptrf16gmemal_0",
+      "count": 360,
+      "total_ms": 1.715905,
+      "mean_us": 4.7664027777777775,
+      "category_time_pct": 1.7397929663556009
+    },
+    {
+      "name": "void sglang::act_and_mul_kernel<__half, (sglang::ActivationKind)0, false, false, false, false>(sglang::ActivationParams)",
+      "count": 180,
+      "total_ms": 1.601648,
+      "mean_us": 8.898044444444444,
+      "category_time_pct": 1.623945337869821
+    },
+    {
+      "name": "void flashinfer::BatchPrefillWithRaggedKVCacheKernel<flashinfer::KernelTraits<(flashinfer::MaskMode)1, 128u, 2u, 2u, 8u, 8u, 4u, 1u, (flashinfer::PosEncodingMode)0, __half, __half, __half, float, int, flashinfer::DefaultAttention<false, false, false, false> >, RaggedParams>(RaggedParams)",
+      "count": 108,
+      "total_ms": 1.532529,
+      "mean_us": 14.190083333333334,
+      "category_time_pct": 1.5538640979168323
+    },
+    {
+      "name": "void flashinfer::BatchPrefillWithPagedKVCacheKernel<flashinfer::KernelTraits<(flashinfer::MaskMode)0, 16u, 1u, 1u, 8u, 8u, 1u, 4u, (flashinfer::PosEncodingMode)0, __half, __half, __half, float, int, flashinfer::DefaultAttention<false, false, false, false> >, PagedParams>(PagedParams)",
+      "count": 72,
+      "total_ms": 0.9476899999999999,
+      "mean_us": 13.16236111111111,
+      "category_time_pct": 0.9608832635172337
+    }
+  ],
+  "top_cuda_runtime": [
+    {
+      "name": "cudaEventSynchronize",
+      "count": 4,
+      "total_ms": 25.835743,
+      "mean_us": 6458.935750000001,
+      "category_time_pct": 62.41731604417361
+    },
+    {
+      "name": "cudaGraphLaunch",
+      "count": 113,
+      "total_ms": 5.095419000000001,
+      "mean_us": 45.09220353982302,
+      "category_time_pct": 12.310169601102128
+    },
+    {
+      "name": "cudaDeviceSynchronize",
+      "count": 1,
+      "total_ms": 3.962505,
+      "mean_us": 3962.505,
+      "category_time_pct": 9.57313002036048
+    },
+    {
+      "name": "cudaLaunchKernel",
+      "count": 323,
+      "total_ms": 2.556084999999999,
+      "mean_us": 7.913575851393186,
+      "category_time_pct": 6.175319412364934
+    },
+    {
+      "name": "cudaMemcpyAsync",
+      "count": 179,
+      "total_ms": 2.1516510000000006,
+      "mean_us": 12.020396648044697,
+      "category_time_pct": 5.198235656848044
+    },
+    {
+      "name": "cudaLaunchKernelExC",
+      "count": 110,
+      "total_ms": 0.7864600000000004,
+      "mean_us": 7.149636363636367,
+      "category_time_pct": 1.900031378083487
+    },
+    {
+      "name": "cudaMalloc",
+      "count": 1,
+      "total_ms": 0.207148,
+      "mean_us": 207.148,
+      "category_time_pct": 0.5004548227592477
+    },
+    {
+      "name": "cudaFuncSetAttribute",
+      "count": 108,
+      "total_ms": 0.16319699999999998,
+      "mean_us": 1.5110833333333331,
+      "category_time_pct": 0.3942723352860802
+    },
+    {
+      "name": "cudaEventQuery",
+      "count": 67,
+      "total_ms": 0.12520399999999998,
+      "mean_us": 1.8687164179104476,
+      "category_time_pct": 0.30248395170964165
+    },
+    {
+      "name": "cudaStreamIsCapturing",
+      "count": 119,
+      "total_ms": 0.100645,
+      "mean_us": 0.8457563025210084,
+      "category_time_pct": 0.24315115587215172
+    }
+  ],
+  "top_cpu_ops": [
+    {
+      "name": "sglang::unified_attention_with_output",
+      "count": 108,
+      "total_ms": 42.27968899999996,
+      "mean_us": 391.4786018518515,
+      "category_time_pct": 55.0461730513645
+    },
+    {
+      "name": "aten::copy_",
+      "count": 331,
+      "total_ms": 6.083754999999997,
+      "mean_us": 18.379924471299084,
+      "category_time_pct": 7.9207638100673865
+    },
+    {
+      "name": "aten::slice",
+      "count": 904,
+      "total_ms": 3.880109999999999,
+      "mean_us": 4.2921570796460164,
+      "category_time_pct": 5.0517213245899235
+    },
+    {
+      "name": "aten::clone",
+      "count": 113,
+      "total_ms": 3.702249999999997,
+      "mean_us": 32.76327433628316,
+      "category_time_pct": 4.8201559424766405
+    },
+    {
+      "name": "aten::contiguous",
+      "count": 108,
+      "total_ms": 3.6463759999999987,
+      "mean_us": 33.76274074074073,
+      "category_time_pct": 4.747410613790049
+    },
+    {
+      "name": "sglang::store_cache",
+      "count": 108,
+      "total_ms": 2.946295999999999,
+      "mean_us": 27.28051851851851,
+      "category_time_pct": 3.8359392727922645
+    },
+    {
+      "name": "aten::to",
+      "count": 140,
+      "total_ms": 1.9458900000000008,
+      "mean_us": 13.899214285714292,
+      "category_time_pct": 2.5334575587564
+    },
+    {
+      "name": "aten::view",
+      "count": 1014,
+      "total_ms": 1.8956119999999996,
+      "mean_us": 1.8694398422090726,
+      "category_time_pct": 2.4679979597353054
+    },
+    {
+      "name": "aten::empty",
+      "count": 276,
+      "total_ms": 1.8487229999999988,
+      "mean_us": 6.698271739130431,
+      "category_time_pct": 2.4069506798415135
+    },
+    {
+      "name": "aten::_to_copy",
+      "count": 65,
+      "total_ms": 1.769283,
+      "mean_us": 27.21973846153846,
+      "category_time_pct": 2.303523523903816
+    }
+  ],
+  "top_user_annotations": [
+    {
+      "name": "scheduler.run_batch",
+      "count": 5,
+      "total_ms": 93.54375599999999,
+      "mean_us": 18708.7512,
+      "category_time_pct": 46.630186582446846
+    },
+    {
+      "name": "step[EXTEND bs=1 toks=128]",
+      "count": 3,
+      "total_ms": 58.257332999999996,
+      "mean_us": 19419.111,
+      "category_time_pct": 29.04042368777386
+    },
+    {
+      "name": "scheduler.process_batch_result",
+      "count": 4,
+      "total_ms": 32.561224,
+      "mean_us": 8140.3060000000005,
+      "category_time_pct": 16.231291273709882
+    },
+    {
+      "name": "scheduler.get_next_batch_to_run",
+      "count": 7,
+      "total_ms": 8.849855000000002,
+      "mean_us": 1264.265,
+      "category_time_pct": 4.411522559320797
+    },
+    {
+      "name": "step[DECODE bs=1]",
+      "count": 2,
+      "total_ms": 4.081676,
+      "mean_us": 2040.838,
+      "category_time_pct": 2.0346554552405967
+    },
+    {
+      "name": "scheduler.recv_requests",
+      "count": 7,
+      "total_ms": 1.3985739999999995,
+      "mean_us": 199.79628571428566,
+      "category_time_pct": 0.6971685696409176
+    },
+    {
+      "name": "copy_result_to_cpu",
+      "count": 5,
+      "total_ms": 1.004011,
+      "mean_us": 200.8022,
+      "category_time_pct": 0.500484717128838
+    },
+    {
+      "name": "scheduler.process_input_requests",
+      "count": 7,
+      "total_ms": 0.9112950000000001,
+      "mean_us": 130.185,
+      "category_time_pct": 0.4542671547382693
+    }
+  ]
+}

@@ -17,7 +17,7 @@ downstream evaluation. The primary downstream acceptance rule is less than one p
 loss on the task-level metric chosen before optimization. Exact token equality is diagnostic, not
 a universal acceptance requirement.
 
-## Planned commands
+## Smoke commands
 
 ```bash
 agentperf run-quality --config configs/experiment_matrix.json --model qwen3_8b_fp16 \
@@ -28,3 +28,21 @@ agentperf compare-quality --baseline quality/fp16/quality.json --candidate quali
 
 For application-level checks use the OpenAI-compatible SGLang endpoint and pin the evaluator and
 dataset revisions in the run manifest before accepting results.
+
+## Expanded numerical regression
+
+The acceptance runner uses 64 deterministic windows of 128 native input IDs from the pinned
+WikiText-2 test set, scoring 8,128 next-token log probabilities. Windows are independent; the
+result is not directly comparable to published sliding-window/full-document WikiText perplexity.
+For a source change, compare OFF and ON of the **same checkpoint**. For quantization selection,
+compare each format to FP16 with both custom switches OFF and the identical corpus IDs.
+
+The 40 generated task regressions include strict JSON (16), exact-format arithmetic (16), and
+long key retrieval (8). Report each category separately. Greedy output agreement and task
+correctness are different: two variants producing the same wrong-format answer are not two
+correct answers. The early W8A8 run passed JSON and retrieval, but scored 0/16 on strict arithmetic
+format even though its answers contained the expected numbers. This weakness must remain visible.
+
+The corpus SHA, dataset revision/hash, tokenizer path, runtime source fingerprints and task-set
+hash are retained. No task result here establishes general instruction-following or tool-use
+quality. JSON extraction is a constrained regression, not a full tool-calling benchmark.
