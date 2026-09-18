@@ -22,6 +22,7 @@ jobs:
       - run: python -m ruff check src tests scripts
       - run: python -m pytest -q
       - run: python scripts/verify_evidence.py
+      - run: python scripts/verify_primary_result.py
 
   patch-reproducibility:
     runs-on: ubuntu-latest

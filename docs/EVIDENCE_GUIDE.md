@@ -5,6 +5,18 @@ model weights are not ordinary Git source files. Their byte sizes and SHA-256 ha
 local raw backups to compact public results. `scripts/verify_evidence.py` checks every published
 artifact's exact bytes; CI runs the same check.
 
+For a CPU-only reconstruction of the **scoped primary acceptance**, run:
+
+```bash
+python scripts/verify_evidence.py
+python scripts/verify_primary_result.py
+```
+
+The second command reconstructs throughput and p99 TTFT from published request arrays, checks
+the >=10% throughput gate, source/configuration identity, task-output agreement, same-weight and
+FP16-relative NLL gates, four completed GPU test suites, and OFF/ON custom-kernel trace counts.
+It is included in CI and does not launch a GPU or substitute for rerunning the experiment.
+
 There are four different evidence types:
 
 | Artifact | What it proves | What it does not prove |
