@@ -160,6 +160,18 @@
     }
   },
   "workloads": {
+    "decode_128_128_c128": {
+      "dataset": "random-ids",
+      "num_prompts": 640,
+      "max_concurrency": 128,
+      "request_rate": "inf",
+      "args": [
+        "--tokenize-prompt",
+        "--random-input-len", "128",
+        "--random-output-len", "128",
+        "--random-range-ratio", "1"
+      ]
+    },
     "synthetic_agent_replay": {
       "dataset": "agentic-trace",
       "backend": "sglang-oai-chat",
@@ -275,6 +287,7 @@
     }
   },
   "suites": {
+    "batch_decode": ["decode_128_128_c128"],
     "agent": ["synthetic_agent_replay"],
     "smoke": ["smoke"],
     "core": ["decode_1k_512", "prefill_8k_64", "agent_prefix_4k"],

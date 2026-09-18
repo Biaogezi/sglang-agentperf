@@ -16,7 +16,9 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--config", default="configs/experiment_matrix.json")
     parser.add_argument(
-        "--suite", choices=["short", "short_decode", "core", "proof", "agent"], default="short"
+        "--suite",
+        choices=["short", "short_decode", "core", "proof", "agent", "batch_decode"],
+        default="short",
     )
     parser.add_argument("--repetitions", type=int, default=3)
     parser.add_argument("--output-root", default="results/paired")
